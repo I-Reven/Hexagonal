@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: 'hex-mongo'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/mongo/data/db:/data/db
+    networks:
+      - backend
+
+  redis:
+    image: redis
+    container_name: 'hex-redis'
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'hex-rabbit'
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./docker/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    networks:
+      - backend
+
+  i-am-alive:
+    build:
+      context: .
+      args:
+        pkg: i-am-alive
+    container_name: 'hex-i-am-alive'
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      REDIS_URL: redis:6379
+    networks:
+      - backend
+
+networks:
+  backend:
