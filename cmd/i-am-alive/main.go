@@ -1,10 +1,13 @@
 package main
 
 import (
+	kernel "github.com/I-Reven/Core/applications/i-am-alive"
 	"github.com/labstack/echo"
 )
 
 func main ()  {
-	echo := echo.New()
+	e := echo.New()
+	kernel.Boot(e)
+	e.Logger.Fatal(e.Start(":80"))
 }
 
