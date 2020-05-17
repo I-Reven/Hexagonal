@@ -4,9 +4,6 @@ services:
   mongo:
     image: mongo:latest
     container_name: 'hex-mongo'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
       - "27017:27017"
     volumes:
@@ -47,10 +44,11 @@ services:
     container_name: 'hex-i-am-alive'
     restart: unless-stopped
     ports:
-      - "80:8080"
+      - "8080:80"
     depends_on:
       - redis
       - rabbitmq
+      - mongo
     environment:
       REDIS_URL: redis:6379
     networks:
