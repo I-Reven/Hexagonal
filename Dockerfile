@@ -12,9 +12,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-ARG pkg
+ARG PKG
 
-RUN go build /app/cmd/${pkg}/main.go
+RUN go build /app/cmd/${PKG}/main.go
 
 EXPOSE 80
 

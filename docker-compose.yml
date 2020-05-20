@@ -1,9 +1,35 @@
 version: '3'
 
 services:
-  mongo:
+
+  netdata:
+    image: netdata/netdata
+    hostname: example.com
+    container_name: 'hex-netdata'
+    ports:
+      - 19999:19999
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+      - core
+      - grafana
+      - telegraf
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - backend
+
+  mongodb:
     image: mongo:latest
-    container_name: 'hex-mongo'
+    container_name: 'hex-mongodb'
     ports:
       - "27017:27017"
     volumes:
@@ -22,7 +48,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: 'hex-rabbit'
+    container_name: 'hex-rabbitmq'
     environment:
       RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
       RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
@@ -36,21 +62,84 @@ services:
     networks:
       - backend
 
-  i-am-alive:
+  influxdb:
+    image: influxdb:latest
+    container_name: 'hex-influxdb'
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    volumes:
+      - ./docker/influxdb/data/influxdb:/var/lib/influxdb
+    environment:
+      INFLUXDB_REPORTING_DISABLED: ${INFLUXDB_REPORTING_DISABLED}
+      INFLUXDB_DB: ${INFLUXDB_DB}
+      INFLUXDB_USER: ${INFLUXDB_USER}
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    networks:
+      - backend
+
+  grafana:
+    build: ./docker/grafana
+    container_name: 'hex-grafana'
+    volumes:
+      - ./docker/grafana/data/grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    links:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
+      GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
+      INFLUXDB_URI: ${INFLUXDB_URI}
+      INFLUXDB_DB: ${INFLUXDB_DB}
+      INFLUXDB_USER: ${INFLUXDB_USER}
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    networks:
+      - backend
+
+  telegraf:
+    image: telegraf:latest
+    container_name: 'hex-telegraf'
+    volumes:
+      - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+    environment:
+      INFLUXDB_URI: ${INFLUXDB_URI}
+      MONGO_HOST: ${MONGO_URI}
+    networks:
+      - backend
+
+  core:
     build:
       context: .
       args:
-        pkg: i-am-alive
-    container_name: 'hex-i-am-alive'
+        PKG: core
+    container_name: 'hex-core'
     restart: unless-stopped
     ports:
       - "8080:80"
     depends_on:
       - redis
       - rabbitmq
-      - mongo
+      - mongodb
     environment:
-      REDIS_URL: redis:6379
+      MONGO_HOST: ${MONGO_HOST}
+      REDIS_URL: ${REDIS_URL}
+      RABBBITMQ_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/%2f/messages
     networks:
       - backend
 
