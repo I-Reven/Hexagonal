@@ -89,7 +89,6 @@ services:
     links:
       - redis
       - rabbitmq
-      - mongodb
       - influxdb
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
@@ -112,6 +111,7 @@ services:
       - rabbitmq
       - mongodb
       - influxdb
+      - grafana
     depends_on:
       - redis
       - rabbitmq
@@ -119,7 +119,7 @@ services:
       - influxdb
     environment:
       INFLUXDB_URI: ${INFLUXDB_URI}
-      MONGO_HOST: ${MONGO_URI}
+      MONGO_HOST: ${MONGO_HOST}:${MONGO_PORT}
     networks:
       - backend
 
@@ -137,9 +137,9 @@ services:
       - rabbitmq
       - mongodb
     environment:
-      MONGO_HOST: ${MONGO_HOST}
-      REDIS_URL: ${REDIS_URL}
-      RABBBITMQ_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/%2f/messages
+      MONGO_URL: ${MONGO_HOST}
+      REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
+      RABBIT_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/
     networks:
       - backend
 

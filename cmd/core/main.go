@@ -1,18 +1,15 @@
 package main
 
 import (
-	kernel "github.com/I-Reven/Hexagonal/applications/core"
-	"github.com/I-Reven/Hexagonal/infrastructures/logger"
+	kernel "github.com/I-Reven/Hexagonal/src/applications/core"
 	"github.com/labstack/echo"
 )
 
-func main ()  {
+func main() {
 	e := echo.New()
 
-	logger.Boot(e)
 	kernel.BootDependencies(e)
 	kernel.Boot(e)
 
-	logger.LOG().FatalE(e.Start(":80"))
+	e.Logger.Fatal(e.Start(":80"))
 }
-
