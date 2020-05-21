@@ -2,7 +2,7 @@ package job
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/I-Reven/Hexagonal/src/applications/core/service"
 	"github.com/I-Reven/Hexagonal/src/domains/job"
 	"github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
@@ -21,8 +21,8 @@ func (i IAmAliveJob) Init(b []byte) (error, job.Job) {
 }
 
 func (i IAmAliveJob) Handler() error {
-	fmt.Println(i.Message.Content)
-	return nil
+	iAmAlive := service.GetEntity(string(i.Message.Id))
+	return iAmAlive.ConsumerTestSuccess()
 }
 
 func (IAmAliveJob) Failed(err error) {

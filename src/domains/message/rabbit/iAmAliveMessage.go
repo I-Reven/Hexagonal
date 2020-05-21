@@ -1,9 +1,11 @@
 package rabbit
 
+import "gopkg.in/mgo.v2/bson"
+
 type (
 	IAmAlive struct {
-		Id      string `json:"id"`
-		Content string `json:"content"`
+		Id      bson.ObjectId `json:"id"`
+		Content string        `json:"content"`
 	}
 )
 

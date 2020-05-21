@@ -9,8 +9,34 @@ type IAmAlive struct {
 	entity.IAmAlive `bson:",inline"`
 }
 
-func (iAmAlive *IAmAlive) Add() error {
+func (iAmAlive *IAmAlive) HttpTestSuccess() error {
 	iAmAlive.SetContent("I Am Alive")
+	iAmAlive.SetHttpSuccess(true)
+	return iAmAlive.Save()
+}
+
+func (iAmAlive *IAmAlive) DbTestSuccess() error {
+	iAmAlive.SetDbSuccess(true)
+	return iAmAlive.Save()
+}
+
+func (iAmAlive *IAmAlive) ProducerTestSuccess() error {
+	iAmAlive.SetProducerSuccess(true)
+	return iAmAlive.Save()
+}
+
+func (iAmAlive *IAmAlive) ConsumerTestSuccess() error {
+	iAmAlive.SetConsumerSuccess(true)
+	return iAmAlive.Save()
+}
+
+func (iAmAlive *IAmAlive) CashTestSuccess() error {
+	iAmAlive.SetCashSuccess(true)
+	return iAmAlive.Save()
+}
+
+func (iAmAlive *IAmAlive) SocketTestSuccess() error {
+	iAmAlive.SetCashSuccess(true)
 	return iAmAlive.Save()
 }
 

@@ -7,13 +7,13 @@ import (
 
 type (
 	IAmAlive struct {
-		Id              bson.ObjectId `bson:"id,omitempty" json:"id"`
+		Id              bson.ObjectId `bson:"_id,omitempty" json:"_id"`
 		HttpSuccess     bool          `bson:"httpSuccess" json:"httpSuccess"`
 		ProducerSuccess bool          `bson:"producerSuccess" json:"producerSuccess"`
 		DbSuccess       bool          `bson:"dbSuccess" json:"dbSuccess"`
-		ConsumerSuccess bool          `bson:"producerSuccess" json:"producerSuccess"`
+		ConsumerSuccess bool          `bson:"consumerSuccess" json:"consumerSuccess"`
 		CashSuccess     bool          `bson:"cashSuccess" json:"cashSuccess"`
-		SocketSuccess   bool          `bson:"cashSuccess" json:"cashSuccess"`
+		SocketSuccess   bool          `bson:"socketSuccess" json:"socketSuccess"`
 		Content         string        `bson:"content" json:"content"`
 		Created         time.Time     `bson:"created" json:"created"`
 		Modified        time.Time     `bson:"modified" json:"modified"`
@@ -36,14 +36,18 @@ func (iAmAlive *IAmAlive) SetModified(time time.Time) {
 	iAmAlive.Modified = time
 }
 
-func (iAmAlive *IAmAlive) SetContent(content string) {
-	iAmAlive.Content = content
-}
-
-func (iAmAlive *IAmAlive) GetContent() string {
-	return iAmAlive.Content
-}
-
-func (iAmAlive *IAmAlive) getEntity() IAmAlive {
-	return *iAmAlive
-}
+func (iAmAlive *IAmAlive) SetHttpSuccess(status bool)     { iAmAlive.HttpSuccess = status }
+func (iAmAlive *IAmAlive) GetHttpSuccess() bool           { return iAmAlive.HttpSuccess }
+func (iAmAlive *IAmAlive) SetProducerSuccess(status bool) { iAmAlive.ProducerSuccess = status }
+func (iAmAlive *IAmAlive) GetProducerSuccess() bool       { return iAmAlive.ProducerSuccess }
+func (iAmAlive *IAmAlive) SetDbSuccess(status bool)       { iAmAlive.DbSuccess = status }
+func (iAmAlive *IAmAlive) GetDbSuccess() bool             { return iAmAlive.DbSuccess }
+func (iAmAlive *IAmAlive) SetConsumerSuccess(status bool) { iAmAlive.ConsumerSuccess = status }
+func (iAmAlive *IAmAlive) GetConsumerSuccess() bool       { return iAmAlive.ConsumerSuccess }
+func (iAmAlive *IAmAlive) SetCashSuccess(status bool)     { iAmAlive.CashSuccess = status }
+func (iAmAlive *IAmAlive) GetCashSuccess() bool           { return iAmAlive.CashSuccess }
+func (iAmAlive *IAmAlive) SetSocketSuccess(status bool)   { iAmAlive.SocketSuccess = status }
+func (iAmAlive *IAmAlive) GetSocketSuccess() bool         { return iAmAlive.SocketSuccess }
+func (iAmAlive *IAmAlive) SetContent(content string)      { iAmAlive.Content = content }
+func (iAmAlive *IAmAlive) GetContent() string             { return iAmAlive.Content }
+func (iAmAlive *IAmAlive) getEntity() IAmAlive            { return *iAmAlive }
