@@ -61,7 +61,7 @@ func setEnv() {
 
 	switch env {
 	case "production":
-		err = godotenv.Load(".env")
+		err = godotenv.Load(".live.env")
 	case "testing":
 		err = godotenv.Load(".test.env")
 	default:

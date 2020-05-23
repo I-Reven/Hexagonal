@@ -11,7 +11,12 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY ./cmd ./cmd
+COPY ./src ./src
+COPY ./test ./test
+COPY .live.env .live.env
+COPY .test.env .test.env
+
 ARG PKG
 
 RUN go build /app/cmd/${PKG}/main.go
