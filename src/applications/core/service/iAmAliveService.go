@@ -9,19 +9,31 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func Test() error {
-	err, id := TestHttp()
+func Test() {
+	id := TestHttp()
+	iAmAlive := GetEntity(id)
+	TestProducer(iAmAlive)
+}
+
+func TestHttp() bson.ObjectId {
+	iAmAlive := repository.IAmAlive{}
+	err := iAmAlive.HttpTestSuccess()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-database")
 		logger.Info(err)
-		return err
 	}
 
-	iAmAlive := GetEntity(id)
-	_ = iAmAlive.DbTestSuccess()
+	return iAmAlive.GetId()
+}
 
-	err = TestProducer(iAmAlive)
+func TestProducer(iAmAlive repository.IAmAlive) {
+	mes := message.IAmAlive{
+		Id:      iAmAlive.GetId(),
+		Content: iAmAlive.GetContent(),
+	}
+
+	err := rabbit.ProduceMessage(mes)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-producer")
@@ -29,30 +41,17 @@ func Test() error {
 	} else {
 		_ = iAmAlive.ProducerTestSuccess()
 	}
-
-	return err
-}
-
-func TestHttp() (error, bson.ObjectId) {
-	iAmAlive := repository.IAmAlive{}
-	return iAmAlive.HttpTestSuccess(), iAmAlive.GetId()
-}
-
-func TestProducer(iAmAlive repository.IAmAlive) error {
-	mes := message.IAmAlive{
-		Id:      iAmAlive.GetId(),
-		Content: iAmAlive.GetContent(),
-	}
-
-	return rabbit.ProduceMessage(mes)
 }
 
 func GetEntity(id bson.ObjectId) repository.IAmAlive {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetById(id)
+
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-get-data")
 		logger.Info(err)
+	} else {
+		_ = iAmAlive.DbTestSuccess()
 	}
 
 	return iAmAlive
