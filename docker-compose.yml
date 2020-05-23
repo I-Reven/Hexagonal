@@ -123,6 +123,14 @@ services:
     networks:
       - backend
 
+  socketio-client-tool:
+    image: amritb/socketio-client-tool:latest
+    container_name: 'hex-socket-client'
+    ports:
+      - "8001:8080"
+    networks:
+      - backend
+
   core:
     build:
       context: .

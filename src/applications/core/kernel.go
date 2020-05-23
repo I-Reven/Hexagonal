@@ -1,16 +1,25 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
+	socketio "github.com/graarh/golang-socketio"
+	"github.com/graarh/golang-socketio/transport"
+	"net/http"
 )
 
-func Boot(e *echo.Echo) {
-	Middleware(e)
-	Route(e)
-	Worker(e)
+var (
+	engine   *gin.Engine
+	serveMux *http.ServeMux
+	socket   *socketio.Server
+)
+
+func init() {
+	engine = gin.Default()
+	serveMux = http.NewServeMux()
+	socket = socketio.NewServer(transport.GetDefaultWebsocketTransport())
 }
 
-func BootDependencies(e *echo.Echo) {
-	logger.Boot(e)
+func Boot() {
+	middleware()
+	worker()
 }

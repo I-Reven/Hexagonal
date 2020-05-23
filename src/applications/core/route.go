@@ -2,9 +2,13 @@ package core
 
 import (
 	"github.com/I-Reven/Hexagonal/src/infrastructures/http/rest"
-	"github.com/labstack/echo"
+	"net/http"
 )
 
-func Route(e *echo.Echo) {
-	e.GET("/i-am-alive", rest.IAmAlive)
+//Route Http
+func Route() http.Handler {
+
+	engine.GET("/i-am-alive", rest.IAmAlive)
+
+	return engine
 }

@@ -1,17 +1,10 @@
 package logger
 
 import (
-	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
 	"os"
-	"sync"
 	"time"
-)
-
-var (
-	once sync.Once
-	Echo *echo.Echo
 )
 
 func init() {
@@ -23,14 +16,13 @@ func init() {
 	})
 }
 
-func Boot(e *echo.Echo) {
-	once.Do(func() {
-		Echo = e
-		SetLoggerOutput()
-	})
+//Boot Logger
+func Boot() {
+	setLoggerOutput()
 }
 
-func SetLoggerOutput() {
+//Set Logger Output
+func setLoggerOutput() {
 	if os.Getenv("APP_DEBUG") == "true" {
 		log.SetOutput(os.Stderr)
 		log.SetLevel(log.DEBUG)
@@ -39,7 +31,7 @@ func SetLoggerOutput() {
 		logPath, err := os.OpenFile("/var/log/hex/"+currentTime.Format("2006-01-02-")+os.Getenv("PKG")+".log", os.O_APPEND|os.O_CREATE, 0755)
 
 		if err != nil {
-			Echo.Logger.Fatal(err)
+			log.Fatal(err)
 		}
 
 		log.SetOutput(logPath)
@@ -47,32 +39,38 @@ func SetLoggerOutput() {
 	}
 }
 
+//Debug log
 func Debug(i ...interface{}) {
 	logrus.Debug(i...)
-	Echo.Logger.Debug(i...)
+	log.Debug(i...)
 }
 
+//Info log
 func Info(i ...interface{}) {
 	logrus.Info(i...)
-	Echo.Logger.Info(i...)
+	log.Info(i...)
 }
 
+//Warn log
 func Warn(i ...interface{}) {
 	logrus.Warn(i...)
-	Echo.Logger.Warn(i...)
+	log.Warn(i...)
 }
 
+//Error log
 func Error(i ...interface{}) {
 	logrus.Error(i...)
-	Echo.Logger.Error(i...)
+	log.Error(i...)
 }
 
+//Fatal log
 func Fatal(i ...interface{}) {
 	logrus.Fatal(i...)
-	Echo.Logger.Fatal(i...)
+	log.Fatal(i...)
 }
 
+//Panic log
 func Panic(i ...interface{}) {
 	logrus.Panic(i...)
-	Echo.Logger.Panic(i...)
+	log.Panic(i...)
 }
