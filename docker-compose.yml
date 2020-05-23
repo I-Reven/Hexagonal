@@ -37,6 +37,21 @@ services:
     networks:
       - backend
 
+  elassandra:
+    image: erangaeb/elassandra:6.2
+    container_name: elassandra
+    environment:
+      - CASSANDRA_BROADCAST_ADDRESS=host.docker.internal
+      - CASSANDRA_SEEDS=host.docker.internal
+    ports:
+      - 7000:7000
+      - 7001:7001
+      - 7199:7199
+      - 9042:9042
+      - 9160:9160
+      - 9200:9200
+      - 9300:9300
+
   redis:
     image: redis
     container_name: 'hex-redis'
