@@ -35,15 +35,14 @@ func (iAmAlive *IAmAlive) CashTestSuccess() error {
 	return iAmAlive.Save()
 }
 
-func (iAmAlive *IAmAlive) SocketTestSuccess() error {
-	iAmAlive.SetCashSuccess(true)
-	return iAmAlive.Save()
-}
-
 func (iAmAlive *IAmAlive) Save() error {
 	return Mongo().Collection("iAmAlive").Save(iAmAlive)
 }
 
 func (iAmAlive *IAmAlive) GetById(Id bson.ObjectId) error {
 	return Mongo().Collection("iAmAlive").FindById(Id, iAmAlive)
+}
+
+func (iAmAlive *IAmAlive) GetLast() error {
+	return Mongo().Collection("iAmAlive").Find(nil).Query.Sort("-created").One(iAmAlive)
 }

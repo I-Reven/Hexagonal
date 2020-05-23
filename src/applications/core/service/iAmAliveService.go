@@ -5,17 +5,21 @@ import (
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
 	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/redis/cache"
 	"github.com/juju/errors"
 	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
+// Test All Services
 func Test() {
-	id := TestHttp()
-	iAmAlive := GetEntity(id)
-	TestProducer(iAmAlive)
+	iAmAlive := getEntity(testHttp())
+	testCache(&iAmAlive)
+	testProducer(&iAmAlive)
 }
 
-func TestHttp() bson.ObjectId {
+//Test Http
+func testHttp() bson.ObjectId {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.HttpTestSuccess()
 
@@ -27,7 +31,8 @@ func TestHttp() bson.ObjectId {
 	return iAmAlive.GetId()
 }
 
-func TestProducer(iAmAlive repository.IAmAlive) {
+//Test Producer
+func testProducer(iAmAlive *repository.IAmAlive) {
 	mes := message.IAmAlive{
 		Id:      iAmAlive.GetId(),
 		Content: iAmAlive.GetContent(),
@@ -43,7 +48,23 @@ func TestProducer(iAmAlive repository.IAmAlive) {
 	}
 }
 
-func GetEntity(id bson.ObjectId) repository.IAmAlive {
+//Test Cache
+func testCache(iAmAlive *repository.IAmAlive) {
+	Cache := cache.Cache()
+	key := "iAmAlive:" + string(iAmAlive.GetId())
+	_, err := Cache.Set(key, iAmAlive.GetContent(), 10*time.Minute)
+	_, err = Cache.Get(key)
+
+	if err != nil {
+		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")
+		logger.Info(err)
+	} else {
+		_ = iAmAlive.CashTestSuccess()
+	}
+}
+
+//Get Entity
+func getEntity(id bson.ObjectId) repository.IAmAlive {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetById(id)
 
@@ -55,4 +76,9 @@ func GetEntity(id bson.ObjectId) repository.IAmAlive {
 	}
 
 	return iAmAlive
+}
+
+func GetLastTest() (error, repository.IAmAlive) {
+	iAmAlive := repository.IAmAlive{}
+	return iAmAlive.GetLast(), iAmAlive
 }

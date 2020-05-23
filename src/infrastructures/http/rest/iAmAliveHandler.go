@@ -9,13 +9,15 @@ import (
 )
 
 func IAmAlive(context echo.Context) error {
-	err := service.Test()
+	err, iAmAlive := service.GetLastTest()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.Handler-get-error-from-test-service")
 		logger.Error(err)
 		return err
+	} else {
+		service.Test()
 	}
 
-	return context.JSON(http.StatusOK, "I Am Alive")
+	return context.JSON(http.StatusOK, iAmAlive)
 }
