@@ -44,6 +44,6 @@ func (iAmAlive *IAmAlive) Save() error {
 	return Mongo().Collection("iAmAlive").Save(iAmAlive)
 }
 
-func (iAmAlive *IAmAlive) GetById(Id string) error {
-	return Mongo().Collection("iAmAlive").FindById(bson.ObjectId(Id), iAmAlive)
+func (iAmAlive *IAmAlive) GetById(Id bson.ObjectId) error {
+	return Mongo().Collection("iAmAlive").FindById(Id, iAmAlive)
 }

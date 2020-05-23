@@ -2,10 +2,10 @@ package job
 
 import (
 	"encoding/json"
-	"github.com/I-Reven/Hexagonal/src/applications/core/service"
 	"github.com/I-Reven/Hexagonal/src/domains/job"
 	"github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
+	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
 	"github.com/juju/errors"
 )
 
@@ -21,7 +21,13 @@ func (i IAmAliveJob) Init(b []byte) (error, job.Job) {
 }
 
 func (i IAmAliveJob) Handler() error {
-	iAmAlive := service.GetEntity(string(i.Message.Id))
+	iAmAlive := repository.IAmAlive{}
+	err := iAmAlive.GetById(i.Message.Id)
+
+	if err != nil {
+		return err
+	}
+
 	return iAmAlive.ConsumerTestSuccess()
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
 	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
 	"github.com/juju/errors"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func Test() error {
@@ -32,9 +33,9 @@ func Test() error {
 	return err
 }
 
-func TestHttp() (error, string) {
+func TestHttp() (error, bson.ObjectId) {
 	iAmAlive := repository.IAmAlive{}
-	return iAmAlive.HttpTestSuccess(), string(iAmAlive.GetId())
+	return iAmAlive.HttpTestSuccess(), iAmAlive.GetId()
 }
 
 func TestProducer(iAmAlive repository.IAmAlive) error {
@@ -46,7 +47,7 @@ func TestProducer(iAmAlive repository.IAmAlive) error {
 	return rabbit.ProduceMessage(mes)
 }
 
-func GetEntity(id string) repository.IAmAlive {
+func GetEntity(id bson.ObjectId) repository.IAmAlive {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetById(id)
 	if err != nil {
