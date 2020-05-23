@@ -7,9 +7,12 @@ import (
 	"os"
 )
 
+func init() {
+	setEnv()
+}
+
 func main() {
 	e := echo.New()
-	setEnv(e)
 
 	kernel.BootDependencies(e)
 	kernel.Boot(e)
@@ -17,7 +20,7 @@ func main() {
 	e.Logger.Fatal(e.Start(":80"))
 }
 
-func setEnv(e *echo.Echo) {
+func setEnv() {
 	var err error
 	env := os.Getenv("APP_ENV")
 
@@ -31,6 +34,6 @@ func setEnv(e *echo.Echo) {
 	}
 
 	if err != nil {
-		e.Logger.Fatal(err)
+		panic(err)
 	}
 }

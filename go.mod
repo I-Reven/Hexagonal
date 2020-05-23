@@ -5,12 +5,13 @@ go 1.13
 require (
 	github.com/fatih/structs v1.1.0
 	github.com/go-bongo/bongo v0.10.4
+	github.com/go-redis/redis/v8 v8.0.0-beta.2 // indirect
 	github.com/gorilla/sessions v1.2.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.9.0 // indirect
-	github.com/labstack/gommon v0.3.0 // indirect
+	github.com/labstack/gommon v0.3.0
 	github.com/maxwellhealth/go-dotaccess v0.0.0-20190924013105-74ea4f4ca4eb // indirect
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.6.0

@@ -1,11 +1,12 @@
 package logger
 
 import (
-	"github.com/fatih/structs"
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
 	"os"
 	"sync"
+	"time"
 )
 
 var (
@@ -14,7 +15,6 @@ var (
 )
 
 func init() {
-	logrus.SetOutput(os.Stdout)
 	logrus.SetFormatter(&logrus.TextFormatter{})
 	logrus.SetReportCaller(false)
 	logrus.SetFormatter(&logrus.TextFormatter{
@@ -26,7 +26,25 @@ func init() {
 func Boot(e *echo.Echo) {
 	once.Do(func() {
 		Echo = e
+		SetLoggerOutput()
 	})
+}
+
+func SetLoggerOutput() {
+	if os.Getenv("APP_DEBUG") == "true" {
+		log.SetOutput(os.Stderr)
+		log.SetLevel(log.DEBUG)
+	} else {
+		currentTime := time.Now()
+		logPath, err := os.OpenFile("/var/log/hex/"+currentTime.Format("2006-01-02-")+os.Getenv("PKG")+".log", os.O_APPEND|os.O_CREATE, 0755)
+
+		if err != nil {
+			Echo.Logger.Fatal(err)
+		}
+
+		log.SetOutput(logPath)
+		log.SetLevel(log.WARN)
+	}
 }
 
 func Debug(i ...interface{}) {
@@ -55,36 +73,6 @@ func Fatal(i ...interface{}) {
 }
 
 func Panic(i ...interface{}) {
-	logrus.Panic(i...)
-	Echo.Logger.Panic(i...)
-}
-
-func DebugF(atr interface{}, err error) {
-	logrus.WithFields(structs.Map(atr)).Debug(err)
-	Echo.Logger.Debug(err)
-}
-
-func InfoF(i ...interface{}) {
-	logrus.Info(i...)
-	Echo.Logger.Info(i...)
-}
-
-func WarnF(i ...interface{}) {
-	logrus.Warn(i...)
-	Echo.Logger.Warn(i...)
-}
-
-func ErrorF(i ...interface{}) {
-	logrus.Error(i...)
-	Echo.Logger.Error(i...)
-}
-
-func FatalF(i ...interface{}) {
-	logrus.Fatal(i...)
-	Echo.Logger.Fatal(i...)
-}
-
-func PanicF(i ...interface{}) {
 	logrus.Panic(i...)
 	Echo.Logger.Panic(i...)
 }

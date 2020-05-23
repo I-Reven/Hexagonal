@@ -33,7 +33,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./docker/mongo/data/db:/data/db
+      - ./docker/mongo/data:/data
     networks:
       - backend
 
@@ -136,7 +136,10 @@ services:
       - redis
       - rabbitmq
       - mongodb
+    volumes:
+      - ./storage/log:/var/log/hex
     environment:
+      PKG: core
       APP_ENV: ${APP_ENV}
       MONGO_URL: ${MONGO_HOST}
       REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
