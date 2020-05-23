@@ -9,6 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bongo/bongo v0.10.4
 	github.com/go-redis/redis/v8 v8.0.0-beta.2
+	github.com/gocql/gocql v0.0.0-20200519160334-799061058e31 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gorilla/sessions v1.2.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
@@ -18,6 +19,7 @@ require (
 	github.com/kardianos/govendor v1.0.9 // indirect
 	github.com/labstack/gommon v0.3.0
 	github.com/maxwellhealth/go-dotaccess v0.0.0-20190924013105-74ea4f4ca4eb // indirect
+	github.com/mitchellh/mapstructure v1.3.1 // indirect
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
