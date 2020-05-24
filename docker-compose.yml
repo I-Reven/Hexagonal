@@ -45,7 +45,7 @@ services:
       - CASSANDRA_BROADCAST_ADDRESS=host.docker.internal
       - CASSANDRA_SEEDS=host.docker.internal
     volumes:
-      - ./docker/casandra/log:/var/log/cassandra
+      - ./docker/cassandra/log:/var/log/cassandra
       - ./docker/elassandra/data:/opt/elassandra/data
     ports:
       - 7000:7000
