@@ -34,6 +34,7 @@ services:
       - ${MONGO_PORT}:27017
     volumes:
       - ./docker/mongo/data:/data
+      - ./docker/mongo/log:/var/log/mongodb
     networks:
       - backend
 
@@ -43,6 +44,9 @@ services:
     environment:
       - CASSANDRA_BROADCAST_ADDRESS=host.docker.internal
       - CASSANDRA_SEEDS=host.docker.internal
+    volumes:
+      - ./docker/casandra/log:/var/log/cassandra
+      - ./docker/elassandra/data:/opt/elassandra/data
     ports:
       - 7000:7000
       - 7001:7001
@@ -58,6 +62,8 @@ services:
     image: redis
     container_name: 'hex-redis'
     restart: unless-stopped
+    volumes:
+      - ./docker/redis/data:/data
     ports:
       - ${REDIS_PORT}:6379
     networks:
@@ -75,6 +81,10 @@ services:
       - 15672:15672
       - 5672:5672
     volumes:
+      - ./docker/rabbitmq/log:/var/log/rabbitmq
+      - ./docker/rabbitmq/schema:/var/lib/rabbitmq/schema
+      - ./docker/rabbitmq/config:/var/lib/rabbitmq/config
+      - ./docker/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia
       - ./docker/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
     networks:
       - backend
@@ -87,7 +97,8 @@ services:
       - 8086:8086
       - 8090:8090
     volumes:
-      - ./docker/influxdb/data/influxdb:/var/lib/influxdb
+      - ./docker/influxdb/data:/var/lib/influxdb
+      - ./docker/influxdb/log:/var/log/influxdb
     environment:
       INFLUXDB_REPORTING_DISABLED: ${INFLUXDB_REPORTING_DISABLED}
       INFLUXDB_DB: ${INFLUXDB_DB}
