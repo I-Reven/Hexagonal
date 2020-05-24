@@ -12,3 +12,4 @@ docker/mongo/log/
 docker/rabbitmq/log/
 docker/rabbitmq/schema/
 docker/rabbitmq/mnesia/
+docker/rabbitmq/config/
