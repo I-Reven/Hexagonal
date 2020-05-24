@@ -1,8 +1,10 @@
 package logger
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
+	"io"
 	"os"
 	"time"
 )
@@ -34,9 +36,14 @@ func setLoggerOutput() {
 			log.Fatal(err)
 		}
 
-		log.SetOutput(logPath)
-		log.SetLevel(log.WARN)
+		gin.DisableConsoleColor()
+		gin.DefaultWriter = io.MultiWriter(logPath)
+
+		//log.SetOutput(logPath)
+		//log.SetLevel(log.WARN)
+		//log.SetLevel(log.DEBUG)
 	}
+
 }
 
 //Debug log

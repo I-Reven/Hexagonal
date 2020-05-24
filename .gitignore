@@ -3,5 +3,5 @@ vendor/
 docker/mongo/data
 docker/influxdb/data
 docker/grafana/data
+docker/application/log
 storage/log
-
