@@ -5,13 +5,13 @@ go 1.13
 require (
 	github.com/Bowery/prompt v0.0.0-20190916142128-fa8279994f75 // indirect
 	github.com/dchest/safefile v0.0.0-20151022103144-855e8d98f185 // indirect
-	github.com/fatih/color v1.9.0 // indirect
+	github.com/fatih/color v1.9.0
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bongo/bongo v0.10.4
 	github.com/go-redis/redis/v8 v8.0.0-beta.2
-	github.com/gocql/gocql v0.0.0-20200519160334-799061058e31 // indirect
+	github.com/gocql/gocql v0.0.0-20200519160334-799061058e31
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gorilla/sessions v1.2.0 // indirect
 	github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f

@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"fmt"
+	"github.com/fatih/color"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -10,7 +10,6 @@ import (
 )
 
 var (
-	// Used for flags.
 	cfgFile     string
 	userLicense string
 
@@ -29,6 +28,7 @@ func Execute(addCommand func(*cobra.Command)) error {
 }
 
 func init() {
+	baner()
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
 	RootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
@@ -41,7 +41,7 @@ func init() {
 }
 
 func er(msg interface{}) {
-	fmt.Println("Error:", msg)
+	color.HiRed("Error: %s", msg)
 	os.Exit(1)
 }
 
@@ -64,6 +64,11 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		color.HiRed("Using config file:" + viper.ConfigFileUsed())
 	}
+}
+
+func baner() {
+	color.Cyan("\n\n██╗  ██╗███████╗██╗  ██╗ █████╗  ██████╗  ██████╗ ███╗   ██╗ █████╗ ██╗     \n██║  ██║██╔════╝╚██╗██╔╝██╔══██╗██╔════╝ ██╔═══██╗████╗  ██║██╔══██╗██║     \n███████║█████╗   ╚███╔╝ ███████║██║  ███╗██║   ██║██╔██╗ ██║███████║██║     \n██╔══██║██╔══╝   ██╔██╗ ██╔══██║██║   ██║██║   ██║██║╚██╗██║██╔══██║██║     \n██║  ██║███████╗██╔╝ ██╗██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██║  ██║███████╗\n╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝ . " + os.Getenv("PKG"))
+	color.HiGreen("Power By GIN\n\n")
 }

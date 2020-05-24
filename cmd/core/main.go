@@ -24,7 +24,7 @@ func boot() {
 
 func setOsArg() {
 	if os.Getenv("PKG") == "" && len(os.Args) == 1 {
-		os.Args = []string{os.Args[0], "serve"}
+		//os.Args = []string{os.Args[0], "serve"}
 	}
 }
 

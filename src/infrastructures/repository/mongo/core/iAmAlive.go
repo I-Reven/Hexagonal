@@ -1,12 +1,12 @@
 package core
 
 import (
-	entity "github.com/I-Reven/Hexagonal/src/domains/entity/core"
+	entity2 "github.com/I-Reven/Hexagonal/src/domains/entity"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type IAmAlive struct {
-	entity.IAmAlive `bson:",inline"`
+	entity2.IAmAlive `bson:",inline"`
 }
 
 func (iAmAlive *IAmAlive) HttpTestSuccess() error {
