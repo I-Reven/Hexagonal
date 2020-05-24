@@ -22,6 +22,7 @@ func init() {
 	socket = socketio.NewServer(transport.GetDefaultWebsocketTransport())
 }
 
+//Boot Boot kernel
 func Boot() {
 	logger.Boot()
 	middleware()

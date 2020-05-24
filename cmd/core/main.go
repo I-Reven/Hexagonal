@@ -1,57 +1,34 @@
 package main
 
 import (
+	"bytes"
 	kernel "github.com/I-Reven/Hexagonal/src/applications/core"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
+	"github.com/I-Reven/Hexagonal/src/applications/core/console"
+	"github.com/dimiro1/banner"
 	"github.com/joho/godotenv"
-	"golang.org/x/sync/errgroup"
-	"net/http"
+	_ "github.com/mattn/go-colorable"
 	"os"
-	"time"
-)
-
-var (
-	g errgroup.Group
 )
 
 func init() {
+	banner.Init(os.Stdout, true, true, bytes.NewBufferString("Hexagonal "+os.Getenv("PKG")))
 	setEnv()
-	boot()
+	setOsArg()
 }
 
 func main() {
-	engine := kernel.Route()
-	socket := kernel.Socket()
-
-	server := &http.Server{
-		Addr:         ":80",
-		Handler:      engine,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-	}
-
-	serverMux := &http.Server{
-		Addr:         ":81",
-		Handler:      socket,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-	}
-
-	g.Go(func() error {
-		return server.ListenAndServe()
-	})
-
-	g.Go(func() error {
-		return serverMux.ListenAndServe()
-	})
-
-	if err := g.Wait(); err != nil {
-		logger.Fatal(err)
-	}
+	boot()
+	console.Cli()
 }
 
 func boot() {
 	kernel.Boot()
+}
+
+func setOsArg() {
+	if os.Getenv("PKG") == "" && len(os.Args) == 1 {
+		os.Args = []string{os.Args[0], "serve"}
+	}
 }
 
 func setEnv() {

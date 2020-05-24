@@ -23,4 +23,4 @@ RUN go build /app/cmd/${PKG}/main.go
 
 EXPOSE 80
 
-CMD ["./main"]
+CMD ["./main", "serve"]

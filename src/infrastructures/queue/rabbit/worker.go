@@ -8,6 +8,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
+//AddWorker Add Worker for queue
 func AddWorker(message rabbit.Message, jobs ...job.Job) {
 	replies, err := ConsumeMessage(message)
 
