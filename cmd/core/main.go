@@ -51,7 +51,6 @@ func main() {
 }
 
 func boot() {
-	logger.Boot()
 	kernel.Boot()
 }
 
