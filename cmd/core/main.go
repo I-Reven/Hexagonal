@@ -1,17 +1,14 @@
 package main
 
 import (
-	"bytes"
 	kernel "github.com/I-Reven/Hexagonal/src/applications/core"
 	"github.com/I-Reven/Hexagonal/src/applications/core/console"
-	"github.com/dimiro1/banner"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-colorable"
 	"os"
 )
 
 func init() {
-	banner.Init(os.Stdout, true, true, bytes.NewBufferString("Hexagonal "+os.Getenv("PKG")))
 	setEnv()
 	setOsArg()
 }

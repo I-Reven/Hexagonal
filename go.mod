@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/Bowery/prompt v0.0.0-20190916142128-fa8279994f75 // indirect
 	github.com/dchest/safefile v0.0.0-20151022103144-855e8d98f185 // indirect
-	github.com/dimiro1/banner v1.0.0
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
@@ -20,7 +19,7 @@ require (
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/kardianos/govendor v1.0.9 // indirect
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/mattn/go-colorable v0.1.6
+	github.com/mattn/go-colorable v0.1.4
 	github.com/maxwellhealth/go-dotaccess v0.0.0-20190924013105-74ea4f4ca4eb // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.3.1 // indirect

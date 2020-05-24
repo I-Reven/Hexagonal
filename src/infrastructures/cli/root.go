@@ -30,7 +30,6 @@ func Execute(addCommand func(*cobra.Command)) error {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
 	RootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	RootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
