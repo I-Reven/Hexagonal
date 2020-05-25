@@ -18,12 +18,10 @@ func init() {
 	})
 }
 
-//Boot Logger
 func Boot() {
 
 }
 
-// SetLogPath Set Log Path
 func SetLogPath() {
 	if os.Getenv("PKG") == "" {
 		log.SetOutput(os.Stderr)
@@ -44,33 +42,27 @@ func SetLogPath() {
 	}
 }
 
-//Debug log
 func Debug(i ...interface{}) {
 	logrus.Debug(i...)
 }
 
-//Info log
 func Info(i ...interface{}) {
 	logrus.Info(i...)
 }
 
-//Warn log
 func Warn(i ...interface{}) {
 	logrus.Warn(i...)
 }
 
-//Error log
 func Error(i ...interface{}) {
 	logrus.Error(i...)
 }
 
-//Fatal log
 func Fatal(i ...interface{}) {
 	logrus.Fatal(i...)
 	log.Fatal(i...)
 }
 
-//Panic log
 func Panic(i ...interface{}) {
 	logrus.Panic(i...)
 	log.Panic(i...)

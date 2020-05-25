@@ -23,8 +23,8 @@ func boot() {
 }
 
 func setOsArg() {
-	if os.Getenv("PKG") == "" && len(os.Args) == 1 {
-		//os.Args = []string{os.Args[0], "serve"}
+	if os.Getenv("AUTO_SERVE") == "true" && len(os.Args) == 1 {
+		os.Args = []string{os.Args[0], "serve"}
 	}
 }
 

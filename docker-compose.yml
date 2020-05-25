@@ -173,6 +173,7 @@ services:
       - redis
       - rabbitmq
       - mongodb
+      - elassandra
     volumes:
       - ./docker/application/log:/var/log/hex
     environment:

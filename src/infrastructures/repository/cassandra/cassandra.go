@@ -8,7 +8,6 @@ import (
 )
 
 type (
-	//Cassandra Config
 	Cassandra struct {
 		Host        string
 		Port        string
@@ -26,33 +25,27 @@ var (
 
 		return i
 	}
-	consistancy = func(c string) gocql.Consistency {
-		gc, err := gocql.MustParseConsistency(c)
-		if err != nil {
-			return gocql.All
-		}
 
-		return gc
+	consistency = func(c string) gocql.Consistency {
+		return gocql.ParseConsistency(c)
 	}
 )
 
-// InitSession Open cassandra session
 func (c Cassandra) InitSession() *gocql.Session {
 	cluster := gocql.NewCluster(c.Host)
 	cluster.Port = port(c.Port)
 	cluster.Keyspace = c.Keyspace
-	cluster.Consistency = consistancy(c.Consistancy)
+	cluster.Consistency = consistency(c.Consistancy)
 
 	session, err := cluster.CreateSession()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "Can not connect to cassandra")
-		logrus.Fatal(err)
+		logrus.Error(err)
 	}
 	return session
 }
 
-//ClearSession Close Cassandra Session
 func ClearSession(session *gocql.Session) {
 	session.Close()
 }

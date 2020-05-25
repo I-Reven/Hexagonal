@@ -11,15 +11,17 @@ import (
 	"time"
 )
 
-// Test All Services
 func Test() {
-	iAmAlive := getEntity(testHttp())
+	request := logger.Request()
+	iAmAlive := getEntity(testHttp(request))
+	request.Data(iAmAlive)
 	testCache(&iAmAlive)
+	request.Data(iAmAlive)
 	testProducer(&iAmAlive)
+	request.Data(iAmAlive)
 }
 
-//Test Http
-func testHttp() bson.ObjectId {
+func testHttp(request logger.RequestLogger) bson.ObjectId {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.HttpTestSuccess()
 
@@ -31,7 +33,6 @@ func testHttp() bson.ObjectId {
 	return iAmAlive.GetId()
 }
 
-//Test Producer
 func testProducer(iAmAlive *repository.IAmAlive) {
 	mes := message.IAmAlive{
 		Id:      iAmAlive.GetId(),
@@ -48,7 +49,6 @@ func testProducer(iAmAlive *repository.IAmAlive) {
 	}
 }
 
-//Test Cache
 func testCache(iAmAlive *repository.IAmAlive) {
 	Cache := cache.Cache()
 	key := "iAmAlive:" + string(iAmAlive.GetId())
@@ -63,7 +63,6 @@ func testCache(iAmAlive *repository.IAmAlive) {
 	}
 }
 
-//Get Entity
 func getEntity(id bson.ObjectId) repository.IAmAlive {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetById(id)
