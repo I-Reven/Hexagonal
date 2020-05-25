@@ -1,5 +1,6 @@
 .idea/
 vendor/
+
 docker/mongo/data/*
 docker/influxdb/data/*
 docker/grafana/data/*
