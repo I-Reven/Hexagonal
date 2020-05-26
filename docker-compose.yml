@@ -149,6 +149,64 @@ services:
     networks:
       - backend
 
+  influxdb-cli:
+    image: influxdb:0.12
+    container_name: 'hex-influxdb-cli'
+    entrypoint:
+      - influx
+      - -host
+      - influxdb
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
+    networks:
+      - backend
+
+  chronograf:
+    image: chronograf:0.12
+    container_name: 'hex-chronograf'
+    volumes:
+      - ./docker/chronograf/data:/var/lib/chronograf
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
+    ports:
+      - 10000:10000
+    networks:
+      - backend
+
+  kapacitor:
+    image: kapacitor:0.12
+    container_name: 'hex-kapacitor'
+    environment:
+      KAPACITOR_HOSTNAME: kapacitor
+      KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
+    volumes:
+      - ./docker/kapacitor/data:/var/lib/kapacitor
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
+    ports:
+      - 9092:9092
+    networks:
+      - backend
+
+  kapacitor-cli:
+    image: kapacitor:0.12
+    container_name: 'hex-kapacitor-cli'
+    entrypoint: bash
+    environment:
+      KAPACITOR_URL: http://kapacitor:9092
+    links:
+      - kapacitor
+    depends_on:
+      - kapacitor
+    networks:
+      - backend
+
   telegraf:
     image: telegraf:latest
     container_name: 'hex-telegraf'
@@ -171,6 +229,10 @@ services:
       - grafana
       - elassandra
       - core
+    ports:
+      - 8092:8092/udp
+      - 8094:8094
+      - 8125:8125/udp
     environment:
       INFLUXDB_URI: ${INFLUXDB_URI}
       MONGO_HOST: ${MONGO_HOST}:${MONGO_PORT}
