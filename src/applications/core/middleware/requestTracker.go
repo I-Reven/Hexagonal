@@ -29,7 +29,7 @@ func RequestTracker() gin.HandlerFunc {
 			err = tracker.Create(&t)
 
 			if err != nil {
-				err = errors.NewNotSupported(err, "Request tracker can not save")
+				err = errors.NewNotSupported(err, "error.request-tracker-can-not-save")
 				logger.Error(err)
 			}
 
@@ -37,7 +37,7 @@ func RequestTracker() gin.HandlerFunc {
 				err = tracker.AddDebug(t.GetId(), debug)
 
 				if err != nil {
-					err = errors.NewNotSupported(err, "Request tracker can not save debug")
+					err = errors.NewNotSupported(err, "error.request-tracker-can-not-save-debug")
 					logger.Error(err)
 				}
 			}

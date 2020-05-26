@@ -48,7 +48,7 @@ func SaveTrack(id string, t *entity.Track) error {
 	track, err := json.Marshal(t)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Task can not connect to redis")
+		err = errors.NewNotSupported(err, "error.task-can-not-connect-to-redis")
 		return err
 	}
 
@@ -61,7 +61,7 @@ func GetTrack(id string) (entity.Track, error) {
 	t, err := Track().Get(id)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Redis track expired")
+		err = errors.NewNotSupported(err, "error.redis-track-expired")
 		return track, err
 	}
 
@@ -74,7 +74,7 @@ func AddMessage(id string, message string) error {
 	track, err := GetTrack(id)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Redis can not get track")
+		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
 		return err
 	}
 
@@ -87,7 +87,7 @@ func AddError(id string, error error) error {
 	track, err := GetTrack(id)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Redis can not get track")
+		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
 		return err
 	}
 
@@ -100,7 +100,7 @@ func AddData(id string, data interface{}) error {
 	track, err := GetTrack(id)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Redis can not get track")
+		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
 		return err
 	}
 
@@ -113,7 +113,7 @@ func AddDebug(id string, message string, data ...interface{}) error {
 	track, err := GetTrack(id)
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Redis can not get track")
+		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
 		return err
 	}
 

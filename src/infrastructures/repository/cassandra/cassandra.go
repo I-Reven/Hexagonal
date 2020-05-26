@@ -40,7 +40,7 @@ func (c Cassandra) InitSession() *gocql.Session {
 	session, err := cluster.CreateSession()
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "Can not connect to cassandra")
+		err = errors.NewNotSupported(err, "error.can-not-connect-to-cassandra")
 		logrus.Error(err)
 	}
 	return session

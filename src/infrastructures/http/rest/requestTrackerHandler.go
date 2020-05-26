@@ -8,15 +8,14 @@ import (
 	"net/http"
 )
 
-func Request(context *gin.Context) {
-	iAmAlive, err := service.GetLastTest()
+func RequestTracker(context *gin.Context) {
+	Track, err := service.GetTrack(context.GetString("trackId"))
 
 	if err != nil {
-		err = errors.NewNotSupported(err, "error.Handler-get-error-from-test-service")
+		err = errors.NewNotSupported(err, "error.handler-get-error-from-get-track-service")
 		logger.Error(err)
 	}
 
-	service.Test()
-
-	context.JSON(http.StatusOK, iAmAlive)
+	logger.TraceLn(Track)
+	context.JSON(http.StatusOK, Track)
 }

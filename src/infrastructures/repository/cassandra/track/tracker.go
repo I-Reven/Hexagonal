@@ -113,7 +113,7 @@ func (t Tracker) GetById(id gocql.UUID) (*entity.Track, error) {
 		return track, nil
 	}
 
-	return nil, errors.NewNotFound(errors.New("error"), "Track Not Found")
+	return nil, errors.NewNotFound(errors.New("error"), "error.track-not-found")
 }
 
 func (t Tracker) Update(id gocql.UUID, message string, error string) error {
