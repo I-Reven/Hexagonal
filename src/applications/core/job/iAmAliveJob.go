@@ -33,7 +33,7 @@ func (i IAmAliveJob) Handler() error {
 
 func (IAmAliveJob) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
-	logger.Info(err)
+	logger.Warn(err)
 }
 
 func (i IAmAliveJob) GetConfig() job.Config {

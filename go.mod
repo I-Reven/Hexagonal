@@ -4,12 +4,16 @@ go 1.13
 
 require (
 	github.com/Bowery/prompt v0.0.0-20190916142128-fa8279994f75 // indirect
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/dchest/safefile v0.0.0-20151022103144-855e8d98f185 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/gin-contrib/cors v1.3.1
+	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bongo/bongo v0.10.4
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-redis/redis/v8 v8.0.0-beta.2
 	github.com/gocql/gocql v0.0.0-20200519160334-799061058e31
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
@@ -22,9 +26,10 @@ require (
 	github.com/mattn/go-colorable v0.1.4
 	github.com/maxwellhealth/go-dotaccess v0.0.0-20190924013105-74ea4f4ca4eb // indirect
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/mitchellh/mapstructure v1.3.1 // indirect
+	github.com/mitchellh/mapstructure v1.3.1
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
+	github.com/shirou/gopsutil v2.20.4+incompatible
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect

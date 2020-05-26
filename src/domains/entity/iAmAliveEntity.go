@@ -7,7 +7,7 @@ import (
 
 type (
 	IAmAlive struct {
-		Id              bson.ObjectId `bson:"_id,omitempty" json:"_id"`
+		Id              bson.ObjectId `bson:"_id,omitempty" json:"id"`
 		HttpSuccess     bool          `bson:"httpSuccess" json:"httpSuccess"`
 		ProducerSuccess bool          `bson:"producerSuccess" json:"producerSuccess"`
 		DbSuccess       bool          `bson:"dbSuccess" json:"dbSuccess"`

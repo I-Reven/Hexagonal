@@ -12,24 +12,22 @@ import (
 )
 
 func Test() {
-	request := logger.Request()
-	iAmAlive := getEntity(testHttp(request))
-	request.Data(iAmAlive)
+	iAmAlive := getEntity(testHttp())
 	testCache(&iAmAlive)
-	request.Data(iAmAlive)
 	testProducer(&iAmAlive)
-	request.Data(iAmAlive)
+	logger.Debug("iAmAliveService.Test", iAmAlive)
 }
 
-func testHttp(request logger.RequestLogger) bson.ObjectId {
+func testHttp() bson.ObjectId {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.HttpTestSuccess()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-database")
-		logger.Info(err)
+		logger.Warn(err)
 	}
 
+	logger.Debug("iAmAliveService.testHttp", iAmAlive)
 	return iAmAlive.GetId()
 }
 
@@ -43,10 +41,12 @@ func testProducer(iAmAlive *repository.IAmAlive) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-producer")
-		logger.Info(err)
+		logger.Warn(err)
 	} else {
 		_ = iAmAlive.ProducerTestSuccess()
 	}
+
+	logger.Debug("iAmAliveService.testProducer", mes)
 }
 
 func testCache(iAmAlive *repository.IAmAlive) {
@@ -57,10 +57,12 @@ func testCache(iAmAlive *repository.IAmAlive) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")
-		logger.Info(err)
+		logger.Warn(err)
 	} else {
 		_ = iAmAlive.CashTestSuccess()
 	}
+
+	logger.Debug("iAmAliveService.testCache", key, iAmAlive)
 }
 
 func getEntity(id bson.ObjectId) repository.IAmAlive {
@@ -69,15 +71,18 @@ func getEntity(id bson.ObjectId) repository.IAmAlive {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-get-data")
-		logger.Info(err)
+		logger.Warn(err)
 	} else {
 		_ = iAmAlive.DbTestSuccess()
 	}
 
+	logger.Debug("iAmAliveService.getEntity", id, iAmAlive)
 	return iAmAlive
 }
 
-func GetLastTest() (error, repository.IAmAlive) {
+func GetLastTest() (repository.IAmAlive, error) {
 	iAmAlive := repository.IAmAlive{}
-	return iAmAlive.GetLast(), iAmAlive
+	err := iAmAlive.GetLast()
+	logger.Debug("iAmAliveService.GetLastTest", iAmAlive)
+	return iAmAlive, err
 }

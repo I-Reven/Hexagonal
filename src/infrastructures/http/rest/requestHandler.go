@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func IAmAlive(context *gin.Context) {
+func Request(context *gin.Context) {
 	iAmAlive, err := service.GetLastTest()
 
 	if err != nil {

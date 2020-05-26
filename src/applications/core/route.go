@@ -5,7 +5,6 @@ import (
 	"net/http"
 )
 
-//Route Http
 func Route() http.Handler {
 
 	engine.GET("/i-am-alive", rest.IAmAlive)

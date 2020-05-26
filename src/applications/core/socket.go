@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-//Socket Listener
 func Socket() *http.ServeMux {
 
 	socket.On(socketio.OnConnection, handler.Connect)

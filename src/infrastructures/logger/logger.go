@@ -10,16 +10,14 @@ import (
 )
 
 func init() {
+	SetLogPath()
 	logrus.SetFormatter(&logrus.TextFormatter{})
 	logrus.SetReportCaller(false)
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableColors: false,
 		FullTimestamp: true,
 	})
-}
-
-func Boot() {
-
+	logrus.SetLevel(logrus.WarnLevel)
 }
 
 func SetLogPath() {
@@ -42,28 +40,50 @@ func SetLogPath() {
 	}
 }
 
-func Debug(i ...interface{}) {
-	logrus.Debug(i...)
+func Debug(message string, data ...interface{}) {
+	if os.Getenv("APP_DEBUG") == "true" {
+		TrackDebug(message, data...)
+		logrus.Debug(message)
+		logrus.Debug(data...)
+	}
 }
 
-func Info(i ...interface{}) {
-	logrus.Info(i...)
+func TraceLn(data ...interface{}) {
+	TrackData(data...)
+	logrus.Traceln(data...)
 }
 
-func Warn(i ...interface{}) {
-	logrus.Warn(i...)
+func Info(message string) {
+	TrackMessage(message)
+	logrus.Info(message)
 }
 
-func Error(i ...interface{}) {
-	logrus.Error(i...)
+func Warn(err error) {
+	TrackError(err)
+	logrus.Warn(err)
 }
 
-func Fatal(i ...interface{}) {
-	logrus.Fatal(i...)
-	log.Fatal(i...)
+func Error(err error) {
+	TrackError(err)
+	logrus.Error(err)
 }
 
-func Panic(i ...interface{}) {
-	logrus.Panic(i...)
-	log.Panic(i...)
+func Fatal(err error) {
+	TrackError(err)
+	logrus.Fatal(err)
+	log.Fatal(err)
+}
+
+func Panic(err error) {
+	TrackError(err)
+	logrus.Panic(err)
+	log.Panic(err)
+}
+
+func StartDebug() error {
+	return os.Setenv("APP_DEBUG", "true")
+}
+
+func EndDebug() error {
+	return os.Setenv("APP_DEBUG", "false")
 }

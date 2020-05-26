@@ -4,9 +4,8 @@ import (
 	"github.com/I-Reven/Hexagonal/src/applications/core/server"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/cli"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra/log"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/migration/cassandra"
 	"github.com/fatih/color"
-	"github.com/juju/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -25,15 +24,13 @@ var (
 		Short: "Migrate core pkg database",
 		Long:  "Migrate core pkg cassandra database",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := log.Log().Migrate()
+			err := cassandra.Migrate()
 
 			if err != nil {
-				err = errors.NewNotSupported(err, "Can not migrate cassandra logs")
 				color.HiRed(err.Error())
-				logger.Panic(err)
+			} else {
+				color.HiGreen("Migration Done")
 			}
-
-			color.HiGreen("Migration Done")
 		},
 	}
 )

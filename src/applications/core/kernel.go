@@ -1,7 +1,6 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/gin-gonic/gin"
 	socketio "github.com/graarh/golang-socketio"
 	"github.com/graarh/golang-socketio/transport"
@@ -15,16 +14,12 @@ var (
 )
 
 func init() {
-	logger.SetLogPath()
-
 	engine = gin.Default()
 	serveMux = http.NewServeMux()
 	socket = socketio.NewServer(transport.GetDefaultWebsocketTransport())
 }
 
-//Boot Boot kernel
 func Boot() {
-	logger.Boot()
 	middleware()
 	worker()
 }
