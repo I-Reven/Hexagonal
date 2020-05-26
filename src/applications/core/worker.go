@@ -8,4 +8,5 @@ import (
 
 func worker() {
 	go rabbit.AddWorker(message.IAmAlive{}, job.IAmAliveJob{})
+	go rabbit.AddWorker(message.TrackRequest{}, job.RequestTracker{})
 }

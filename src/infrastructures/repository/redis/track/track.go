@@ -56,6 +56,10 @@ func SaveTrack(id string, t *entity.Track) error {
 	return nil
 }
 
+func DeleteTrack(id string) error {
+	return Track().Del(id)
+}
+
 func GetTrack(id string) (entity.Track, error) {
 	track := entity.Track{}
 	t, err := Track().Get(id)

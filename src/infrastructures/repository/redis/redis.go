@@ -28,3 +28,8 @@ func (r Redis) Get(key string) (string, error) {
 func (r Redis) Set(key string, value interface{}, expiration time.Duration) (string, error) {
 	return r.Client.Set(r.Ctx, key, value, expiration).Result()
 }
+
+//Set Value
+func (r Redis) Del(key string) error {
+	return r.Client.Del(r.Ctx, key).Err()
+}

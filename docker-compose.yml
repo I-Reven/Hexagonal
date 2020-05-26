@@ -58,6 +58,19 @@ services:
     networks:
       - backend
 
+  elasticsearch:
+    image: elastichq/elasticsearch-hq
+    container_name: 'hex-elasticsearch'
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    links:
+      - elassandra
+    depends_on:
+      - elassandra
+    networks:
+      - backend
+
   redis:
     image: redis
     container_name: 'hex-redis'
@@ -117,7 +130,15 @@ services:
     links:
       - redis
       - rabbitmq
+      - mongodb
       - influxdb
+      - elassandra
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+      - elassandra
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
       GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
@@ -140,11 +161,16 @@ services:
       - mongodb
       - influxdb
       - grafana
+      - elassandra
+      - core
     depends_on:
       - redis
       - rabbitmq
       - mongodb
       - influxdb
+      - grafana
+      - elassandra
+      - core
     environment:
       INFLUXDB_URI: ${INFLUXDB_URI}
       MONGO_HOST: ${MONGO_HOST}:${MONGO_PORT}
