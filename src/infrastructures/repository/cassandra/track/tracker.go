@@ -56,6 +56,7 @@ func (t Tracker) Migrate() error {
 	tracksQuery := `
 		CREATE TABLE IF NOT EXISTS tracks (
   			id TIMEUUID,
+			track_id UUID,
   			message TEXT,
   			data SET<TEXT>,
 			debugs SET<frozen <debug>>,
@@ -78,15 +79,17 @@ func (t Tracker) Create(track *entity.Track) error {
 	query := `
 		INSERT INTO tracks (
 		    id,
+		    track_id,
 		    message,
 		    data,
 		    error,
 			timestamp
 		)
-		VALUES (?, ?, ?, ?, ?)
+		VALUES (?, ?, ?, ?, ?, ?)
     	`
 	return t.Query(query,
 		track.GetId(),
+		track.GetTrackId(),
 		track.GetMessage(),
 		track.GetData(),
 		track.GetError(),
@@ -104,6 +107,32 @@ func (t Tracker) GetById(id gocql.UUID) (*entity.Track, error) {
 	for itr.MapScan(m) {
 		track := &entity.Track{}
 		track.SetId(m["id"].(gocql.UUID))
+		track.SetTrackId(m["track_id"].(gocql.UUID))
+		track.SetMessage(m["message"].(string))
+		track.SetData(m["data"].([]string))
+		track.SetDebugs(toDebugs(m["debugs"]))
+		track.SetError(m["error"].(string))
+		track.SetTimestamp(m["timestamp"].(time.Time))
+
+		return track, nil
+	}
+
+	return nil, errors.NewNotFound(errors.New("error"), "error.track-not-found")
+}
+
+func (t Tracker) GetByTrackId(trackId gocql.UUID) (*entity.Track, error) {
+	m := map[string]interface{}{}
+	query := `
+		SELECT * FROM tracks
+			WHERE track_id = ?
+		LIMIT 1
+		ALLOW FILTERING
+    	`
+	itr := t.Query(query, trackId).Consistency(gocql.One).Iter()
+	for itr.MapScan(m) {
+		track := &entity.Track{}
+		track.SetId(m["id"].(gocql.UUID))
+		track.SetTrackId(m["track_id"].(gocql.UUID))
 		track.SetMessage(m["message"].(string))
 		track.SetData(m["data"].([]string))
 		track.SetDebugs(toDebugs(m["debugs"]))

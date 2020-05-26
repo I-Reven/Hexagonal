@@ -18,5 +18,5 @@ func GetTrack(id string) (*entity.Track, error) {
 		return nil, err
 	}
 
-	return tracker.GetById(Id)
+	return tracker.GetByTrackId(Id)
 }

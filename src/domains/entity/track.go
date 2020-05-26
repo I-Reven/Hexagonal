@@ -8,6 +8,7 @@ import (
 
 type Track struct {
 	Id        gocql.UUID `cql:"id" json:"id"`
+	TrackId   gocql.UUID `cql:"track_id" json:"trackId"`
 	Message   string     `cql:"message" json:"message"`
 	Data      []string   `cql:"data" json:"data"`
 	Debugs    []Debug    `cql:"debugger" json:"debugger"`
@@ -17,6 +18,8 @@ type Track struct {
 
 func (t *Track) GetId() gocql.UUID                { return t.Id }
 func (t *Track) SetId(id gocql.UUID)              { t.Id = id }
+func (t *Track) GetTrackId() gocql.UUID           { return t.TrackId }
+func (t *Track) SetTrackId(trackId gocql.UUID)    { t.TrackId = trackId }
 func (t *Track) GetMessage() string               { return t.Message }
 func (t *Track) SetMessage(message string)        { t.Message = message }
 func (t *Track) GetData() []string                { return t.Data }

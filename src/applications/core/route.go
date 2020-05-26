@@ -8,6 +8,7 @@ import (
 func Route() http.Handler {
 
 	engine.GET("/i-am-alive", rest.IAmAlive)
+	engine.GET("/track/:trackId", rest.RequestTracker)
 
 	return engine
 }

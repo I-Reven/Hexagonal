@@ -39,7 +39,7 @@ func CreateTrack() (string, error) {
 	track := entity.Track{}
 	track.SetId(gocql.TimeUUID())
 	id := track.GetId().String()
-	track.SetId(gocql.TimeUUID())
+	track.SetTrackId(track.GetId())
 	err := SaveTrack(id, &track)
 	return id, err
 }

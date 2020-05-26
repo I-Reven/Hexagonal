@@ -22,37 +22,33 @@ type (
 		CPNice float64 `json:"cPNice"`
 		CPSys  float64 `json:"cPSys"`
 		CPIntr float64 `json:"cPIntr"`
-		//CPIdle    float64 `json:"cPIdle"`
-		//CPUStates float64 `json:"cPUStates"`
 	}
 
 	Memory struct {
-		Alloc        uint64 `json:"alloc"`
-		TotalAlloc   uint64 `json:"totalAlloc"`
-		Sys          uint64 `json:"sys"`
-		Lookups      uint64 `json:"lookups"`
-		Mallocs      uint64 `json:"mallocs"`
-		Frees        uint64 `json:"frees"`
-		HeapAlloc    uint64 `json:"heapAlloc"`
-		HeapSys      uint64 `json:"heapSys"`
-		HeapIdle     uint64 `json:"heapIdle"`
-		HeapInuse    uint64 `json:"heapInuse"`
-		HeapReleased uint64 `json:"heapReleased"`
-		HeapObjects  uint64 `json:"heapObjects"`
-		StackInuse   uint64 `json:"stackInuse"`
-		StackSys     uint64 `json:"stackSys"`
-		MSpanInuse   uint64 `json:"mSpanInuse"`
-		MSpanSys     uint64 `json:"mSpanSys"`
-		MCacheInuse  uint64 `json:"mCacheInuse"`
-		MCacheSys    uint64 `json:"mCacheSys"`
-		BuckHashSys  uint64 `json:"buckHashSys"`
-		GCSys        uint64 `json:"gCSys"`
-		OtherSys     uint64 `json:"otherSys"`
-		NextGC       uint64 `json:"nextGC"`
-		LastGC       uint64 `json:"lastGC"`
-		PauseTotalNs uint64 `json:"pauseTotalNs"`
-		//PauseNs       [256]uint64 `json:"pauseNs"`
-		//PauseEnd      [256]uint64 `json:"pauseEnd"`
+		Alloc         uint64  `json:"alloc"`
+		TotalAlloc    uint64  `json:"totalAlloc"`
+		Sys           uint64  `json:"sys"`
+		Lookups       uint64  `json:"lookups"`
+		Mallocs       uint64  `json:"mallocs"`
+		Frees         uint64  `json:"frees"`
+		HeapAlloc     uint64  `json:"heapAlloc"`
+		HeapSys       uint64  `json:"heapSys"`
+		HeapIdle      uint64  `json:"heapIdle"`
+		HeapInuse     uint64  `json:"heapInuse"`
+		HeapReleased  uint64  `json:"heapReleased"`
+		HeapObjects   uint64  `json:"heapObjects"`
+		StackInuse    uint64  `json:"stackInuse"`
+		StackSys      uint64  `json:"stackSys"`
+		MSpanInuse    uint64  `json:"mSpanInuse"`
+		MSpanSys      uint64  `json:"mSpanSys"`
+		MCacheInuse   uint64  `json:"mCacheInuse"`
+		MCacheSys     uint64  `json:"mCacheSys"`
+		BuckHashSys   uint64  `json:"buckHashSys"`
+		GCSys         uint64  `json:"gCSys"`
+		OtherSys      uint64  `json:"otherSys"`
+		NextGC        uint64  `json:"nextGC"`
+		LastGC        uint64  `json:"lastGC"`
+		PauseTotalNs  uint64  `json:"pauseTotalNs"`
 		NumGC         uint32  `json:"numGC"`
 		NumForcedGC   uint32  `json:"numForcedGC"`
 		GCCPUFraction float64 `json:"gCCPUFraction"`
@@ -119,8 +115,6 @@ func (d *Debug) SetMemory() {
 		memory.NextGC,
 		memory.LastGC,
 		memory.PauseTotalNs,
-		//memory.PauseNs,
-		//memory.PauseEnd,
 		memory.NumGC,
 		memory.NumForcedGC,
 		memory.GCCPUFraction,
@@ -145,12 +139,10 @@ func (d *Debug) GetUPU() CPU {
 func (d *Debug) SetCPU() {
 	percent, _ := cpu.Percent(time.Nanosecond, true)
 	Cpu := CPU{
-		percent[cpu.CPUser],
-		percent[cpu.CPNice],
-		percent[cpu.CPSys],
-		percent[cpu.CPIntr],
-		//percent[cpu.CPIdle],
-		//percent[cpu.CPUStates],
+		percent[0],
+		percent[1],
+		percent[2],
+		percent[3],
 	}
 	cpu, err := json.Marshal(Cpu)
 

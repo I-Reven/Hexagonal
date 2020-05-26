@@ -9,7 +9,7 @@ import (
 )
 
 func RequestTracker(context *gin.Context) {
-	Track, err := service.GetTrack(context.GetString("trackId"))
+	Track, err := service.GetTrack(context.Param("trackId"))
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.handler-get-error-from-get-track-service")
