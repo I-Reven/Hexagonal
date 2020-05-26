@@ -71,7 +71,7 @@ func CreateDebugger(message string, data ...interface{}) Debug {
 	}
 
 	debugger.SetMemory()
-	debugger.SetCPU()
+	//debugger.SetCPU()
 	debugger.SetTimestamp(time.Now().UnixNano() / int64(time.Millisecond))
 
 	for _, info := range data {

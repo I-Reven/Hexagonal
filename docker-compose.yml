@@ -27,6 +27,35 @@ services:
     networks:
       - backend
 
+  grafana:
+    build: ./docker/grafana
+    container_name: 'hex-grafana'
+    volumes:
+      - ./docker/grafana/data/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    links:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+      - elassandra
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - influxdb
+      - elassandra
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
+      GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
+      INFLUXDB_URI: ${INFLUXDB_URI}
+      INFLUXDB_DB: ${INFLUXDB_DB}
+      INFLUXDB_USER: ${INFLUXDB_USER}
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    networks:
+      - backend
+
   mongodb:
     image: mongo:latest
     container_name: 'hex-mongodb'
@@ -114,35 +143,6 @@ services:
       - ./docker/influxdb/log:/var/log/influxdb
     environment:
       INFLUXDB_REPORTING_DISABLED: ${INFLUXDB_REPORTING_DISABLED}
-      INFLUXDB_DB: ${INFLUXDB_DB}
-      INFLUXDB_USER: ${INFLUXDB_USER}
-      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-    networks:
-      - backend
-
-  grafana:
-    build: ./docker/grafana
-    container_name: 'hex-grafana'
-    volumes:
-      - ./docker/grafana/data/grafana:/var/lib/grafana
-    ports:
-      - 3000:3000
-    links:
-      - redis
-      - rabbitmq
-      - mongodb
-      - influxdb
-      - elassandra
-    depends_on:
-      - redis
-      - rabbitmq
-      - mongodb
-      - influxdb
-      - elassandra
-    environment:
-      GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
-      GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
-      INFLUXDB_URI: ${INFLUXDB_URI}
       INFLUXDB_DB: ${INFLUXDB_DB}
       INFLUXDB_USER: ${INFLUXDB_USER}
       INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
