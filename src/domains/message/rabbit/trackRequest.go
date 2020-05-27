@@ -36,7 +36,7 @@ func (TrackRequest) GetConsumerConfig() ConsumerConfig {
 		AutoAck:        true,
 		NoLocal:        false,
 		Durable:        false,
-		DeleteWhenUsed: false,
+		DeleteWhenUsed: true,
 		Exclusive:      false,
 	}
 }
