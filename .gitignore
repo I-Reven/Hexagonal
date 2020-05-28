@@ -1,18 +1,3 @@
 .idea/
 vendor/
 
-docker/mongo/data/*
-docker/influxdb/data/*
-docker/grafana/data/*
-docker/elassandra/data/*
-docker/redis/data/*
-docker/application/log/*
-docker/cassandra/log/*
-docker/influxdb/log/*
-docker/mongo/log/*
-docker/rabbitmq/log/*
-docker/rabbitmq/schema/*
-docker/rabbitmq/mnesia/*
-docker/rabbitmq/config/*
-docker/chronograf/data/*
-docker/kapacitor/data/*
