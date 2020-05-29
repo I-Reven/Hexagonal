@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: telegraf
+  name: telegraf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: telegraf
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: telegraf
+    spec:
+      containers:
+      - env:
+        - name: INFLUXDB_URI
+          value: http://influxdb:8086
+        - name: MONGO_HOST
+          value: mongodb:27017
+        image: telegraf:latest
+        imagePullPolicy: ""
+        name: hex-telegraf
+        ports:
+        - containerPort: 8092
+          protocol: UDP
+        - containerPort: 8094
+        - containerPort: 8125
+          protocol: UDP
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/telegraf/telegraf.conf
+          name: telegraf-claim0
+          readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: telegraf-claim1
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: telegraf-claim0
+        persistentVolumeClaim:
+          claimName: telegraf-claim0
+          readOnly: true
+      - name: telegraf-claim1
+        persistentVolumeClaim:
+          claimName: telegraf-claim1
+status: {}

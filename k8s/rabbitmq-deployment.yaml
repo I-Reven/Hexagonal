@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: rabbitmq
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: rabbitmq
+    spec:
+      containers:
+      - env:
+        - name: RABBITMQ_DEFAULT_PASS
+          value: kousha
+        - name: RABBITMQ_DEFAULT_USER
+          value: kousha
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: /
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: SWQOKODSQALRPCLNMEQG
+        image: rabbitmq:3-management
+        imagePullPolicy: ""
+        name: hex-rabbitmq
+        ports:
+        - containerPort: 15672
+        - containerPort: 5672
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/log/rabbitmq
+          name: rabbitmq-claim0
+        - mountPath: /var/lib/rabbitmq/schema
+          name: rabbitmq-claim1
+        - mountPath: /var/lib/rabbitmq/config
+          name: rabbitmq-claim2
+        - mountPath: /var/lib/rabbitmq/mnesia
+          name: rabbitmq-claim3
+        - mountPath: /etc/rabbitmq/enabled_plugins
+          name: rabbitmq-claim4
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: rabbitmq-claim0
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim0
+      - name: rabbitmq-claim1
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim1
+      - name: rabbitmq-claim2
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim2
+      - name: rabbitmq-claim3
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim3
+      - name: rabbitmq-claim4
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim4
+status: {}

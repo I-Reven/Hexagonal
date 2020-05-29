@@ -4,7 +4,6 @@ services:
 
   netdata:
     image: netdata/netdata
-    hostname: example.com
     container_name: 'hex-netdata'
     ports:
       - 19999:19999
@@ -149,19 +148,19 @@ services:
     networks:
       - backend
 
-  influxdb-cli:
-    image: influxdb:0.12
-    container_name: 'hex-influxdb-cli'
-    entrypoint:
-      - influx
-      - -host
-      - influxdb
-    links:
-      - influxdb
-    depends_on:
-      - influxdb
-    networks:
-      - backend
+#  influxdb-cli:
+#    image: influxdb:0.12
+#    container_name: 'hex-influxdb-cli'
+#    entrypoint:
+#      - influx
+#      - -host
+#      - influxdb
+#    links:
+#      - influxdb
+#    depends_on:
+#      - influxdb
+#    networks:
+#      - backend
 
   chronograf:
     image: chronograf:0.12
@@ -194,18 +193,18 @@ services:
     networks:
       - backend
 
-  kapacitor-cli:
-    image: kapacitor:0.12
-    container_name: 'hex-kapacitor-cli'
-    entrypoint: bash
-    environment:
-      KAPACITOR_URL: http://kapacitor:9092
-    links:
-      - kapacitor
-    depends_on:
-      - kapacitor
-    networks:
-      - backend
+#  kapacitor-cli:
+#    image: kapacitor:0.12
+#    container_name: 'hex-kapacitor-cli'
+#    entrypoint: bash
+#    environment:
+#      KAPACITOR_URL: http://kapacitor:9092
+#    links:
+#      - kapacitor
+#    depends_on:
+#      - kapacitor
+#    networks:
+#      - backend
 
   telegraf:
     image: telegraf:latest
@@ -243,7 +242,7 @@ services:
     image: amritb/socketio-client-tool:latest
     container_name: 'hex-socket-client'
     ports:
-      - 8001:8080
+      - 8002:8080
     networks:
       - backend
 

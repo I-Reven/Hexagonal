@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: influxdb
+  name: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: influxdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: influxdb
+    spec:
+      containers:
+      - env:
+        - name: INFLUXDB_DB
+          value: telegraf
+        - name: INFLUXDB_REPORTING_DISABLED
+          value: "false"
+        - name: INFLUXDB_USER
+          value: telegraf
+        - name: INFLUXDB_USER_PASSWORD
+          value: supersecret
+        image: influxdb:latest
+        imagePullPolicy: ""
+        name: hex-influxdb
+        ports:
+        - containerPort: 8083
+        - containerPort: 8086
+        - containerPort: 8090
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: influxdb-claim0
+        - mountPath: /var/log/influxdb
+          name: influxdb-claim1
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: influxdb-claim0
+        persistentVolumeClaim:
+          claimName: influxdb-claim0
+      - name: influxdb-claim1
+        persistentVolumeClaim:
+          claimName: influxdb-claim1
+status: {}

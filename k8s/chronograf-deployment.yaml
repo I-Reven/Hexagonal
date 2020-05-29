@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chronograf
+  name: chronograf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: chronograf
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: chronograf
+    spec:
+      containers:
+      - image: chronograf:0.12
+        imagePullPolicy: ""
+        name: hex-chronograf
+        ports:
+        - containerPort: 10000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/chronograf
+          name: chronograf-claim0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: chronograf-claim0
+        persistentVolumeClaim:
+          claimName: chronograf-claim0
+status: {}

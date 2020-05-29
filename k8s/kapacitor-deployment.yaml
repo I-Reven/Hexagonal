@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kapacitor
+  name: kapacitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: kapacitor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: kapacitor
+    spec:
+      containers:
+      - env:
+        - name: KAPACITOR_HOSTNAME
+          value: kapacitor
+        - name: KAPACITOR_INFLUXDB_0_URLS_0
+          value: http://influxdb:8086
+        image: kapacitor:0.12
+        imagePullPolicy: ""
+        name: hex-kapacitor
+        ports:
+        - containerPort: 9092
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/kapacitor
+          name: kapacitor-claim0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: kapacitor-claim0
+        persistentVolumeClaim:
+          claimName: kapacitor-claim0
+status: {}

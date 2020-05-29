@@ -1,0 +1,237 @@
+networks:
+  backend: {}
+services:
+  chronograf:
+    container_name: hex-chronograf
+    depends_on:
+    - influxdb
+    image: chronograf:0.12
+    links:
+    - influxdb
+    networks:
+      backend: null
+    ports:
+    - 10000:10000/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/chronograf/data:/var/lib/chronograf:rw
+  core:
+    build:
+      args:
+        PKG: core
+      context: /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal
+    container_name: hex-core
+    depends_on:
+    - elassandra
+    - mongodb
+    - rabbitmq
+    - redis
+    environment:
+      APP_ENV: production
+      MONGO_URL: mongodb
+      PKG: core
+      RABBIT_URL: amqp://kousha:kousha@rabbitmq:5672/
+      REDIS_URL: redis:6379
+    image: koushamad/hexagonal-core:latest
+    networks:
+      backend: null
+    ports:
+    - 8080:80/tcp
+    - 8081:81/tcp
+    restart: unless-stopped
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/application/log:/var/log/hex:rw
+  elassandra:
+    container_name: hex-elassandra
+    environment:
+      CASSANDRA_BROADCAST_ADDRESS: host.docker.internal
+      CASSANDRA_SEEDS: host.docker.internal
+    image: erangaeb/elassandra:6.2
+    networks:
+      backend: null
+    ports:
+    - 7000:7000/tcp
+    - 7001:7001/tcp
+    - 7199:7199/tcp
+    - 9042:9042/tcp
+    - 9160:9160/tcp
+    - 9200:9200/tcp
+    - 9300:9300/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/cassandra/log:/var/log/cassandra:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/elassandra/data:/opt/elassandra/data:rw
+  elasticsearch:
+    container_name: hex-elasticsearch
+    depends_on:
+    - elassandra
+    image: elastichq/elasticsearch-hq
+    links:
+    - elassandra
+    networks:
+      backend: null
+    ports:
+    - 5000:5000/tcp
+    restart: unless-stopped
+  grafana:
+    build:
+      context: /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/grafana
+    container_name: hex-grafana
+    depends_on:
+    - elassandra
+    - influxdb
+    - mongodb
+    - rabbitmq
+    - redis
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      INFLUXDB_DB: telegraf
+      INFLUXDB_URI: http://influxdb:8086
+      INFLUXDB_USER: telegraf
+      INFLUXDB_USER_PASSWORD: supersecret
+    links:
+    - redis
+    - rabbitmq
+    - mongodb
+    - influxdb
+    - elassandra
+    networks:
+      backend: null
+    ports:
+    - 3000:3000/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/grafana/data/grafana:/var/lib/grafana:rw
+  influxdb:
+    container_name: hex-influxdb
+    environment:
+      INFLUXDB_DB: telegraf
+      INFLUXDB_REPORTING_DISABLED: "false"
+      INFLUXDB_USER: telegraf
+      INFLUXDB_USER_PASSWORD: supersecret
+    image: influxdb:latest
+    networks:
+      backend: null
+    ports:
+    - 8083:8083/tcp
+    - 8086:8086/tcp
+    - 8090:8090/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/influxdb/data:/var/lib/influxdb:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/influxdb/log:/var/log/influxdb:rw
+  kapacitor:
+    container_name: hex-kapacitor
+    depends_on:
+    - influxdb
+    environment:
+      KAPACITOR_HOSTNAME: kapacitor
+      KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
+    image: kapacitor:0.12
+    links:
+    - influxdb
+    networks:
+      backend: null
+    ports:
+    - 9092:9092/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/kapacitor/data:/var/lib/kapacitor:rw
+  mongodb:
+    container_name: hex-mongodb
+    image: mongo:latest
+    networks:
+      backend: null
+    ports:
+    - 27017:27017/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/mongo/data:/data:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/mongo/log:/var/log/mongodb:rw
+  netdata:
+    cap_add:
+    - SYS_PTRACE
+    container_name: hex-netdata
+    depends_on:
+    - core
+    - grafana
+    - influxdb
+    - mongodb
+    - rabbitmq
+    - redis
+    - telegraf
+    image: netdata/netdata
+    networks:
+      backend: null
+    ports:
+    - 19999:19999/tcp
+    security_opt:
+    - apparmor:unconfined
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+  rabbitmq:
+    container_name: hex-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_PASS: kousha
+      RABBITMQ_DEFAULT_USER: kousha
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+    image: rabbitmq:3-management
+    networks:
+      backend: null
+    ports:
+    - 15672:15672/tcp
+    - 5672:5672/tcp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/rabbitmq/log:/var/log/rabbitmq:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/rabbitmq/schema:/var/lib/rabbitmq/schema:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/rabbitmq/config:/var/lib/rabbitmq/config:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia:rw
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:rw
+  redis:
+    container_name: hex-redis
+    image: redis
+    networks:
+      backend: null
+    ports:
+    - 6379:6379/tcp
+    restart: unless-stopped
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/redis/data:/data:rw
+  socketio-client-tool:
+    container_name: hex-socket-client
+    image: amritb/socketio-client-tool:latest
+    networks:
+      backend: null
+    ports:
+    - 8002:8080/tcp
+  telegraf:
+    container_name: hex-telegraf
+    depends_on:
+    - core
+    - elassandra
+    - grafana
+    - influxdb
+    - mongodb
+    - rabbitmq
+    - redis
+    environment:
+      INFLUXDB_URI: http://influxdb:8086
+      MONGO_HOST: mongodb:27017
+    image: telegraf:latest
+    links:
+    - redis
+    - rabbitmq
+    - mongodb
+    - influxdb
+    - grafana
+    - elassandra
+    - core
+    networks:
+      backend: null
+    ports:
+    - 8092:8092/udp
+    - 8094:8094/tcp
+    - 8125:8125/udp
+    volumes:
+    - /Users/koushaghodsizad/go/src/github.com/I-Reven/Hexagonal/docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+version: '3.0'
+

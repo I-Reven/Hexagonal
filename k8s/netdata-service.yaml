@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: netdata
+  name: netdata
+spec:
+  ports:
+  - name: "19999"
+    port: 19999
+    targetPort: 19999
+  selector:
+    io.kompose.service: netdata
+status:
+  loadBalancer: {}
