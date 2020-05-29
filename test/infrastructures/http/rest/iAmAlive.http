@@ -1,4 +1,0 @@
-GET http://localhost:80/i-am-alive
-Accept: application/json
-
-###

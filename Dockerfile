@@ -1,26 +1,33 @@
-FROM golang:1.13-alpine
+FROM golang:1.13-alpine AS build_base
+LABEL maintainer="Kousha Godsizad <kousha.ghodsizad@gmail.com>"
 
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
-LABEL maintainer="Kousha Godsizad <kousha.ghodsizad@gmail.com>"
-
+ARG PKG
 WORKDIR /app
 
 COPY go.mod go.sum ./
-
 RUN go mod download
 
-COPY ./cmd ./cmd
 COPY ./src ./src
 COPY ./test ./test
-COPY .live.env .live.env
-COPY .test.env .test.env
+COPY .test.env .live.env ./
+
+RUN go build /app/src/applications/${PKG}/cmd/main.go
+
+
+FROM alpine:3.9
+RUN apk add ca-certificates
 
 ARG PKG
+WORKDIR /app
 
-RUN go build /app/cmd/${PKG}/main.go
+COPY ./docker/application/wait-for-it.sh /usr/bin/wait-for-it
+COPY ./docker/application/crontabs /etc/crontabs/root
+COPY --from=build_base /app/main ./
+COPY .live.env ./
 
-EXPOSE 80
+CMD wait-for-it rabbitmq:5672 -- wait-for-it mongodb:27017 -- wait-for-it redis:6379 -- wait-for-it elassandra:9042 -- app/main install ; /app/main
 
-CMD ["./main"]
+EXPOSE 80 81 82 83 84 85 86 87 88 89

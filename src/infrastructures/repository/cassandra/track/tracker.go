@@ -7,6 +7,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/mitchellh/mapstructure"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -17,6 +18,8 @@ type (
 )
 
 var (
+	once     sync.Once
+	tracker  Tracker
 	toDebugs = func(i interface{}) []entity.Debug {
 		var debugs []entity.Debug
 		debug := entity.Debug{}
@@ -33,14 +36,18 @@ var (
 )
 
 func Track() Tracker {
-	cassandraConfig := cassandra.Cassandra{
-		Host:        os.Getenv("CASSANDRA_HOST"),
-		Port:        os.Getenv("CASSANDRA_PORT"),
-		Keyspace:    os.Getenv("CASSANDRA_KEYSPACE_TRACKER"),
-		Consistancy: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
-	}
+	once.Do(func() {
+		cassandraConfig := cassandra.Cassandra{
+			Host:        os.Getenv("CASSANDRA_HOST"),
+			Port:        os.Getenv("CASSANDRA_PORT"),
+			Keyspace:    os.Getenv("CASSANDRA_KEYSPACE_TRACKER"),
+			Consistancy: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
+		}
 
-	return Tracker{cassandraConfig.InitSession()}
+		tracker = Tracker{cassandraConfig.InitSession()}
+	})
+
+	return tracker
 }
 
 func (t Tracker) Migrate() error {

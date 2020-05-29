@@ -1,7 +1,7 @@
 package main
 
 import (
-	kernel "github.com/I-Reven/Hexagonal/src/applications/core"
+	"github.com/I-Reven/Hexagonal/src/applications/core"
 	"github.com/I-Reven/Hexagonal/src/applications/core/console"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-colorable"
@@ -14,12 +14,8 @@ func init() {
 }
 
 func main() {
-	boot()
+	core.Boot()
 	console.Cli()
-}
-
-func boot() {
-	kernel.Boot()
 }
 
 func setOsArg() {

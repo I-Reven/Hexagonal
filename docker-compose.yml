@@ -248,6 +248,7 @@ services:
       - backend
 
   core:
+    image: koushamad/hexagonal-core:latest
     build:
       context: .
       args:
@@ -267,9 +268,6 @@ services:
     environment:
       PKG: core
       APP_ENV: ${APP_ENV}
-      MONGO_URL: ${MONGO_HOST}
-      REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
-      RABBIT_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/
     networks:
       - backend
 

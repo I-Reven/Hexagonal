@@ -8,7 +8,11 @@ import (
 	"net/http"
 )
 
-func IAmAlive(context *gin.Context) {
+func Ping(ctx *gin.Context) {
+	ctx.String(http.StatusOK, "PONG")
+}
+
+func IAmAlive(ctx *gin.Context) {
 	iAmAlive, err := service.GetLastTest()
 
 	if err != nil {
@@ -18,5 +22,5 @@ func IAmAlive(context *gin.Context) {
 
 	service.Test()
 
-	context.JSON(http.StatusOK, iAmAlive)
+	ctx.JSON(http.StatusOK, iAmAlive)
 }

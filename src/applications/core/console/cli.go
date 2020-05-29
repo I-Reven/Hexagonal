@@ -1,10 +1,11 @@
 package console
 
 import (
+	"github.com/I-Reven/Hexagonal/src/applications/core"
+	"github.com/I-Reven/Hexagonal/src/applications/core/job"
 	"github.com/I-Reven/Hexagonal/src/applications/core/server"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/cli"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/migration/cassandra"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
@@ -19,28 +20,37 @@ var (
 		},
 	}
 
-	MigrateCmd = &cobra.Command{
-		Use:   "migration",
-		Short: "Migrate core pkg database",
-		Long:  "Migrate core pkg cassandra database",
+	InstallCmd = &cobra.Command{
+		Use:   "install",
+		Short: "Install core pkg",
+		Long:  "Install core pkg dependency",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := cassandra.Migrate()
+			err := core.Install()
 
 			if err != nil {
 				color.HiRed(err.Error())
 			} else {
-				color.HiGreen("Migration Done")
+				color.HiGreen("Install Done")
 			}
+		},
+	}
+
+	CronCmd = &cobra.Command{
+		Use:   "cron",
+		Short: "Run core pkg cron",
+		Long:  "Run core pkg cron jobs",
+		Run: func(cmd *cobra.Command, args []string) {
+			job.Cron()
 		},
 	}
 )
 
-//Cli Command line interface
 func Cli() {
 	err := cli.Execute(func(c *cobra.Command) {
 		c.AddCommand(cli.VersionCmd)
 		c.AddCommand(ServeCmd)
-		c.AddCommand(MigrateCmd)
+		c.AddCommand(InstallCmd)
+		c.AddCommand(CronCmd)
 	})
 
 	if err != nil {

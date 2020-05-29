@@ -38,6 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.0
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
+	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
