@@ -35,7 +35,7 @@ if [ $state == "test" ]; then
 fi
 
 if [ $state == "local" ]; then
-  docker-compose up --build
+  docker-compose up --build  --remove-orphans
 fi
 
 
