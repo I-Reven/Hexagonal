@@ -10,7 +10,7 @@ type Install struct {
 	Installer core.Installer
 }
 
-func (i Install) Command() *cobra.Command {
+func (i *Install) Command() *cobra.Command {
 	return &cobra.Command{
 		Use:   "install",
 		Short: "Install core pkg",

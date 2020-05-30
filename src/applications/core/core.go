@@ -6,6 +6,6 @@ type Core struct {
 }
 
 func (c Core) Boot() {
-	c.Middleware.middleware()
-	c.Worker.worker()
+	c.Middleware.Handler()
+	c.Worker.Work()
 }

@@ -10,7 +10,7 @@ type Worker struct {
 	Worker rabbit.Worker
 }
 
-func (w Worker) worker() {
+func (w Worker) Work() {
 	go w.Worker.AddWorker(message.IAmAlive{}, job.IAmAliveJob{})
 	go w.Worker.AddWorker(message.TrackRequest{}, job.RequestTracker{})
 }

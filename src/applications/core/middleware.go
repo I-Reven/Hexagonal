@@ -14,12 +14,12 @@ type Middleware struct {
 	Tracker middleware.Tracker
 }
 
-func (m Middleware) middleware() {
+func (m Middleware) Handler() {
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 
 	engine.Use(sessions.Sessions("core", m.Session.Store()))
-	engine.Use(m.Tracker.RequestTracker())
+	engine.Use(m.Tracker.Handler())
 
 	engine.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},

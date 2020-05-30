@@ -12,7 +12,7 @@ type Tracker struct {
 	Track logger.Tracker
 }
 
-func (m Tracker) RequestTracker() gin.HandlerFunc {
+func (m Tracker) Handler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := m.Track.Create(ctx)
 		if err != nil {

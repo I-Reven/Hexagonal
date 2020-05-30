@@ -9,7 +9,7 @@ type Cron struct {
 	CronJob job.CronJob
 }
 
-func (c Cron) CronCmd() *cobra.Command {
+func (c *Cron) CronCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "cron",
 		Short: "Run core pkg cron",

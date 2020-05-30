@@ -9,7 +9,7 @@ type Serve struct {
 	Listener listener.Listener
 }
 
-func (c Serve) Command() *cobra.Command {
+func (c *Serve) Command() *cobra.Command {
 	return &cobra.Command{
 		Use:   "serve",
 		Short: "Start to listen and serve core pkg",
