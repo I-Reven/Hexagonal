@@ -6,13 +6,16 @@ import (
 )
 
 func Connect(c *socketio.Channel) {
-	logger.Info("Connect to socket " + c.Id())
+	log := logger.Log{}
+	log.Info("Connect to socket " + c.Id())
 }
 
 func Disconnect(c *socketio.Channel) {
-	logger.Info("Disconnect to socket " + c.Id())
+	log := logger.Log{}
+	log.Info("Disconnect to socket " + c.Id())
 }
 
 func Error(c *socketio.Channel) {
-	logger.Info("Error to socket " + c.Id())
+	log := logger.Log{}
+	log.Info("Error to socket " + c.Id())
 }

@@ -17,29 +17,18 @@ var (
 	once    sync.Once
 )
 
-func Boot() {
-	once.Do(func() {
-		var err error
-		amqpURI = flag.String("amqp", os.Getenv("RABBIT_URL"), "AMQP URI")
-		flag.Parse()
-		conn, err = amqp.Dial(*amqpURI)
-
-		if err != nil {
-			err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-server")
-			logger.Panic(err)
-		}
-
-	})
+type Rabbit struct {
+	Log logger.Log
 }
 
-func Init(message rabbit.Message) {
-	Boot()
+func (r Rabbit) Init(message rabbit.Message) {
+	r.Boot()
 	var err error
 	ch, err = conn.Channel()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-channel")
-		logger.Panic(err)
+		r.Log.Panic(err)
 	}
 
 	err = ch.ExchangeDeclare(
@@ -54,6 +43,21 @@ func Init(message rabbit.Message) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-exchange-declare-channel")
-		logger.Panic(err)
+		r.Log.Panic(err)
 	}
+}
+
+func (r Rabbit) Boot() {
+	once.Do(func() {
+		var err error
+		amqpURI = flag.String("amqp", os.Getenv("RABBIT_URL"), "AMQP URI")
+		flag.Parse()
+		conn, err = amqp.Dial(*amqpURI)
+
+		if err != nil {
+			err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-server")
+			r.Log.Panic(err)
+		}
+
+	})
 }

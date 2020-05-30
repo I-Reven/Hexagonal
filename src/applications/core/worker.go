@@ -6,7 +6,11 @@ import (
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
 )
 
-func worker() {
-	go rabbit.AddWorker(message.IAmAlive{}, job.IAmAliveJob{})
-	go rabbit.AddWorker(message.TrackRequest{}, job.RequestTracker{})
+type Worker struct {
+	Worker rabbit.Worker
+}
+
+func (w Worker) worker() {
+	go w.Worker.AddWorker(message.IAmAlive{}, job.IAmAliveJob{})
+	go w.Worker.AddWorker(message.TrackRequest{}, job.RequestTracker{})
 }

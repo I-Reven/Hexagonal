@@ -2,82 +2,44 @@ package job
 
 import "math/rand"
 
-func Cron() {
-	EveryMinute()
+type CronJob struct{}
+
+func (c CronJob) Cron() {
+	c.everyMinute()
 
 	if rand.Intn(5) == 1 {
-		EveryFiveMinute()
+		c.everyFiveMinute()
 	}
 
 	if rand.Intn(15) == 1 {
-		EveryFifineMinute()
+		c.everyFifineMinute()
 	}
 
 	if rand.Intn(30) == 1 {
-		EveryThirtyMinute()
+		c.everyThirtyMinute()
 	}
 
 	if rand.Intn(60) == 1 {
-		EveryHour()
-	}
-
-	if rand.Intn(360) == 1 {
-		EverySixHour()
-	}
-
-	if rand.Intn(720) == 1 {
-		EveryTwelveHour()
-	}
-
-	if rand.Intn(1440) == 1 {
-		EveryDay()
-	}
-
-	if rand.Intn(10080) == 1 {
-		EveryWeek()
-	}
-
-	if rand.Intn(43200) == 1 {
-		EveryMonth()
+		c.everyHour()
 	}
 }
 
-func EveryMinute() {
+func (c CronJob) everyMinute() {
 
 }
 
-func EveryFiveMinute() {
+func (c CronJob) everyFiveMinute() {
 
 }
 
-func EveryFifineMinute() {
+func (c CronJob) everyFifineMinute() {
 
 }
 
-func EveryThirtyMinute() {
+func (c CronJob) everyThirtyMinute() {
 
 }
 
-func EveryHour() {
-
-}
-
-func EverySixHour() {
-
-}
-
-func EveryTwelveHour() {
-
-}
-
-func EveryDay() {
-
-}
-
-func EveryWeek() {
-
-}
-
-func EveryMonth() {
+func (c CronJob) everyHour() {
 
 }

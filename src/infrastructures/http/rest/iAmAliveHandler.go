@@ -13,14 +13,15 @@ func Ping(ctx *gin.Context) {
 }
 
 func IAmAlive(ctx *gin.Context) {
-	iAmAlive, err := service.GetLastTest()
+	log := logger.Log{}
+	iAmAlive, err := service.IAamAliveService{}.GetLastTest()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.Handler-get-error-from-test-service")
-		logger.Error(err)
+		log.Error(err)
 	}
 
-	service.Test()
+	service.IAamAliveService{}.Test()
 
 	ctx.JSON(http.StatusOK, iAmAlive)
 }

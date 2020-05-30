@@ -11,7 +11,9 @@ var (
 	Session sessions.Session = nil
 )
 
-func CreateTracker(context *gin.Context) (string, error) {
+type Tracker struct{}
+
+func (t Tracker) Create(context *gin.Context) (string, error) {
 	Session = sessions.Default(context)
 	id, err := track.CreateTrack()
 
@@ -23,65 +25,51 @@ func CreateTracker(context *gin.Context) (string, error) {
 	return id, Session.Save()
 }
 
-func TrackMessage(message string) {
+func (t Tracker) Message(message string) error {
 	if Session != nil {
 		id := Session.Get("track-id").(string)
-		err := track.AddMessage(id, message)
-
-		if err != nil {
-			Error(err)
-		}
+		return track.AddMessage(id, message)
 	}
+	return nil
 }
 
-func TrackError(error error) {
+func (t Tracker) Error(error error) error {
 	if Session != nil {
 		id := Session.Get("track-id").(string)
-		err := track.AddError(id, error)
 
-		if err != nil {
-			Error(err)
-		}
+		return track.AddError(id, error)
 	}
+
+	return nil
 }
 
-func TrackData(data ...interface{}) {
+func (t Tracker) Data(data ...interface{}) error {
 	if Session != nil {
 		id := Session.Get("track-id").(string)
 
 		for _, info := range data {
-			err := track.AddData(id, info)
-
-			if err != nil {
-				Error(err)
-			}
+			return track.AddData(id, info)
 		}
 	}
+
+	return nil
 }
 
-func TrackDebug(message string, data ...interface{}) {
+func (t Tracker) Debug(message string, data ...interface{}) error {
 	if Session != nil {
 		id := Session.Get("track-id").(string)
 
-		err := track.AddDebug(id, message, data...)
-
-		if err != nil {
-			Error(err)
-		}
+		return track.AddDebug(id, message, data...)
 	}
+
+	return nil
 }
 
-func GetTrack() entity.Track {
+func (t Tracker) Get() (entity.Track, error) {
 	if Session != nil {
 		id := Session.Get("track-id").(string)
-		t, err := track.GetTrack(id)
-
-		if err != nil {
-			Error(err)
-		}
-
-		return t
+		return track.GetTrack(id)
 	}
 
-	return entity.Track{}
+	return entity.Track{}, nil
 }

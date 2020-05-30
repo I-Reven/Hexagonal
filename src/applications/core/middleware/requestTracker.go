@@ -7,26 +7,31 @@ import (
 	"os"
 )
 
-func RequestTracker() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id, err := logger.CreateTracker(c)
+type Tracker struct {
+	Log   logger.Log
+	Track logger.Tracker
+}
+
+func (m Tracker) RequestTracker() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := m.Track.Create(ctx)
 		if err != nil {
-			c.Next()
+			ctx.Next()
 		} else {
-			if os.Getenv("DEBUG_KEY") == c.GetHeader("Debug") {
-				_ = logger.StartDebug()
+			if os.Getenv("DEBUG_KEY") == ctx.GetHeader("Debug") {
+				_ = m.Log.StartDebug()
 			}
 
-			logger.TraceLn(c.Request)
+			m.Log.TraceLn(ctx.Request)
 
-			c.Set("TrackerId", id)
-			c.Header("tracker-id", id)
-			c.Next()
+			ctx.Set("TrackerId", id)
+			ctx.Header("tracker-id", id)
+			ctx.Next()
 
-			service.TrackRequestProducer(id)
+			service.TrackService{}.TrackRequestProducer(id)
 
-			if os.Getenv("DEBUG_KEY") == c.GetHeader("Debug") {
-				_ = logger.EndDebug()
+			if os.Getenv("DEBUG_KEY") == ctx.GetHeader("Debug") {
+				_ = m.Log.EndDebug()
 			}
 		}
 	}

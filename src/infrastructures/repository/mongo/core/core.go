@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo"
+	db "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo"
 	"github.com/go-bongo/bongo"
 	"os"
 	"sync"
@@ -20,11 +20,14 @@ type (
 	Connection struct {
 		*bongo.Connection
 	}
+	Core struct {
+		DB db.Mongo
+	}
 )
 
-func Mongo() *Connection {
+func (c Core) Mongo() *Connection {
 	once.Do(func() {
-		connection = &Connection{mongo.Init(config)}
+		connection = &Connection{db.Mongo{}.Connection(config)}
 	})
 
 	return connection

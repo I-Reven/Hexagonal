@@ -10,30 +10,35 @@ import (
 	"github.com/juju/errors"
 )
 
-func GetTrack(id string) (*entity.Track, error) {
+type TrackService struct {
+	Log     logger.Log
+	Produce rabbit.Produce
+}
+
+func (s TrackService) GetTrack(id string) (*entity.Track, error) {
 	tracker := track.Track()
 	Id, err := gocql.ParseUUID(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.can-not-parse-uuid")
-		logger.Error(err)
+		s.Log.Error(err)
 		return nil, err
 	}
 
 	return tracker.GetByTrackId(Id)
 }
 
-func TrackRequestProducer(id string) {
+func (s TrackService) TrackRequestProducer(id string) {
 	mes := message.TrackRequest{
 		Id: id,
 	}
 
-	err := rabbit.ProduceMessage(mes)
+	err := s.Produce.ProduceMessage(mes)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-producer-track-request")
-		logger.Warn(err)
+		s.Log.Warn(err)
 	}
 
-	logger.Debug("requestTrackerService.TrackRequestProducer", mes)
+	s.Log.Debug("requestTrackerService.TrackRequestProducer", mes)
 }

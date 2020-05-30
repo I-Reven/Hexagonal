@@ -9,13 +9,15 @@ import (
 )
 
 func RequestTracker(context *gin.Context) {
-	Track, err := service.GetTrack(context.Param("trackId"))
+	log := logger.Log{}
+
+	Track, err := service.TrackService{}.GetTrack(context.Param("trackId"))
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.handler-get-error-from-get-track-service")
-		logger.Error(err)
+		log.Error(err)
 	}
 
-	logger.TraceLn(Track)
+	log.TraceLn(Track)
 	context.JSON(http.StatusOK, Track)
 }

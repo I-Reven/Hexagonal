@@ -36,13 +36,13 @@ func (iAmAlive *IAmAlive) CashTestSuccess() error {
 }
 
 func (iAmAlive *IAmAlive) Save() error {
-	return Mongo().Collection("iAmAlive").Save(iAmAlive)
+	return Core{}.Mongo().Collection("iAmAlive").Save(iAmAlive)
 }
 
 func (iAmAlive *IAmAlive) GetById(Id bson.ObjectId) error {
-	return Mongo().Collection("iAmAlive").FindById(Id, iAmAlive)
+	return Core{}.Mongo().Collection("iAmAlive").FindById(Id, iAmAlive)
 }
 
 func (iAmAlive *IAmAlive) GetLast() error {
-	return Mongo().Collection("iAmAlive").Find(nil).Query.Sort("-created").One(iAmAlive)
+	return Core{}.Mongo().Collection("iAmAlive").Find(nil).Query.Sort("-created").One(iAmAlive)
 }

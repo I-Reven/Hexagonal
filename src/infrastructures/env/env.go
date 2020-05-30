@@ -1,30 +1,19 @@
-package main
+package env
 
 import (
-	"github.com/I-Reven/Hexagonal/src/applications/core"
-	"github.com/I-Reven/Hexagonal/src/applications/core/console"
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-colorable"
 	"os"
 )
 
-func init() {
-	setEnv()
-	setOsArg()
-}
+type Env struct{}
 
-func main() {
-	core.Boot()
-	console.Cli()
-}
-
-func setOsArg() {
+func (e Env) SetOsArg() {
 	if os.Getenv("AUTO_SERVE") == "true" && len(os.Args) == 1 {
 		os.Args = []string{os.Args[0], "serve"}
 	}
 }
 
-func setEnv() {
+func (e Env) SetEnv() {
 	var err error
 	env := os.Getenv("APP_ENV")
 

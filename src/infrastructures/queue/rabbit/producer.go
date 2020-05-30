@@ -9,14 +9,19 @@ import (
 	"time"
 )
 
-func ProduceMessage(message message.Message) error {
-	Init(message)
+type Produce struct {
+	Log    logger.Log
+	Rabbit Rabbit
+}
+
+func (p Produce) ProduceMessage(message message.Message) error {
+	p.Rabbit.Init(message)
 
 	payload, err := json.Marshal(message)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-produce-message")
-		logger.Error(err)
+		p.Log.Error(err)
 		return err
 	}
 
@@ -34,7 +39,7 @@ func ProduceMessage(message message.Message) error {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-publish-message-on-channel")
-		logger.Error(err)
+		p.Log.Error(err)
 	}
 
 	return err

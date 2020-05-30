@@ -6,12 +6,16 @@ import (
 	"github.com/juju/errors"
 )
 
-func Init(config bongo.Config) *bongo.Connection {
+type Mongo struct {
+	Log logger.Log
+}
+
+func (m Mongo) Connection(config bongo.Config) *bongo.Connection {
 	c, err := bongo.Connect(&config)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.mongo-can-not-connect-to-server")
-		logger.Panic(err)
+		m.Log.Panic(err)
 	}
 
 	return c

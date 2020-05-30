@@ -14,20 +14,21 @@ type (
 	RequestTracker struct {
 		Tries   int
 		Message rabbit.TrackRequest
+		Log     logger.Log
 	}
 )
 
-func (i RequestTracker) Init(b []byte) (error, job.Job) {
-	return json.Unmarshal(b, &i.Message), i
+func (j RequestTracker) Init(b []byte) (error, job.Job) {
+	return json.Unmarshal(b, &j.Message), j
 }
 
-func (i RequestTracker) Handler() error {
-	t, err := track.GetTrack(i.Message.Id)
+func (j RequestTracker) Handler() error {
+	t, err := track.GetTrack(j.Message.Id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.request-tracker-can-not-find-track-data")
-		logger.TraceLn(i.Message.Id)
-		logger.Error(err)
+		j.Log.TraceLn(j.Message.Id)
+		j.Log.Error(err)
 		return err
 	}
 
@@ -36,8 +37,8 @@ func (i RequestTracker) Handler() error {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.request-tracker-can-not-save")
-		logger.TraceLn(t)
-		logger.Error(err)
+		j.Log.TraceLn(t)
+		j.Log.Error(err)
 		return err
 	}
 
@@ -46,8 +47,8 @@ func (i RequestTracker) Handler() error {
 
 		if err != nil {
 			err = errors.NewNotSupported(err, "error.request-tracker-can-not-save-debug")
-			logger.TraceLn(t, debug)
-			logger.Error(err)
+			j.Log.TraceLn(t, debug)
+			j.Log.Error(err)
 		}
 	}
 
@@ -56,8 +57,8 @@ func (i RequestTracker) Handler() error {
 
 func (i RequestTracker) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-request-tracker-failed")
-	logger.TraceLn(i)
-	logger.Fatal(err)
+	i.Log.TraceLn(i)
+	i.Log.Fatal(err)
 }
 
 func (i RequestTracker) GetConfig() job.Config {

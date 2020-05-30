@@ -148,20 +148,6 @@ services:
     networks:
       - backend
 
-#  influxdb-cli:
-#    image: influxdb:0.12
-#    container_name: 'hex-influxdb-cli'
-#    entrypoint:
-#      - influx
-#      - -host
-#      - influxdb
-#    links:
-#      - influxdb
-#    depends_on:
-#      - influxdb
-#    networks:
-#      - backend
-
   chronograf:
     image: chronograf:0.12
     container_name: 'hex-chronograf'
@@ -192,19 +178,6 @@ services:
       - 9092:9092
     networks:
       - backend
-
-#  kapacitor-cli:
-#    image: kapacitor:0.12
-#    container_name: 'hex-kapacitor-cli'
-#    entrypoint: bash
-#    environment:
-#      KAPACITOR_URL: http://kapacitor:9092
-#    links:
-#      - kapacitor
-#    depends_on:
-#      - kapacitor
-#    networks:
-#      - backend
 
   telegraf:
     image: telegraf:latest

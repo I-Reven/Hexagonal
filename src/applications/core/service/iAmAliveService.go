@@ -11,45 +11,48 @@ import (
 	"time"
 )
 
-func Test() {
-	iAmAlive := getEntity(testHttp())
-	testCache(&iAmAlive)
-	testProducer(&iAmAlive)
-	logger.Debug("iAmAliveService.Test", iAmAlive)
+type IAamAliveService struct {
+	Log     logger.Log
+	Produce rabbit.Produce
 }
 
-func testHttp() bson.ObjectId {
+func (s IAamAliveService) Test() {
+	iAmAlive := s.getEntity(s.testHttp())
+	s.testCache(&iAmAlive)
+	s.testProducer(&iAmAlive)
+
+	s.Log.Debug("iAmAliveService.Test", iAmAlive)
+}
+
+func (s IAamAliveService) testHttp() bson.ObjectId {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.HttpTestSuccess()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-database")
-		logger.Warn(err)
+		s.Log.Warn(err)
 	}
 
-	logger.Debug("iAmAliveService.testHttp", iAmAlive)
 	return iAmAlive.GetId()
 }
 
-func testProducer(iAmAlive *repository.IAmAlive) {
+func (s IAamAliveService) testProducer(iAmAlive *repository.IAmAlive) {
 	mes := message.IAmAlive{
 		Id:      iAmAlive.GetId(),
 		Content: iAmAlive.GetContent(),
 	}
 
-	err := rabbit.ProduceMessage(mes)
+	err := s.Produce.ProduceMessage(mes)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-producer")
-		logger.Warn(err)
+		s.Log.Warn(err)
 	} else {
 		_ = iAmAlive.ProducerTestSuccess()
 	}
-
-	logger.Debug("iAmAliveService.testProducer", mes)
 }
 
-func testCache(iAmAlive *repository.IAmAlive) {
+func (s IAamAliveService) testCache(iAmAlive *repository.IAmAlive) {
 	Cache := cache.Cache()
 	key := "iAmAlive:" + string(iAmAlive.GetId())
 	_, err := Cache.Set(key, iAmAlive.GetContent(), 10*time.Minute)
@@ -57,32 +60,28 @@ func testCache(iAmAlive *repository.IAmAlive) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")
-		logger.Warn(err)
+		s.Log.Warn(err)
 	} else {
 		_ = iAmAlive.CashTestSuccess()
 	}
-
-	logger.Debug("iAmAliveService.testCache", key, iAmAlive)
 }
 
-func getEntity(id bson.ObjectId) repository.IAmAlive {
+func (s IAamAliveService) getEntity(id bson.ObjectId) repository.IAmAlive {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetById(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-get-data")
-		logger.Warn(err)
+		s.Log.Warn(err)
 	} else {
 		_ = iAmAlive.DbTestSuccess()
 	}
 
-	logger.Debug("iAmAliveService.getEntity", id, iAmAlive)
 	return iAmAlive
 }
 
-func GetLastTest() (repository.IAmAlive, error) {
+func (s IAamAliveService) GetLastTest() (repository.IAmAlive, error) {
 	iAmAlive := repository.IAmAlive{}
 	err := iAmAlive.GetLast()
-	logger.Debug("iAmAliveService.GetLastTest", iAmAlive)
 	return iAmAlive, err
 }

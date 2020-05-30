@@ -7,14 +7,14 @@ RUN apk update && apk upgrade && \
 ARG PKG
 WORKDIR /app
 
-COPY go.mod go.sum ./
-RUN go mod download
-
+COPY ./cmd ./cmd
 COPY ./src ./src
 COPY ./test ./test
+COPY go.mod go.sum ./
 COPY .test.env .live.env ./
 
-RUN go build /app/src/applications/${PKG}/cmd/main.go
+RUN go mod download
+RUN go build /app/cmd/${PKG}/main.go
 
 
 FROM alpine:3.9

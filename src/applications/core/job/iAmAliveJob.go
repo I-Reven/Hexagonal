@@ -15,16 +15,17 @@ type (
 	IAmAliveJob struct {
 		Tries   int
 		Message rabbit.IAmAlive
+		Log     logger.Log
 	}
 )
 
-func (i IAmAliveJob) Init(b []byte) (error, job.Job) {
-	return json.Unmarshal(b, &i.Message), i
+func (j IAmAliveJob) Init(b []byte) (error, job.Job) {
+	return json.Unmarshal(b, &j.Message), j
 }
 
-func (i IAmAliveJob) Handler() error {
+func (j IAmAliveJob) Handler() error {
 	iAmAlive := repository.IAmAlive{}
-	err := iAmAlive.GetById(i.Message.Id)
+	err := iAmAlive.GetById(j.Message.Id)
 
 	if err != nil {
 		return err
@@ -33,7 +34,7 @@ func (i IAmAliveJob) Handler() error {
 	return iAmAlive.ConsumerTestSuccess()
 }
 
-func (IAmAliveJob) Failed(err error) {
+func (j IAmAliveJob) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
 
 	slack.Send(&message.FailedJob{
@@ -42,9 +43,9 @@ func (IAmAliveJob) Failed(err error) {
 		Error:   err,
 	})
 
-	logger.Warn(err)
+	j.Log.Warn(err)
 }
 
-func (i IAmAliveJob) GetConfig() job.Config {
-	return job.Config{Tries: i.Tries}
+func (j IAmAliveJob) GetConfig() job.Config {
+	return job.Config{Tries: j.Tries}
 }

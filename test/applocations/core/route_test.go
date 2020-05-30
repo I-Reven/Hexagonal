@@ -11,7 +11,7 @@ import (
 )
 
 func TestRoutePing(t *testing.T) {
-	router := core.Route()
+	router := core.Http{}.Route()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/ping", nil)

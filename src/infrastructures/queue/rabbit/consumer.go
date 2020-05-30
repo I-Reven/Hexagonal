@@ -7,11 +7,16 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func ConsumeMessage(message message.Message) (<-chan amqp.Delivery, error) {
+type Consume struct {
+	Log    logger.Log
+	Rabbit Rabbit
+}
+
+func (c Consume) Message(message message.Message) (<-chan amqp.Delivery, error) {
 	var err error
 	var q amqp.Queue
 
-	Init(message)
+	c.Rabbit.Init(message)
 
 	q, err = ch.QueueDeclare(
 		message.GetConsumerConfig().Name,           // name, leave empty to generate a unique name
@@ -24,7 +29,7 @@ func ConsumeMessage(message message.Message) (<-chan amqp.Delivery, error) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-server")
-		logger.Error(err)
+		c.Log.Error(err)
 		return nil, err
 	}
 
@@ -38,7 +43,7 @@ func ConsumeMessage(message message.Message) (<-chan amqp.Delivery, error) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-build-queue")
-		logger.Error(err)
+		c.Log.Error(err)
 		return nil, err
 	}
 

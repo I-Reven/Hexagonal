@@ -6,12 +6,16 @@ import (
 	"github.com/juju/errors"
 )
 
-func Migrate() error {
+type Migration struct {
+	Log logger.Log
+}
+
+func (m Migration) Migrate() error {
 	err := track.Track().Migrate()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.can-not-migrate-cassandra-tracks")
-		logger.Error(err)
+		m.Log.Error(err)
 	}
 
 	return err
