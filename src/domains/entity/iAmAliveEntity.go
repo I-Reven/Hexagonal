@@ -17,17 +17,6 @@ type (
 		Created         time.Time     `bson:"created" json:"created"`
 		Modified        time.Time     `bson:"modified" json:"modified"`
 	}
-
-	iAmAlive interface {
-		HttpTestSuccess() error
-		DbTestSuccess() error
-		ProducerTestSuccess() error
-		ConsumerTestSuccess() error
-		CashTestSuccess() error
-		Save() error
-		GetById(Id bson.ObjectId) error
-		GetLast() error
-	}
 )
 
 func (iAmAlive *IAmAlive) GetId() bson.ObjectId       { return iAmAlive.Id }

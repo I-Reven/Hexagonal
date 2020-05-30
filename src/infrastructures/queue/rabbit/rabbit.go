@@ -18,17 +18,17 @@ var (
 )
 
 type Rabbit struct {
-	Log logger.Log
+	log logger.Log
 }
 
-func (r Rabbit) Init(message rabbit.Message) {
+func (r *Rabbit) Init(message rabbit.Message) {
 	r.Boot()
 	var err error
 	ch, err = conn.Channel()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-channel")
-		r.Log.Panic(err)
+		r.log.Panic(err)
 	}
 
 	err = ch.ExchangeDeclare(
@@ -43,11 +43,11 @@ func (r Rabbit) Init(message rabbit.Message) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-exchange-declare-channel")
-		r.Log.Panic(err)
+		r.log.Panic(err)
 	}
 }
 
-func (r Rabbit) Boot() {
+func (r *Rabbit) Boot() {
 	once.Do(func() {
 		var err error
 		amqpURI = flag.String("amqp", os.Getenv("RABBIT_URL"), "AMQP URI")
@@ -56,7 +56,7 @@ func (r Rabbit) Boot() {
 
 		if err != nil {
 			err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-server")
-			r.Log.Panic(err)
+			r.log.Panic(err)
 		}
 
 	})

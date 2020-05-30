@@ -9,15 +9,15 @@ import (
 )
 
 type Session struct {
-	Log logger.Log
+	log logger.Log
 }
 
-func (s Session) Store() sessions.Store {
+func (s *Session) Store() sessions.Store {
 	store, err := redis.NewStore(10, "tcp", os.Getenv("REDIS_URL"), "", []byte("secret"))
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.session-can-not-connect-to-redis")
-		s.Log.Error(err)
+		s.log.Error(err)
 	}
 
 	return store

@@ -11,7 +11,7 @@ import (
 
 type Listen struct {
 	group errgroup.Group
-	Log   logger.Log
+	log   logger.Log
 }
 
 func (l *Listen) Http(server *http.Server) {
@@ -26,7 +26,7 @@ func (l *Listen) Socket(server *http.Server) {
 	})
 }
 
-func (l *Listen) GRPC(network, address string, server *grpc.Server) {
+func (l *Listen) Grpc(network, address string, server *grpc.Server) {
 	listener, err := net.Listen(network, address)
 	l.group.Go(func() error {
 
@@ -40,6 +40,6 @@ func (l *Listen) GRPC(network, address string, server *grpc.Server) {
 
 func (l *Listen) Run() {
 	if err := l.group.Wait(); err != nil {
-		l.Log.Fatal(err)
+		l.log.Fatal(err)
 	}
 }

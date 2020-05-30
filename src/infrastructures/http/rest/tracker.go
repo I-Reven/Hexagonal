@@ -8,16 +8,19 @@ import (
 	"net/http"
 )
 
-func RequestTracker(context *gin.Context) {
-	log := logger.Log{}
+type Tracker struct {
+	log     logger.Log
+	service service.TrackService
+}
 
-	Track, err := service.TrackService{}.GetTrack(context.Param("trackId"))
+func (h *Tracker) Handler(context *gin.Context) {
+	Track, err := h.service.GetTrack(context.Param("trackId"))
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.handler-get-error-from-get-track-service")
-		log.Error(err)
+		h.log.Error(err)
 	}
 
-	log.TraceLn(Track)
+	h.log.TraceLn(Track)
 	context.JSON(http.StatusOK, Track)
 }

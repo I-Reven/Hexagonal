@@ -11,8 +11,8 @@ type (
 	Cassandra struct {
 		Host        string
 		Port        string
-		Keyspace    string
-		Consistancy string
+		KeySpace    string
+		Consistency string
 	}
 )
 
@@ -31,11 +31,11 @@ var (
 	}
 )
 
-func (c Cassandra) InitSession() *gocql.Session {
+func (c *Cassandra) InitSession() *gocql.Session {
 	cluster := gocql.NewCluster(c.Host)
 	cluster.Port = port(c.Port)
-	cluster.Keyspace = c.Keyspace
-	cluster.Consistency = consistency(c.Consistancy)
+	cluster.Keyspace = c.KeySpace
+	cluster.Consistency = consistency(c.Consistency)
 
 	session, err := cluster.CreateSession()
 
@@ -46,6 +46,6 @@ func (c Cassandra) InitSession() *gocql.Session {
 	return session
 }
 
-func ClearSession(session *gocql.Session) {
+func (c *Cassandra) ClearSession(session *gocql.Session) {
 	session.Close()
 }

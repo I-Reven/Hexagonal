@@ -5,27 +5,27 @@ import (
 	message "github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra/track"
+	tracker2 "github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra/tracker"
 	"github.com/gocql/gocql"
 	"github.com/juju/errors"
 )
 
 type TrackService struct {
-	Log     logger.Log
-	Produce rabbit.Produce
+	log     logger.Log
+	produce rabbit.Produce
+	track   tracker2.Track
 }
 
 func (s TrackService) GetTrack(id string) (*entity.Track, error) {
-	tracker := track.Track()
 	Id, err := gocql.ParseUUID(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.can-not-parse-uuid")
-		s.Log.Error(err)
+		s.log.Error(err)
 		return nil, err
 	}
 
-	return tracker.GetByTrackId(Id)
+	return s.track.GetByTrackId(Id)
 }
 
 func (s TrackService) TrackRequestProducer(id string) {
@@ -33,12 +33,12 @@ func (s TrackService) TrackRequestProducer(id string) {
 		Id: id,
 	}
 
-	err := s.Produce.ProduceMessage(mes)
+	err := s.produce.ProduceMessage(mes)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-producer-track-request")
-		s.Log.Warn(err)
+		s.log.Warn(err)
 	}
 
-	s.Log.Debug("requestTrackerService.TrackRequestProducer", mes)
+	s.log.Debug("requestTrackerService.TrackRequestProducer", mes)
 }

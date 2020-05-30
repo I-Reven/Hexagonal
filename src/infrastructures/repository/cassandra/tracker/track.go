@@ -1,4 +1,4 @@
-package track
+package tracker
 
 import (
 	"github.com/I-Reven/Hexagonal/src/domains/entity"
@@ -12,14 +12,12 @@ import (
 )
 
 type (
-	Tracker struct {
-		*gocql.Session
-	}
+	Track struct{}
 )
 
 var (
 	once     sync.Once
-	tracker  Tracker
+	session  *gocql.Session
 	toDebugs = func(i interface{}) []entity.Debug {
 		var debugs []entity.Debug
 		debug := entity.Debug{}
@@ -35,22 +33,22 @@ var (
 	}
 )
 
-func Track() Tracker {
+func (t *Track) cql() *gocql.Session {
 	once.Do(func() {
 		cassandraConfig := cassandra.Cassandra{
 			Host:        os.Getenv("CASSANDRA_HOST"),
 			Port:        os.Getenv("CASSANDRA_PORT"),
-			Keyspace:    os.Getenv("CASSANDRA_KEYSPACE_TRACKER"),
-			Consistancy: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
+			KeySpace:    os.Getenv("CASSANDRA_KEYSPACE_TRACKER"),
+			Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
 		}
 
-		tracker = Tracker{cassandraConfig.InitSession()}
+		session = cassandraConfig.InitSession()
 	})
 
-	return tracker
+	return session
 }
 
-func (t Tracker) Migrate() error {
+func (t *Track) Migrate() error {
 	debugQuery := `
 		CREATE TYPE IF NOT EXISTS debug (
   			message TEXT,
@@ -72,16 +70,16 @@ func (t Tracker) Migrate() error {
   			PRIMARY KEY(id)
 		);
     	`
-	err := t.Query(debugQuery).Exec()
+	err := t.cql().Query(debugQuery).Exec()
 
 	if err == nil {
-		err = t.Query(tracksQuery).Exec()
+		err = t.cql().Query(tracksQuery).Exec()
 	}
 
 	return err
 }
 
-func (t Tracker) Create(track *entity.Track) error {
+func (t *Track) Create(track *entity.Track) error {
 	track.Id = gocql.TimeUUID()
 	query := `
 		INSERT INTO tracks (
@@ -94,7 +92,7 @@ func (t Tracker) Create(track *entity.Track) error {
 		)
 		VALUES (?, ?, ?, ?, ?, ?)
     	`
-	return t.Query(query,
+	return t.cql().Query(query,
 		track.GetId(),
 		track.GetTrackId(),
 		track.GetMessage(),
@@ -103,14 +101,14 @@ func (t Tracker) Create(track *entity.Track) error {
 		time.Now()).Exec()
 }
 
-func (t Tracker) GetById(id gocql.UUID) (*entity.Track, error) {
+func (t *Track) GetById(id gocql.UUID) (*entity.Track, error) {
 	m := map[string]interface{}{}
 	query := `
 		SELECT * FROM tracks
 			WHERE id = ?
 		LIMIT 1
     	`
-	itr := t.Query(query, id).Consistency(gocql.One).Iter()
+	itr := t.cql().Query(query, id).Consistency(gocql.One).Iter()
 	for itr.MapScan(m) {
 		track := &entity.Track{}
 		track.SetId(m["id"].(gocql.UUID))
@@ -127,7 +125,7 @@ func (t Tracker) GetById(id gocql.UUID) (*entity.Track, error) {
 	return nil, errors.NewNotFound(errors.New("error"), "error.track-not-found")
 }
 
-func (t Tracker) GetByTrackId(trackId gocql.UUID) (*entity.Track, error) {
+func (t *Track) GetByTrackId(trackId gocql.UUID) (*entity.Track, error) {
 	m := map[string]interface{}{}
 	query := `
 		SELECT * FROM tracks
@@ -135,7 +133,7 @@ func (t Tracker) GetByTrackId(trackId gocql.UUID) (*entity.Track, error) {
 		LIMIT 1
 		ALLOW FILTERING
     	`
-	itr := t.Query(query, trackId).Consistency(gocql.One).Iter()
+	itr := t.cql().Query(query, trackId).Consistency(gocql.One).Iter()
 	for itr.MapScan(m) {
 		track := &entity.Track{}
 		track.SetId(m["id"].(gocql.UUID))
@@ -152,47 +150,47 @@ func (t Tracker) GetByTrackId(trackId gocql.UUID) (*entity.Track, error) {
 	return nil, errors.NewNotFound(errors.New("error"), "error.track-not-found")
 }
 
-func (t Tracker) Update(id gocql.UUID, message string, error string) error {
+func (t *Track) Update(id gocql.UUID, message string, error string) error {
 	query := `
         	UPDATE tracks
 		SET message = ?, error = ?
 		WHERE id = ?
     	`
-	return t.Query(query, message, error, id).Exec()
+	return t.cql().Query(query, message, error, id).Exec()
 }
 
-func (t Tracker) AddData(id gocql.UUID, data string) error {
+func (t *Track) AddData(id gocql.UUID, data string) error {
 	query := `
 		UPDATE tracks
 		SET data = data + ?
 		WHERE id = ?;
 	`
-	return t.Query(query, []string{data}, id).Exec()
+	return t.cql().Query(query, []string{data}, id).Exec()
 }
 
-func (t Tracker) RemoveData(id gocql.UUID, data string) error {
+func (t *Track) RemoveData(id gocql.UUID, data string) error {
 	query := `
 		UPDATE tracks
 		SET data = data - ?
 		WHERE id = ?;
 	`
-	return t.Query(query, []string{data}, id).Exec()
+	return t.cql().Query(query, []string{data}, id).Exec()
 }
 
-func (t Tracker) AddDebug(id gocql.UUID, debug entity.Debug) error {
+func (t *Track) AddDebug(id gocql.UUID, debug entity.Debug) error {
 	query := `
 		UPDATE tracks
 		SET debugs = debugs + ?
 		WHERE id = ?;
 	`
-	return t.Query(query, []entity.Debug{debug}, id).Exec()
+	return t.cql().Query(query, []entity.Debug{debug}, id).Exec()
 }
 
-func (t Tracker) RemoveDebug(id gocql.UUID, debug entity.Debug) error {
+func (t *Track) RemoveDebug(id gocql.UUID, debug entity.Debug) error {
 	query := `
 		UPDATE tracks
 		SET debugs = debugs - ?
 		WHERE id = ?;
 	`
-	return t.Query(query, []entity.Debug{debug}, id).Exec()
+	return t.cql().Query(query, []entity.Debug{debug}, id).Exec()
 }

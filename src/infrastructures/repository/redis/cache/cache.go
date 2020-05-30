@@ -19,7 +19,9 @@ var (
 	}
 )
 
-func Cache() redis.Redis {
+type Cache struct{}
+
+func (*Cache) Init() redis.Redis {
 	once.Do(func() {
 		client = redisV8.NewClient(config)
 		ctx = context.Background()

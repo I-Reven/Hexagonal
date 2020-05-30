@@ -7,53 +7,53 @@ import (
 )
 
 type Log struct {
-	Track Tracker
+	tracker Tracker
 }
 
-func (l Log) Debug(message string, data ...interface{}) {
+func (l *Log) Debug(message string, data ...interface{}) {
 	if os.Getenv("APP_DEBUG") == "true" {
-		_ = l.Track.Debug(message, data...)
+		_ = l.tracker.Debug(message, data...)
 		logrus.Debug(message)
 		logrus.Debug(data...)
 	}
 }
 
-func (l Log) TraceLn(data ...interface{}) {
-	_ = l.Track.Data(data...)
+func (l *Log) TraceLn(data ...interface{}) {
+	_ = l.tracker.Data(data...)
 	logrus.Traceln(data...)
 }
 
-func (l Log) Info(message string) {
-	_ = l.Track.Message(message)
+func (l *Log) Info(message string) {
+	_ = l.tracker.Message(message)
 	logrus.Info(message)
 }
 
-func (l Log) Warn(err error) {
-	_ = l.Track.Error(err)
+func (l *Log) Warn(err error) {
+	_ = l.tracker.Error(err)
 	logrus.Warn(err)
 }
 
-func (l Log) Error(err error) {
-	_ = l.Track.Error(err)
+func (l *Log) Error(err error) {
+	_ = l.tracker.Error(err)
 	logrus.Error(err)
 }
 
-func (l Log) Fatal(err error) {
-	_ = l.Track.Error(err)
+func (l *Log) Fatal(err error) {
+	_ = l.tracker.Error(err)
 	logrus.Fatal(err)
 	log.Fatal(err)
 }
 
-func (l Log) Panic(err error) {
-	_ = l.Track.Error(err)
+func (l *Log) Panic(err error) {
+	_ = l.tracker.Error(err)
 	logrus.Panic(err)
 	log.Panic(err)
 }
 
-func (Log) StartDebug() error {
+func (*Log) StartDebug() error {
 	return os.Setenv("APP_DEBUG", "true")
 }
 
-func (Log) EndDebug() error {
+func (*Log) EndDebug() error {
 	return os.Setenv("APP_DEBUG", "false")
 }

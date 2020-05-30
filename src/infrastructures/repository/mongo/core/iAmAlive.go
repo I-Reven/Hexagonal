@@ -7,6 +7,7 @@ import (
 
 type IAmAlive struct {
 	entity.IAmAlive `bson:",inline"`
+	core            Core
 }
 
 func (iAmAlive *IAmAlive) HttpTestSuccess() error {
@@ -36,13 +37,13 @@ func (iAmAlive *IAmAlive) CashTestSuccess() error {
 }
 
 func (iAmAlive *IAmAlive) Save() error {
-	return Core{}.Mongo().Collection("iAmAlive").Save(iAmAlive)
+	return iAmAlive.core.Connection().Collection("iAmAlive").Save(iAmAlive)
 }
 
 func (iAmAlive *IAmAlive) GetById(Id bson.ObjectId) error {
-	return Core{}.Mongo().Collection("iAmAlive").FindById(Id, iAmAlive)
+	return iAmAlive.core.Connection().Collection("iAmAlive").FindById(Id, iAmAlive)
 }
 
 func (iAmAlive *IAmAlive) GetLast() error {
-	return Core{}.Mongo().Collection("iAmAlive").Find(nil).Query.Sort("-created").One(iAmAlive)
+	return iAmAlive.core.Connection().Collection("iAmAlive").Find(nil).Query.Sort("-created").One(iAmAlive)
 }

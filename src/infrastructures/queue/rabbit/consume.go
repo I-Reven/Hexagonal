@@ -8,15 +8,15 @@ import (
 )
 
 type Consume struct {
-	Log    logger.Log
-	Rabbit Rabbit
+	log    logger.Log
+	rabbit Rabbit
 }
 
-func (c Consume) Message(message message.Message) (<-chan amqp.Delivery, error) {
+func (c *Consume) Message(message message.Message) (<-chan amqp.Delivery, error) {
 	var err error
 	var q amqp.Queue
 
-	c.Rabbit.Init(message)
+	c.rabbit.Init(message)
 
 	q, err = ch.QueueDeclare(
 		message.GetConsumerConfig().Name,           // name, leave empty to generate a unique name
@@ -29,7 +29,7 @@ func (c Consume) Message(message message.Message) (<-chan amqp.Delivery, error) 
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-connect-to-server")
-		c.Log.Error(err)
+		c.log.Error(err)
 		return nil, err
 	}
 
@@ -43,7 +43,7 @@ func (c Consume) Message(message message.Message) (<-chan amqp.Delivery, error) 
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.rabbit-can-not-build-queue")
-		c.Log.Error(err)
+		c.log.Error(err)
 		return nil, err
 	}
 

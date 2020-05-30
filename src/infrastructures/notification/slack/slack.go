@@ -5,6 +5,8 @@ import (
 	"github.com/ashwanthkumar/slack-go-webhook"
 )
 
-func Send(m message.Message) []error {
+type Slack struct{}
+
+func (*Slack) Send(m message.Message) []error {
 	return slack.Send(m.GetWebHook(), "", slack.Payload(m.GetPayload()))
 }

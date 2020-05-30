@@ -25,9 +25,9 @@ type (
 	}
 )
 
-func (c Core) Mongo() *Connection {
+func (c *Core) Connection() *Connection {
 	once.Do(func() {
-		connection = &Connection{db.Mongo{}.Connection(config)}
+		connection = &Connection{c.DB.Connection(config)}
 	})
 
 	return connection

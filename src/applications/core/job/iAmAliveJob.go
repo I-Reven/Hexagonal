@@ -13,19 +13,20 @@ import (
 
 type (
 	IAmAliveJob struct {
-		Tries   int
-		Message rabbit.IAmAlive
-		Log     logger.Log
+		tries   int
+		message rabbit.IAmAlive
+		log     logger.Log
+		slack   slack.Slack
 	}
 )
 
 func (j IAmAliveJob) Init(b []byte) (error, job.Job) {
-	return json.Unmarshal(b, &j.Message), j
+	return json.Unmarshal(b, &j.message), j
 }
 
 func (j IAmAliveJob) Handler() error {
 	iAmAlive := repository.IAmAlive{}
-	err := iAmAlive.GetById(j.Message.Id)
+	err := iAmAlive.GetById(j.message.Id)
 
 	if err != nil {
 		return err
@@ -37,15 +38,15 @@ func (j IAmAliveJob) Handler() error {
 func (j IAmAliveJob) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
 
-	slack.Send(&message.FailedJob{
+	j.slack.Send(&message.FailedJob{
 		JobName: "IAmAliveJob",
 		Message: "I Am Alive Job Failed",
 		Error:   err,
 	})
 
-	j.Log.Warn(err)
+	j.log.Warn(err)
 }
 
 func (j IAmAliveJob) GetConfig() job.Config {
-	return job.Config{Tries: j.Tries}
+	return job.Config{Tries: j.tries}
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type CLI struct {
+type Cli struct {
 	Log     logger.Log
 	Core    core.Core
 	CLI     cli.CLI
@@ -17,12 +17,12 @@ type CLI struct {
 	Cron    Cron
 }
 
-func (c CLI) Boot() {
+func (c *Cli) Boot() {
 	c.Core.Boot()
 	c.Cli()
 }
 
-func (c CLI) Cli() {
+func (c *Cli) Cli() {
 	err := c.CLI.Execute(func(cobra *cobra.Command) {
 		cobra.AddCommand(c.CLI.VersionCmd())
 		cobra.AddCommand(c.Serve.Command())

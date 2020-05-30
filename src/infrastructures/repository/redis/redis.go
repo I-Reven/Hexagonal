@@ -7,29 +7,24 @@ import (
 )
 
 type (
-	//Redis Struct
 	Redis struct {
 		Client *redis.Client
 		Ctx    context.Context
 	}
 )
 
-// Ping Redis
-func (r Redis) Ping() (string, error) {
+func (r *Redis) Ping() (string, error) {
 	return r.Client.Ping(r.Ctx).Result()
 }
 
-// Get Value
-func (r Redis) Get(key string) (string, error) {
+func (r *Redis) Get(key string) (string, error) {
 	return r.Client.Get(r.Ctx, key).Result()
 }
 
-//Set Value
-func (r Redis) Set(key string, value interface{}, expiration time.Duration) (string, error) {
-	return r.Client.Set(r.Ctx, key, value, expiration).Result()
+func (r *Redis) Set(key string, value interface{}, expiration time.Duration) error {
+	return r.Client.Set(r.Ctx, key, value, expiration).Err()
 }
 
-//Set Value
-func (r Redis) Del(key string) error {
+func (r *Redis) Del(key string) error {
 	return r.Client.Del(r.Ctx, key).Err()
 }

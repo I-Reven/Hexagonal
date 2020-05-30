@@ -31,7 +31,7 @@ func (l *Listener) Listen() {
 		WriteTimeout: 10 * time.Second,
 	})
 
-	l.listen.GRPC("tcp", ":82", l.grpc.Route())
+	l.listen.Grpc("tcp", ":82", l.grpc.Route())
 
 	l.listen.Run()
 }

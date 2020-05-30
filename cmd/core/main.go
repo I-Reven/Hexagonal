@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	coreCli := core.CLI{}
+	coreCli := core.Cli{}
 
 	coreCli.Boot()
 }

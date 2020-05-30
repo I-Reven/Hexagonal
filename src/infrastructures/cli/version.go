@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func (CLI) VersionCmd() *cobra.Command {
+func (*CLI) VersionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Print the version number of Hugo",

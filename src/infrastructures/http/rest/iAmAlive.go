@@ -8,20 +8,20 @@ import (
 	"net/http"
 )
 
-func Ping(ctx *gin.Context) {
-	ctx.String(http.StatusOK, "PONG")
+type IAmAlive struct {
+	log     logger.Log
+	service service.IAamAliveService
 }
 
-func IAmAlive(ctx *gin.Context) {
-	log := logger.Log{}
-	iAmAlive, err := service.IAamAliveService{}.GetLastTest()
+func (h *IAmAlive) Handler(ctx *gin.Context) {
+	iAmAlive, err := h.service.GetLastTest()
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.Handler-get-error-from-test-service")
-		log.Error(err)
+		h.log.Error(err)
 	}
 
-	service.IAamAliveService{}.Test()
+	h.service.Test()
 
 	ctx.JSON(http.StatusOK, iAmAlive)
 }

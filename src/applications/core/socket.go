@@ -12,18 +12,20 @@ var (
 	socket   *socketio.Server
 )
 
-type Socket struct{}
+type Socket struct {
+	socket handler.Default
+}
 
 func init() {
 	serveMux = http.NewServeMux()
 	socket = socketio.NewServer(transport.GetDefaultWebsocketTransport())
 }
 
-func (Socket) Route() *http.ServeMux {
+func (s Socket) Route() *http.ServeMux {
 
-	socket.On(socketio.OnConnection, handler.Connect)
-	socket.On(socketio.OnDisconnection, handler.Disconnect)
-	socket.On(socketio.OnError, handler.Error)
+	socket.On(socketio.OnConnection, s.socket.Connect)
+	socket.On(socketio.OnDisconnection, s.socket.Disconnect)
+	socket.On(socketio.OnError, s.socket.Error)
 
 	serveMux.Handle("/io/", socket)
 	return serveMux

@@ -7,13 +7,13 @@ import (
 
 type Env struct{}
 
-func (e Env) SetOsArg() {
+func (e *Env) SetOsArg() {
 	if os.Getenv("AUTO_SERVE") == "true" && len(os.Args) == 1 {
 		os.Args = []string{os.Args[0], "serve"}
 	}
 }
 
-func (e Env) SetEnv() {
+func (e *Env) SetEnv() {
 	var err error
 	env := os.Getenv("APP_ENV")
 

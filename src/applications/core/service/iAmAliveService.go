@@ -12,8 +12,9 @@ import (
 )
 
 type IAamAliveService struct {
-	Log     logger.Log
+	log     logger.Log
 	Produce rabbit.Produce
+	cache   cache.Cache
 }
 
 func (s IAamAliveService) Test() {
@@ -21,7 +22,7 @@ func (s IAamAliveService) Test() {
 	s.testCache(&iAmAlive)
 	s.testProducer(&iAmAlive)
 
-	s.Log.Debug("iAmAliveService.Test", iAmAlive)
+	s.log.Debug("iAmAliveService.Test", iAmAlive)
 }
 
 func (s IAamAliveService) testHttp() bson.ObjectId {
@@ -30,7 +31,7 @@ func (s IAamAliveService) testHttp() bson.ObjectId {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-database")
-		s.Log.Warn(err)
+		s.log.Warn(err)
 	}
 
 	return iAmAlive.GetId()
@@ -46,21 +47,21 @@ func (s IAamAliveService) testProducer(iAmAlive *repository.IAmAlive) {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-producer")
-		s.Log.Warn(err)
+		s.log.Warn(err)
 	} else {
 		_ = iAmAlive.ProducerTestSuccess()
 	}
 }
 
 func (s IAamAliveService) testCache(iAmAlive *repository.IAmAlive) {
-	Cache := cache.Cache()
+	Cache := s.cache.Init()
 	key := "iAmAlive:" + string(iAmAlive.GetId())
-	_, err := Cache.Set(key, iAmAlive.GetContent(), 10*time.Minute)
+	err := Cache.Set(key, iAmAlive.GetContent(), 10*time.Minute)
 	_, err = Cache.Get(key)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")
-		s.Log.Warn(err)
+		s.log.Warn(err)
 	} else {
 		_ = iAmAlive.CashTestSuccess()
 	}
@@ -72,7 +73,7 @@ func (s IAamAliveService) getEntity(id bson.ObjectId) repository.IAmAlive {
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-get-data")
-		s.Log.Warn(err)
+		s.log.Warn(err)
 	} else {
 		_ = iAmAlive.DbTestSuccess()
 	}

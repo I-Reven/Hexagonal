@@ -10,7 +10,7 @@ type Mongo struct {
 	Log logger.Log
 }
 
-func (m Mongo) Connection(config bongo.Config) *bongo.Connection {
+func (m *Mongo) Connection(config bongo.Config) *bongo.Connection {
 	c, err := bongo.Connect(&config)
 
 	if err != nil {
