@@ -1,7 +1,9 @@
 package service
 
 import (
+	domain "github.com/I-Reven/Hexagonal/src/domains/grpc"
 	message "github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/grpc/client"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
 	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
@@ -15,12 +17,14 @@ type IAamAliveService struct {
 	log     logger.Log
 	Produce rabbit.Produce
 	cache   cache.Cache
+	client  client.Ping
 }
 
 func (s IAamAliveService) Test() {
 	iAmAlive := s.getEntity(s.testHttp())
 	s.testCache(&iAmAlive)
 	s.testProducer(&iAmAlive)
+	s.testGrpc(&iAmAlive)
 
 	s.log.Debug("iAmAliveService.Test", iAmAlive)
 }
@@ -64,6 +68,17 @@ func (s IAamAliveService) testCache(iAmAlive *repository.IAmAlive) {
 		s.log.Warn(err)
 	} else {
 		_ = iAmAlive.CashTestSuccess()
+	}
+}
+
+func (s IAamAliveService) testGrpc(iAmAlive *repository.IAmAlive) {
+	_, err := s.client.Ping(&domain.PingRequest{Message: "PING"}, ":82")
+
+	if err != nil {
+		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")
+		s.log.Warn(err)
+	} else {
+		_ = iAmAlive.GrpcTestSuccess()
 	}
 }
 

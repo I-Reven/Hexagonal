@@ -8,6 +8,7 @@ type IAmAlive interface {
 	ProducerTestSuccess() error
 	ConsumerTestSuccess() error
 	CashTestSuccess() error
+	GrpcTestSuccess() error
 	Save() error
 	GetById(Id bson.ObjectId) error
 	GetLast() error

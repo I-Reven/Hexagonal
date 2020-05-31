@@ -36,6 +36,11 @@ func (iAmAlive *IAmAlive) CashTestSuccess() error {
 	return iAmAlive.Save()
 }
 
+func (iAmAlive *IAmAlive) GrpcTestSuccess() error {
+	iAmAlive.SetGrpcSuccess(true)
+	return iAmAlive.Save()
+}
+
 func (iAmAlive *IAmAlive) Save() error {
 	return iAmAlive.core.Connection().Collection("iAmAlive").Save(iAmAlive)
 }

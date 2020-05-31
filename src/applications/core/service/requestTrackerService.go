@@ -16,7 +16,7 @@ type TrackService struct {
 	track   tracker2.Track
 }
 
-func (s TrackService) GetTrack(id string) (*entity.Track, error) {
+func (s TrackService) Get(id string) (*entity.Track, error) {
 	Id, err := gocql.ParseUUID(id)
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (s TrackService) GetTrack(id string) (*entity.Track, error) {
 	return s.track.GetByTrackId(Id)
 }
 
-func (s TrackService) TrackRequestProducer(id string) {
+func (s TrackService) Produce(id string) {
 	mes := message.TrackRequest{
 		Id: id,
 	}

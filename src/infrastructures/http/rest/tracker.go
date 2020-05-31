@@ -14,7 +14,7 @@ type Tracker struct {
 }
 
 func (h *Tracker) Handler(context *gin.Context) {
-	Track, err := h.service.GetTrack(context.Param("trackId"))
+	Track, err := h.service.Get(context.Param("trackId"))
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.handler-get-error-from-get-track-service")

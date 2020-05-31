@@ -13,6 +13,7 @@ type (
 		DbSuccess       bool          `bson:"dbSuccess" json:"dbSuccess"`
 		ConsumerSuccess bool          `bson:"consumerSuccess" json:"consumerSuccess"`
 		CashSuccess     bool          `bson:"cashSuccess" json:"cashSuccess"`
+		GrpcSuccess     bool          `bson:"grpcSuccess" json:"grpcSuccess"`
 		Content         string        `bson:"content" json:"content"`
 		Created         time.Time     `bson:"created" json:"created"`
 		Modified        time.Time     `bson:"modified" json:"modified"`
@@ -34,6 +35,8 @@ func (iAmAlive *IAmAlive) SetConsumerSuccess(status bool) { iAmAlive.ConsumerSuc
 func (iAmAlive *IAmAlive) GetConsumerSuccess() bool       { return iAmAlive.ConsumerSuccess }
 func (iAmAlive *IAmAlive) SetCashSuccess(status bool)     { iAmAlive.CashSuccess = status }
 func (iAmAlive *IAmAlive) GetCashSuccess() bool           { return iAmAlive.CashSuccess }
+func (iAmAlive *IAmAlive) SetGrpcSuccess(status bool)     { iAmAlive.GrpcSuccess = status }
+func (iAmAlive *IAmAlive) GetGrpcSuccess() bool           { return iAmAlive.GrpcSuccess }
 func (iAmAlive *IAmAlive) SetContent(content string)      { iAmAlive.Content = content }
 func (iAmAlive *IAmAlive) GetContent() string             { return iAmAlive.Content }
 func (iAmAlive *IAmAlive) getEntity() IAmAlive            { return *iAmAlive }

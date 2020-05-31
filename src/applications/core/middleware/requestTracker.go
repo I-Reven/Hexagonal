@@ -8,30 +8,31 @@ import (
 )
 
 type Tracker struct {
-	Log   logger.Log
-	Track logger.Tracker
+	log     logger.Log
+	track   logger.Tracker
+	service service.TrackService
 }
 
 func (m Tracker) Handler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		id, err := m.Track.Create(ctx)
+		id, err := m.track.Create(ctx)
 		if err != nil {
 			ctx.Next()
 		} else {
 			if os.Getenv("DEBUG_KEY") == ctx.GetHeader("Debug") {
-				_ = m.Log.StartDebug()
+				_ = m.log.StartDebug()
 			}
 
-			m.Log.TraceLn(ctx.Request)
+			m.log.TraceLn(ctx.Request)
 
 			ctx.Set("TrackerId", id)
 			ctx.Header("tracker-id", id)
 			ctx.Next()
 
-			service.TrackService{}.TrackRequestProducer(id)
+			m.service.Produce(id)
 
 			if os.Getenv("DEBUG_KEY") == ctx.GetHeader("Debug") {
-				_ = m.Log.EndDebug()
+				_ = m.log.EndDebug()
 			}
 		}
 	}
