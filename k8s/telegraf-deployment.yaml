@@ -31,7 +31,7 @@ spec:
           value: http://influxdb:8086
         - name: MONGO_HOST
           value: mongodb:27017
-        image: telegraf:latest
+        image: library/telegraf:1.14.3
         imagePullPolicy: ""
         name: hex-telegraf
         ports:

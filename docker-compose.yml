@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 
 services:
 
@@ -249,4 +249,4 @@ services:
 
 networks:
   backend:
-    external: true
+    driver: bridge

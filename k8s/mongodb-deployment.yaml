@@ -26,7 +26,7 @@ spec:
         io.kompose.service: mongodb
     spec:
       containers:
-      - image: mongo:latest
+      - image: mongo:3.6.18
         imagePullPolicy: ""
         name: hex-mongodb
         ports:

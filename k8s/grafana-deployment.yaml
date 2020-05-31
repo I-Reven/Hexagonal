@@ -39,7 +39,7 @@ spec:
           value: telegraf
         - name: INFLUXDB_USER_PASSWORD
           value: supersecret
-        image: grafana
+        image: koushamad/hexagonal-grafana:latest
         imagePullPolicy: ""
         name: hex-grafana
         ports:

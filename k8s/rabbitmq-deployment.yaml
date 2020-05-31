@@ -35,7 +35,7 @@ spec:
           value: /
         - name: RABBITMQ_ERLANG_COOKIE
           value: SWQOKODSQALRPCLNMEQG
-        image: rabbitmq:3-management
+        image: rabbitmq:3.7.5-management
         imagePullPolicy: ""
         name: hex-rabbitmq
         ports:
