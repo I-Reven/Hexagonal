@@ -1,16 +1,16 @@
 ### PING API
-GET http://localhost:80/ping
+GET http://localhost:80/v1/ping
 Accept: application/json
 
 ### I AM ALIVE API
-GET http://localhost:80/i-am-alive
+GET http://localhost:80/v1/i-am-alive
 Accept: application/json
 
 ### TRACK API
-POST http://localhost:80/track
+POST http://localhost:80/v1/track
 Content-Type: application/json
 
 {
-  "trackId": "f29160c8-a34a-11ea-ba2f-985aebce38dc"
+  "trackId": "ad722cb8-a357-11ea-8368-985aebce38dc"
 }
 

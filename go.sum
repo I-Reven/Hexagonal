@@ -45,6 +45,10 @@ github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff h1:RmdPFa+slIr4SCBg4
 github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff/go.mod h1:+RTT1BOk5P97fT2CiHkbFQwkK3mjsFAP6zCYV2aXtjw=
 github.com/bradfitz/gomemcache v0.0.0-20190329173943-551aad21a668/go.mod h1:H0wQNHz2YrLsuXOZozoeDmnHXkNCRmMW0gwFWDfEZDA=
 github.com/bradleypeabody/gorilla-sessions-memcache v0.0.0-20181103040241-659414f458e1/go.mod h1:dkChI7Tbtx7H1Tj7TqGSZMOeGpMP5gLHtjroHd4agiI=
+github.com/bxcodec/faker v1.5.0 h1:RIWOeAcM3ZHye1i8bQtHU2LfNOaLmHuRiCo60mNMOcQ=
+github.com/bxcodec/faker v2.0.1+incompatible h1:P0KUpUw5w6WJXwrPfv35oc91i4d8nf40Nwln+M/+faA=
+github.com/bxcodec/faker/v3 v3.3.1 h1:G7uldFk+iO/ES7W4v7JlI/WU9FQ6op9VJ15YZlDEhGQ=
+github.com/bxcodec/faker/v3 v3.3.1/go.mod h1:gF31YgnMSMKgkvl+fyEo1xuSMbEuieyqfeslGYFjneM=
 github.com/casbin/casbin/v2 v2.0.0/go.mod h1:YcPU1XXisHhLzuxH9coDNf2FbKpjGlbCg3n9yuLkIJQ=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=

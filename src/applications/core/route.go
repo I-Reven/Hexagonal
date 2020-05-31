@@ -21,10 +21,12 @@ func init() {
 }
 
 func (h Http) Route() http.Handler {
-
-	engine.GET("/ping", h.ping.Handler)
-	engine.GET("/i-am-alive", h.iAmAlive.Handler)
-	engine.POST("/track", h.tracker.Handler)
+	v1 := engine.Group("/v1")
+	{
+		v1.GET("/ping", h.ping.Handler)
+		v1.GET("/i-am-alive", h.iAmAlive.Handler)
+		v1.POST("/track", h.tracker.Handler)
+	}
 
 	return engine
 }

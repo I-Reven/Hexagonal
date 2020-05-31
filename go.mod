@@ -6,6 +6,7 @@ require (
 	github.com/Bowery/prompt v0.0.0-20190916142128-fa8279994f75 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20200209025033-430dd4e66960
+	github.com/bxcodec/faker/v3 v3.3.1 // indirect
 	github.com/dchest/safefile v0.0.0-20151022103144-855e8d98f185 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/fatih/structs v1.1.0 // indirect
