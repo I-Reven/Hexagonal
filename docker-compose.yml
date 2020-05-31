@@ -3,7 +3,7 @@ version: '3.2'
 services:
 
   netdata:
-    image: netdata/netdata
+    image: netdata/netdata:v1.22.1
     container_name: 'hex-netdata'
     ports:
       - 19999:19999
@@ -88,7 +88,7 @@ services:
       - backend
 
   elasticsearch:
-    image: elastichq/elasticsearch-hq
+    image: elastichq/elasticsearch-hq:release-v3.5.12
     container_name: 'hex-elasticsearch'
     restart: unless-stopped
     ports:
@@ -101,7 +101,7 @@ services:
       - backend
 
   redis:
-    image: redis
+    image: library/redis:6.0.4
     container_name: 'hex-redis'
     restart: unless-stopped
     volumes:
@@ -112,7 +112,7 @@ services:
       - backend
 
   rabbitmq:
-    image: rabbitmq:3.7.5-management
+    image: library/rabbitmq:3.7.5-management
     container_name: 'hex-rabbitmq'
     environment:
       RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
@@ -132,7 +132,7 @@ services:
       - backend
 
   influxdb:
-    image: influxdb:1.7.10
+    image: library/influxdb:1.7.10
     container_name: 'hex-influxdb'
     ports:
       - 8083:8083
@@ -150,7 +150,7 @@ services:
       - backend
 
   chronograf:
-    image: chronograf:0.12
+    image: library/chronograf:0.12
     container_name: 'hex-chronograf'
     volumes:
       - ./docker/chronograf/data:/var/lib/chronograf
@@ -164,7 +164,7 @@ services:
       - backend
 
   kapacitor:
-    image: kapacitor:0.12
+    image: library/kapacitor:0.12
     container_name: 'hex-kapacitor'
     environment:
       KAPACITOR_HOSTNAME: kapacitor

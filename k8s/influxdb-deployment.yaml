@@ -35,7 +35,7 @@ spec:
           value: telegraf
         - name: INFLUXDB_USER_PASSWORD
           value: supersecret
-        image: influxdb:1.7.10
+        image: library/influxdb:1.7.10
         imagePullPolicy: ""
         name: hex-influxdb
         ports:

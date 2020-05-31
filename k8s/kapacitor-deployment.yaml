@@ -31,7 +31,7 @@ spec:
           value: kapacitor
         - name: KAPACITOR_INFLUXDB_0_URLS_0
           value: http://influxdb:8086
-        image: kapacitor:0.12
+        image: library/kapacitor:0.12
         imagePullPolicy: ""
         name: hex-kapacitor
         ports:

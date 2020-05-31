@@ -26,7 +26,7 @@ spec:
         io.kompose.service: redis
     spec:
       containers:
-      - image: redis
+      - image: library/redis:6.0.4
         imagePullPolicy: ""
         name: hex-redis
         ports:
