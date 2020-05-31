@@ -47,6 +47,7 @@ require (
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 	google.golang.org/grpc v1.29.1
 	google.golang.org/protobuf v1.24.0
+	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/ini.v1 v1.56.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	moul.io/http2curl v1.0.0 // indirect

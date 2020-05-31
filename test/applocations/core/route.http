@@ -7,6 +7,10 @@ GET http://localhost:80/i-am-alive
 Accept: application/json
 
 ### TRACK API
-GET http://localhost:80/track/c5b75d8c-a1a1-11ea-92a3-985aebce38dc
-Accept: application/json
+POST http://localhost:80/track
+Content-Type: application/json
+
+{
+  "trackId": "f29160c8-a34a-11ea-ba2f-985aebce38dc"
+}
 

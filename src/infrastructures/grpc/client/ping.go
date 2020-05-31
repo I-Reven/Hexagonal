@@ -3,17 +3,21 @@ package client
 import (
 	"context"
 	domain "github.com/I-Reven/Hexagonal/src/domains/grpc"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/juju/errors"
 	"google.golang.org/grpc"
 )
 
-type Ping struct{}
+type Ping struct {
+	log logger.Log
+}
 
-func (Ping) Ping(request *domain.PingRequest, port string) (*domain.PingResponse, error) {
-	conn, err := grpc.Dial(port, grpc.WithInsecure())
+func (p Ping) Ping(addr string, request *domain.PingRequest) (*domain.PingResponse, error) {
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 
 	if err != nil {
-		errors.NewNotSupported(err, "error.can-not-connect-to-grpc")
+		err = errors.NewNotSupported(err, "error.can-not-connect-to-grpc")
+		p.log.Error(err)
 		return nil, err
 	}
 

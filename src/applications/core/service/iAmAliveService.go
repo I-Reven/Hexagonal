@@ -22,9 +22,9 @@ type IAamAliveService struct {
 
 func (s IAamAliveService) Test() {
 	iAmAlive := s.getEntity(s.testHttp())
+	s.testGrpc(&iAmAlive)
 	s.testCache(&iAmAlive)
 	s.testProducer(&iAmAlive)
-	s.testGrpc(&iAmAlive)
 
 	s.log.Debug("iAmAliveService.Test", iAmAlive)
 }
@@ -72,7 +72,7 @@ func (s IAamAliveService) testCache(iAmAlive *repository.IAmAlive) {
 }
 
 func (s IAamAliveService) testGrpc(iAmAlive *repository.IAmAlive) {
-	_, err := s.client.Ping(&domain.PingRequest{Message: "PING"}, ":82")
+	_, err := s.client.Ping(":82", &domain.PingRequest{Message: "PING"})
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.service-can-not-test-cache")

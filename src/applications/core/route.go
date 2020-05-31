@@ -24,7 +24,7 @@ func (h Http) Route() http.Handler {
 
 	engine.GET("/ping", h.ping.Handler)
 	engine.GET("/i-am-alive", h.iAmAlive.Handler)
-	engine.GET("/track/:trackId", h.tracker.Handler)
+	engine.POST("/track", h.tracker.Handler)
 
 	return engine
 }

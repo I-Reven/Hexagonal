@@ -17,7 +17,8 @@ func init() {
 		DisableColors: false,
 		FullTimestamp: true,
 	})
-	logrus.SetLevel(logrus.WarnLevel)
+
+	logrus.SetLevel(logrus.TraceLevel)
 }
 
 func SetLogPath() {
