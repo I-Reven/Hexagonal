@@ -10,10 +10,10 @@ import (
 
 type (
 	Debug struct {
-		Message   string   `cql:"message" json:"message"`
+		Message   string   `cql:"message" json:"message" faker:"sentence"`
 		Data      []string `cql:"data" json:"data"`
-		Memory    string   `cql:"memory" json:"memory"`
-		CPU       string   `cql:"cpu" json:"cpu"`
+		Memory    string   `cql:"memory" json:"memory" faker:"sentence"`
+		CPU       string   `cql:"cpu" json:"cpu" faker:"sentence"`
 		Timestamp int64    `cql:"timestamp" json:"timestamp"`
 	}
 

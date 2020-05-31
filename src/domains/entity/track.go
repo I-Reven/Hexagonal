@@ -2,17 +2,19 @@ package entity
 
 import (
 	"fmt"
+	"github.com/bxcodec/faker/v3"
 	"github.com/gocql/gocql"
+	"reflect"
 	"time"
 )
 
 type Track struct {
-	Id        gocql.UUID `cql:"id" json:"id"`
-	TrackId   gocql.UUID `cql:"track_id" json:"trackId"`
-	Message   string     `cql:"message" json:"message"`
+	Id        gocql.UUID `cql:"id" json:"id" faker:"-"`
+	TrackId   gocql.UUID `cql:"track_id" json:"trackId" faker:"-"`
+	Message   string     `cql:"message" json:"message" faker:"sentence"`
 	Data      []string   `cql:"data" json:"data"`
 	Debugs    []Debug    `cql:"debugger" json:"debugger"`
-	Error     string     `cql:"error" json:"error"`
+	Error     string     `cql:"error" json:"error" faker:"error"`
 	Timestamp time.Time  `cql:"timestamp" json:"timestamp"`
 }
 
@@ -34,4 +36,11 @@ func (t *Track) SetDebugs(debugs []Debug)         { t.Debugs = debugs }
 
 func (t *Track) AddDebug(message string, data ...interface{}) {
 	t.Debugs = append(t.Debugs, CreateDebugger(message, data...))
+}
+
+func (t *Track) Factory() error { t.customFaker(); return faker.FakeData(t) }
+func (t *Track) customFaker() {
+	_ = faker.AddProvider("error", func(v reflect.Value) (interface{}, error) {
+		return "error.faker.error-message", nil
+	})
 }
