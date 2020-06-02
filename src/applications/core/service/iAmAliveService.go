@@ -3,7 +3,7 @@ package service
 import (
 	domain "github.com/I-Reven/Hexagonal/src/domains/grpc"
 	message "github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/grpc/client"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/grpc/core/client"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
 	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
 	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
