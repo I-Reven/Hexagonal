@@ -1,14 +1,14 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/http/rest"
+	"github.com/I-Reven/Hexagonal/src/infrastructures/http/core"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Http struct {
-	iAmAlive rest.IAmAlive
-	tracker  rest.Tracker
+	iAmAlive core.IAmAlive
+	tracker  core.Tracker
 }
 
 func init() {

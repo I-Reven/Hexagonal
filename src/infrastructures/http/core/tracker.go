@@ -1,4 +1,4 @@
-package rest
+package core
 
 import (
 	"github.com/I-Reven/Hexagonal/src/applications/core/service"
