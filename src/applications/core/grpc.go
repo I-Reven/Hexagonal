@@ -1,8 +1,8 @@
 package core
 
 import (
-	domain "github.com/I-Reven/Hexagonal/src/domains/grpc"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/grpc/core/handler"
+	domain "github.com/I-Reven/Hexagonal/src/domain/grpc"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/grpc/core/handler"
 	"google.golang.org/grpc"
 )
 

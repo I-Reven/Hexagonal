@@ -2,12 +2,12 @@ package job
 
 import (
 	"encoding/json"
-	"github.com/I-Reven/Hexagonal/src/domains/job"
-	"github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
-	message "github.com/I-Reven/Hexagonal/src/domains/message/slack"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/notification/slack"
-	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
+	"github.com/I-Reven/Hexagonal/src/domain/job"
+	"github.com/I-Reven/Hexagonal/src/domain/message/rabbit"
+	message "github.com/I-Reven/Hexagonal/src/domain/message/slack"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/framework/notification/slack"
+	repository "github.com/I-Reven/Hexagonal/src/infrastructure/repository/mongo/core"
 	"github.com/juju/errors"
 )
 

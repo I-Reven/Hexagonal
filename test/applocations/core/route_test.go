@@ -3,7 +3,7 @@ package core
 import (
 	"encoding/json"
 	"github.com/I-Reven/Hexagonal/src/applications/core"
-	"github.com/I-Reven/Hexagonal/src/domains/entity"
+	"github.com/I-Reven/Hexagonal/src/domain/entity"
 	"github.com/joho/godotenv"
 	"net/http"
 	"net/http/httptest"

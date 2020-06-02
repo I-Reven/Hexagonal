@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/http/core"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/http/core"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

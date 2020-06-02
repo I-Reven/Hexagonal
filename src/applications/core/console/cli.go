@@ -2,8 +2,8 @@ package console
 
 import (
 	"github.com/I-Reven/Hexagonal/src/applications/core"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/cli"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
+	"github.com/I-Reven/Hexagonal/src/framework/cli"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	_ "github.com/mattn/go-colorable"
 	"github.com/spf13/cobra"
 )

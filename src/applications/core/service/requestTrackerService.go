@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/I-Reven/Hexagonal/src/domains/entity"
-	message "github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
-	tracker2 "github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra/tracker"
+	"github.com/I-Reven/Hexagonal/src/domain/entity"
+	message "github.com/I-Reven/Hexagonal/src/domain/message/rabbit"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/framework/queue/rabbit"
+	tracker2 "github.com/I-Reven/Hexagonal/src/infrastructure/repository/cassandra/tracker"
 	"github.com/gocql/gocql"
 	"github.com/juju/errors"
 )

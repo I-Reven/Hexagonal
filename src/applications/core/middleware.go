@@ -2,7 +2,7 @@ package core
 
 import (
 	"github.com/I-Reven/Hexagonal/src/applications/core/middleware"
-	redis "github.com/I-Reven/Hexagonal/src/infrastructures/repository/redis/session"
+	redis "github.com/I-Reven/Hexagonal/src/infrastructure/repository/redis/session"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

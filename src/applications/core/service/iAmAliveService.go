@@ -1,13 +1,13 @@
 package service
 
 import (
-	domain "github.com/I-Reven/Hexagonal/src/domains/grpc"
-	message "github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/grpc/core/client"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/queue/rabbit"
-	repository "github.com/I-Reven/Hexagonal/src/infrastructures/repository/mongo/core"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/redis/cache"
+	domain "github.com/I-Reven/Hexagonal/src/domain/grpc"
+	message "github.com/I-Reven/Hexagonal/src/domain/message/rabbit"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/framework/queue/rabbit"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/grpc/core/client"
+	repository "github.com/I-Reven/Hexagonal/src/infrastructure/repository/mongo/core"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/repository/redis/cache"
 	"github.com/juju/errors"
 	"gopkg.in/mgo.v2/bson"
 	"time"
