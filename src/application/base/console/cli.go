@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/application/iCustomer"
+	"github.com/I-Reven/Hexagonal/src/application/base"
 	"github.com/I-Reven/Hexagonal/src/framework/cli"
 	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	_ "github.com/mattn/go-colorable"
@@ -10,7 +10,7 @@ import (
 
 type Cli struct {
 	Log     logger.Log
-	Kernel  core.Kernel
+	Core    core.Kernel
 	CLI     cli.CLI
 	Serve   Serve
 	Install Install
@@ -18,7 +18,7 @@ type Cli struct {
 }
 
 func (c *Cli) Boot() {
-	c.Kernel.Boot()
+	c.Core.Boot()
 	c.Cli()
 }
 
