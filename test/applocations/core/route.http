@@ -1,7 +1,3 @@
-### PING API
-GET http://localhost:80/v1/ping
-Accept: application/json
-
 ### I AM ALIVE API
 GET http://localhost:80/v1/i-am-alive
 Accept: application/json
