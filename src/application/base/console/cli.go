@@ -10,7 +10,7 @@ import (
 
 type Cli struct {
 	Log     logger.Log
-	Core    core.Kernel
+	Kernel  core.Kernel
 	CLI     cli.CLI
 	Serve   Serve
 	Install Install
@@ -18,7 +18,7 @@ type Cli struct {
 }
 
 func (c *Cli) Boot() {
-	c.Core.Boot()
+	c.Kernel.Boot()
 	c.Cli()
 }
 

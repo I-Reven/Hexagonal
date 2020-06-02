@@ -1,15 +1,11 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructure/http/core"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type Http struct {
-	iAmAlive core.IAmAlive
-	tracker  core.Tracker
-}
+type Http struct{}
 
 func init() {
 	engine = gin.Default()
