@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/applications/core/listener"
+	"github.com/I-Reven/Hexagonal/src/application/core/listener"
 	"github.com/spf13/cobra"
 )
 

@@ -13,7 +13,7 @@ var (
 	RootCmd = &cobra.Command{
 		Use:   "hexagonal",
 		Short: "A hexagonal architect base Applications",
-		Long:  `Hexagonal is a hexagonal architect library for Go that empowers applications. This application is a tool to generate the hexagonal architect structure`,
+		Long:  `Hexagonal is a hexagonal architect library for Go that empowers application. This application is a tool to generate the hexagonal architect structure`,
 	}
 )
 

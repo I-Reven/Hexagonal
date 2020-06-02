@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/I-Reven/Hexagonal/src/applications/core/service"
+	"github.com/I-Reven/Hexagonal/src/application/core/service"
 	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	"github.com/gin-gonic/gin"
 	"os"

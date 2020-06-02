@@ -1,7 +1,7 @@
 package main
 
 import (
-	core "github.com/I-Reven/Hexagonal/src/applications/core/console"
+	core "github.com/I-Reven/Hexagonal/src/application/core/console"
 	"github.com/I-Reven/Hexagonal/src/framework/env"
 )
 
