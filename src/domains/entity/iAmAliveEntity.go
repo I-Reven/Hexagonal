@@ -22,23 +22,23 @@ type (
 	}
 )
 
-func (iAmAlive *IAmAlive) GetId() bson.ObjectId           { return iAmAlive.Id }
-func (iAmAlive *IAmAlive) SetId(id bson.ObjectId)         { iAmAlive.Id = id }
-func (iAmAlive *IAmAlive) SetCreated(time time.Time)      { iAmAlive.Created = time }
-func (iAmAlive *IAmAlive) SetModified(time time.Time)     { iAmAlive.Modified = time }
-func (iAmAlive *IAmAlive) SetHttpSuccess(status bool)     { iAmAlive.HttpSuccess = status }
-func (iAmAlive *IAmAlive) GetHttpSuccess() bool           { return iAmAlive.HttpSuccess }
-func (iAmAlive *IAmAlive) SetProducerSuccess(status bool) { iAmAlive.ProducerSuccess = status }
-func (iAmAlive *IAmAlive) GetProducerSuccess() bool       { return iAmAlive.ProducerSuccess }
-func (iAmAlive *IAmAlive) SetDbSuccess(status bool)       { iAmAlive.DbSuccess = status }
-func (iAmAlive *IAmAlive) GetDbSuccess() bool             { return iAmAlive.DbSuccess }
-func (iAmAlive *IAmAlive) SetConsumerSuccess(status bool) { iAmAlive.ConsumerSuccess = status }
-func (iAmAlive *IAmAlive) GetConsumerSuccess() bool       { return iAmAlive.ConsumerSuccess }
-func (iAmAlive *IAmAlive) SetCashSuccess(status bool)     { iAmAlive.CashSuccess = status }
-func (iAmAlive *IAmAlive) GetCashSuccess() bool           { return iAmAlive.CashSuccess }
-func (iAmAlive *IAmAlive) SetGrpcSuccess(status bool)     { iAmAlive.GrpcSuccess = status }
-func (iAmAlive *IAmAlive) GetGrpcSuccess() bool           { return iAmAlive.GrpcSuccess }
-func (iAmAlive *IAmAlive) SetContent(content string)      { iAmAlive.Content = content }
-func (iAmAlive *IAmAlive) GetContent() string             { return iAmAlive.Content }
-func (iAmAlive *IAmAlive) getEntity() IAmAlive            { return *iAmAlive }
-func (iAmAlive *IAmAlive) Factory() error                 { return faker.FakeData(iAmAlive) }
+func (e *IAmAlive) GetId() bson.ObjectId           { return e.Id }
+func (e *IAmAlive) SetId(id bson.ObjectId)         { e.Id = id }
+func (e *IAmAlive) SetCreated(time time.Time)      { e.Created = time }
+func (e *IAmAlive) SetModified(time time.Time)     { e.Modified = time }
+func (e *IAmAlive) SetHttpSuccess(status bool)     { e.HttpSuccess = status }
+func (e *IAmAlive) GetHttpSuccess() bool           { return e.HttpSuccess }
+func (e *IAmAlive) SetProducerSuccess(status bool) { e.ProducerSuccess = status }
+func (e *IAmAlive) GetProducerSuccess() bool       { return e.ProducerSuccess }
+func (e *IAmAlive) SetDbSuccess(status bool)       { e.DbSuccess = status }
+func (e *IAmAlive) GetDbSuccess() bool             { return e.DbSuccess }
+func (e *IAmAlive) SetConsumerSuccess(status bool) { e.ConsumerSuccess = status }
+func (e *IAmAlive) GetConsumerSuccess() bool       { return e.ConsumerSuccess }
+func (e *IAmAlive) SetCashSuccess(status bool)     { e.CashSuccess = status }
+func (e *IAmAlive) GetCashSuccess() bool           { return e.CashSuccess }
+func (e *IAmAlive) SetGrpcSuccess(status bool)     { e.GrpcSuccess = status }
+func (e *IAmAlive) GetGrpcSuccess() bool           { return e.GrpcSuccess }
+func (e *IAmAlive) SetContent(content string)      { e.Content = content }
+func (e *IAmAlive) GetContent() string             { return e.Content }
+func (e *IAmAlive) getEntity() IAmAlive            { return *e }
+func (e *IAmAlive) Factory() error                 { return faker.FakeData(e) }

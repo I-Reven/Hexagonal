@@ -10,7 +10,7 @@ import (
 
 type Cli struct {
 	Log     logger.Log
-	Core    core.Core
+	Core    core.Kernel
 	CLI     cli.CLI
 	Serve   Serve
 	Install Install

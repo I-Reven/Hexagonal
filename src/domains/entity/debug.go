@@ -57,13 +57,13 @@ type (
 	}
 )
 
-func (d *Debug) GetMessage() string           { return d.Message }
-func (d *Debug) SetMessage(message string)    { d.Message = message }
-func (d *Debug) GetData() []string            { return d.Data }
-func (d *Debug) SetData(data []string)        { d.Data = data }
-func (d *Debug) AddData(data interface{})     { d.Data = append(d.Data, fmt.Sprintf("%v", data)) }
-func (d *Debug) GetTimestamp() int64          { return d.Timestamp }
-func (d *Debug) SetTimestamp(timestamp int64) { d.Timestamp = timestamp }
+func (e *Debug) GetMessage() string           { return e.Message }
+func (e *Debug) SetMessage(message string)    { e.Message = message }
+func (e *Debug) GetData() []string            { return e.Data }
+func (e *Debug) SetData(data []string)        { e.Data = data }
+func (e *Debug) AddData(data interface{})     { e.Data = append(e.Data, fmt.Sprintf("%v", data)) }
+func (e *Debug) GetTimestamp() int64          { return e.Timestamp }
+func (e *Debug) SetTimestamp(timestamp int64) { e.Timestamp = timestamp }
 
 func CreateDebugger(message string, data ...interface{}) Debug {
 	debugger := Debug{
@@ -81,14 +81,14 @@ func CreateDebugger(message string, data ...interface{}) Debug {
 	return debugger
 }
 
-func (d *Debug) GetMemory() Memory {
+func (e *Debug) GetMemory() Memory {
 	memory := Memory{}
-	_ = json.Unmarshal([]byte(d.Memory), &memory)
+	_ = json.Unmarshal([]byte(e.Memory), &memory)
 
 	return memory
 }
 
-func (d *Debug) SetMemory() {
+func (e *Debug) SetMemory() {
 	memory := runtime.MemStats{}
 	runtime.ReadMemStats(&memory)
 	Memo := Memory{
@@ -126,18 +126,18 @@ func (d *Debug) SetMemory() {
 	memo, err := json.Marshal(Memo)
 
 	if err == nil {
-		d.Memory = string(memo)
+		e.Memory = string(memo)
 	}
 }
 
-func (d *Debug) GetUPU() CPU {
+func (e *Debug) GetUPU() CPU {
 	cpu := CPU{}
-	_ = json.Unmarshal([]byte(d.CPU), &cpu)
+	_ = json.Unmarshal([]byte(e.CPU), &cpu)
 
 	return cpu
 }
 
-func (d *Debug) SetCPU() {
+func (e *Debug) SetCPU() {
 	percent, _ := cpu.Percent(time.Nanosecond, true)
 	Cpu := CPU{
 		percent[0],
@@ -148,6 +148,6 @@ func (d *Debug) SetCPU() {
 	cpu, err := json.Marshal(Cpu)
 
 	if err == nil {
-		d.CPU = string(cpu)
+		e.CPU = string(cpu)
 	}
 }

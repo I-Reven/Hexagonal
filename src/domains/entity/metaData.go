@@ -6,13 +6,13 @@ type MetaData struct {
 	Value string `cql:"value" json:"value"`
 }
 
-func (m *MetaData) GetKey() string                  { return m.Key }
-func (m *MetaData) SetKey(key string) *MetaData     { m.Key = key; return m }
-func (m *MetaData) GetKind() int32                  { return m.Kind }
-func (m *MetaData) SetKind(kind int32) *MetaData    { m.Kind = kind; return m }
-func (m *MetaData) GetValue() string                { return m.Value }
-func (m *MetaData) SetValue(value string) *MetaData { m.Value = value; return m }
+func (e *MetaData) GetKey() string                  { return e.Key }
+func (e *MetaData) SetKey(key string) *MetaData     { e.Key = key; return e }
+func (e *MetaData) GetKind() int32                  { return e.Kind }
+func (e *MetaData) SetKind(kind int32) *MetaData    { e.Kind = kind; return e }
+func (e *MetaData) GetValue() string                { return e.Value }
+func (e *MetaData) SetValue(value string) *MetaData { e.Value = value; return e }
 
-func (m *MetaData) Make(key string, value string, kind int32) *MetaData {
-	return m.SetKey(key).SetValue(value).SetKind(kind)
+func (e *MetaData) Make(key string, value string, kind int32) *MetaData {
+	return e.SetKey(key).SetValue(value).SetKind(kind)
 }
