@@ -1,5 +1,11 @@
 package core
 
+import "github.com/gin-gonic/gin"
+
+var (
+	engine *gin.Engine
+)
+
 type Kernel struct {
 	Middleware Middleware
 	Worker     Worker

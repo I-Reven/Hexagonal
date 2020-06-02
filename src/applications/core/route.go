@@ -11,10 +11,6 @@ type Http struct {
 	tracker  rest.Tracker
 }
 
-var (
-	engine *gin.Engine
-)
-
 func init() {
 	engine = gin.Default()
 }
