@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/applications/core"
+	"github.com/I-Reven/Hexagonal/src/application/core"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )

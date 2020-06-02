@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/I-Reven/Hexagonal/src/applications/core/job"
+	"github.com/I-Reven/Hexagonal/src/application/core/job"
 	message "github.com/I-Reven/Hexagonal/src/domain/message/rabbit"
 	"github.com/I-Reven/Hexagonal/src/framework/queue/rabbit"
 )

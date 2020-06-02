@@ -1,7 +1,7 @@
 package listener
 
 import (
-	kernel "github.com/I-Reven/Hexagonal/src/applications/core"
+	kernel "github.com/I-Reven/Hexagonal/src/application/core"
 	"github.com/I-Reven/Hexagonal/src/framework/listener"
 	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	"net/http"
