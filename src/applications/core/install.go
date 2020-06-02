@@ -1,6 +1,6 @@
 package core
 
-import "github.com/I-Reven/Hexagonal/src/infrastructures/migration/cassandra"
+import "github.com/I-Reven/Hexagonal/src/infrastructure/migration/cassandra"
 
 type Installer struct {
 	Migration cassandra.Migration

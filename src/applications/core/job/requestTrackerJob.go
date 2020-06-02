@@ -2,11 +2,11 @@ package job
 
 import (
 	"encoding/json"
-	"github.com/I-Reven/Hexagonal/src/domains/job"
-	"github.com/I-Reven/Hexagonal/src/domains/message/rabbit"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra/tracker"
-	redis "github.com/I-Reven/Hexagonal/src/infrastructures/repository/redis/track"
+	"github.com/I-Reven/Hexagonal/src/domain/job"
+	"github.com/I-Reven/Hexagonal/src/domain/message/rabbit"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/repository/cassandra/tracker"
+	redis "github.com/I-Reven/Hexagonal/src/infrastructure/repository/redis/track"
 	"github.com/juju/errors"
 )
 

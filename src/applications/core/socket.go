@@ -1,7 +1,7 @@
 package core
 
 import (
-	handler "github.com/I-Reven/Hexagonal/src/infrastructures/socket"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/socket/core"
 	socketio "github.com/graarh/golang-socketio"
 	"github.com/graarh/golang-socketio/transport"
 	"net/http"
@@ -13,7 +13,7 @@ var (
 )
 
 type Socket struct {
-	socket handler.Default
+	socket core.Default
 }
 
 func init() {
