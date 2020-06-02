@@ -39,13 +39,13 @@ func (e *Room) AddMessage(message Message) *Room {
 
 func (e *Room) AddUserId(userId int64) *Room {
 	var id int64
-	for id = range e.GetUsersId() {
+	for _, id = range e.GetUsersId() {
 		if userId == id {
 			return nil
 		}
 	}
 
-	e.SetUserId(append(e.GetUsersId(), userId))
+	e.SetUsersId(append(e.GetUsersId(), userId))
 	return e
 }
 
@@ -56,7 +56,7 @@ func (e *Room) AddMetaData(metaData MetaData) *Room {
 		exist = false
 	)
 
-	for m = range e.GetMetaData() {
+	for _, m = range e.GetMetaData() {
 		if m.Key == metaData.Key {
 			md = append(md, metaData)
 			exist = true
