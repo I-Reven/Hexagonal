@@ -1,8 +1,8 @@
 package customer
 
 import (
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/repository/cassandra"
 	"github.com/gocql/gocql"
 	"github.com/juju/errors"
 	"os"
@@ -47,7 +47,7 @@ func (r *Customer) MigrateKeySpace(keySpace string) error {
 func (r *Customer) MigrateMessage(keySpace string) error {
 	messageQuery := `CREATE TYPE IF NOT EXISTS message (
 						id UUID,
-						userId BIGINT
+						userId BIGINT,
   						content TEXT,
 						kind INT,
   						seen SET<BIGINT>,

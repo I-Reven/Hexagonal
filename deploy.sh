@@ -11,6 +11,9 @@ if [ $state == "live" ]; then
     docker-compose up -d --build
     docker push koushamad/hexagonal-core:latest
     docker push koushamad/hexagonal-grafana:latest
+
+    docker push koushamad/hexagonal-icustomer:latest
+
     docker-compose config > docker-compose-deploy.yaml && kompose convert -f docker-compose-deploy.yaml --out ./k8s
     docker-compose down
     rm -rvf docker-compose-deploy.yaml
@@ -30,7 +33,7 @@ if [ $state == "test" ]; then
   read state
 
   if [ $state == "up" ]; then
-    docker-compose up -d mongodb elassandra redis rabbitmq
+    docker-compose up -d mongodb elassandra redis rabbitmq core
   fi
 
   if [ $state == "down" ]; then

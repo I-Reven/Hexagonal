@@ -1,9 +1,9 @@
 package customer
 
 import (
-	"github.com/I-Reven/Hexagonal/src/domains/entity"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/logger"
-	"github.com/I-Reven/Hexagonal/src/infrastructures/repository/cassandra"
+	"github.com/I-Reven/Hexagonal/src/domain/entity"
+	"github.com/I-Reven/Hexagonal/src/framework/logger"
+	"github.com/I-Reven/Hexagonal/src/infrastructure/repository/cassandra"
 	"github.com/gocql/gocql"
 	"github.com/juju/errors"
 	"github.com/mitchellh/mapstructure"

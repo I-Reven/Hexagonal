@@ -1,4 +1,4 @@
-package http
+package request
 
 import "gopkg.in/go-playground/validator.v9"
 

@@ -2,7 +2,7 @@ package core
 
 import (
 	"github.com/I-Reven/Hexagonal/src/application/core/service"
-	request "github.com/I-Reven/Hexagonal/src/domain/http"
+	"github.com/I-Reven/Hexagonal/src/domain/http/request"
 	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/juju/errors"

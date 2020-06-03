@@ -46,6 +46,23 @@ func (c *Cassandra) InitSession() *gocql.Session {
 	return session
 }
 
+func (c *Cassandra) MackKeySpace(keySpace string) error {
+	cluster := gocql.NewCluster(c.Host)
+	cluster.Port = port(c.Port)
+	cluster.Consistency = consistency(c.Consistency)
+
+	session, err := cluster.CreateSession()
+
+	if err != nil {
+		err = errors.NewNotSupported(err, "error.can-not-connect-to-cassandra")
+		return err
+	}
+
+	debugQuery := `CREATE KEYSPACE IF NOT EXISTS ` + keySpace + ` WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};`
+
+	return session.Query(debugQuery).Exec()
+}
+
 func (c *Cassandra) ClearSession(session *gocql.Session) {
 	session.Close()
 }

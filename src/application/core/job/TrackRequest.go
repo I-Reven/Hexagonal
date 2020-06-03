@@ -11,7 +11,7 @@ import (
 )
 
 type (
-	RequestTracker struct {
+	TrackRequest struct {
 		tries   int
 		message rabbit.TrackRequest
 		log     logger.Log
@@ -20,11 +20,11 @@ type (
 	}
 )
 
-func (j RequestTracker) Init(b []byte) (error, job.Job) {
+func (j TrackRequest) Init(b []byte) (error, job.Job) {
 	return json.Unmarshal(b, &j.message), j
 }
 
-func (j RequestTracker) Handler() error {
+func (j TrackRequest) Handler() error {
 	t, err := j.redis.GetTrack(j.message.Id)
 
 	if err != nil {
@@ -56,12 +56,12 @@ func (j RequestTracker) Handler() error {
 	return nil
 }
 
-func (j RequestTracker) Failed(err error) {
+func (j TrackRequest) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-request-tracker-failed")
 	j.log.TraceLn(j)
 	j.log.Fatal(err)
 }
 
-func (j RequestTracker) GetConfig() job.Config {
-	return job.Config{Tries: j.tries}
+func (j TrackRequest) GetConfig() job.Config {
+	return job.Config{Tries: 2}
 }

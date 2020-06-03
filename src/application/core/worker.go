@@ -7,10 +7,14 @@ import (
 )
 
 type Worker struct {
-	Worker rabbit.Worker
+	worker              rabbit.Worker
+	iAmAliveMessage     message.IAmAlive
+	iAmaLiveJob         job.IAmAliveJob
+	trackRequestMessage message.TrackRequest
+	trackRequestJob     job.TrackRequest
 }
 
 func (w Worker) Work() {
-	go w.Worker.AddWorker(message.IAmAlive{}, job.IAmAliveJob{})
-	go w.Worker.AddWorker(message.TrackRequest{}, job.RequestTracker{})
+	go w.worker.AddWorker(w.iAmAliveMessage, w.iAmaLiveJob)
+	go w.worker.AddWorker(w.trackRequestMessage, w.trackRequestJob)
 }
