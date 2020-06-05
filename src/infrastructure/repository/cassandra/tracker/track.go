@@ -36,7 +36,7 @@ var (
 func (t *Track) cql() *gocql.Session {
 	once.Do(func() {
 		cassandraConfig := cassandra.Cassandra{
-			Host:        os.Getenv("CASSANDRA_HOST"),
+			Host:        os.Getenv("ELASSANDRA_HOST"),
 			Port:        os.Getenv("CASSANDRA_PORT"),
 			KeySpace:    os.Getenv("CASSANDRA_KEYSPACE_TRACKER"),
 			Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
@@ -46,6 +46,17 @@ func (t *Track) cql() *gocql.Session {
 	})
 
 	return session
+}
+
+func (t *Track) MigrateKeySpace() error {
+	cassandraConfig := cassandra.Cassandra{
+		Host:        os.Getenv("ELASSANDRA_HOST"),
+		Port:        os.Getenv("CASSANDRA_PORT"),
+		KeySpace:    "tracker",
+		Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
+	}
+
+	return cassandraConfig.MackKeySpace("tracker")
 }
 
 func (t *Track) Migrate() error {

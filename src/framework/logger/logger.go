@@ -18,7 +18,7 @@ func init() {
 		FullTimestamp: true,
 	})
 
-	logrus.SetLevel(logrus.WarnLevel)
+	logrus.SetLevel(logrus.TraceLevel)
 }
 
 func SetLogPath() {

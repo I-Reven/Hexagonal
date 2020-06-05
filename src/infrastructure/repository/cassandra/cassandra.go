@@ -58,7 +58,7 @@ func (c *Cassandra) MackKeySpace(keySpace string) error {
 		return err
 	}
 
-	debugQuery := `CREATE KEYSPACE IF NOT EXISTS ` + keySpace + ` WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};`
+	debugQuery := `CREATE KEYSPACE IF NOT EXISTS ` + keySpace + ` WITH replication = {'class':'NetworkTopologyStrategy', 'DC1':'1'};`
 
 	return session.Query(debugQuery).Exec()
 }

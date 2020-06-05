@@ -45,7 +45,7 @@ type Room struct {
 
 func (r *Room) cql(keySpace string) *gocql.Session {
 	cassandraConfig := cassandra.Cassandra{
-		Host:        os.Getenv("CASSANDRA_HOST"),
+		Host:        os.Getenv("ELASSANDRA_HOST"),
 		Port:        os.Getenv("CASSANDRA_PORT"),
 		KeySpace:    keySpace,
 		Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),

@@ -12,12 +12,16 @@ type Migration struct {
 }
 
 func (m *Migration) Migrate() error {
-	err := m.track.Migrate()
-
-	if err != nil {
-		err = errors.NewNotSupported(err, "error.can-not-migrate-cassandra-tracks")
-		m.log.Error(err)
+	if err := m.track.MigrateKeySpace(); err != nil {
+		err = errors.NewNotSupported(err, "error.can-not-migrate-cassandra-tracks-key-space")
+		return err
 	}
 
-	return err
+	if err := m.track.Migrate(); err != nil {
+		err = errors.NewNotSupported(err, "error.can-not-migrate-cassandra-tracks")
+		m.log.Error(err)
+		return err
+	}
+
+	return nil
 }

@@ -18,7 +18,7 @@ type Customer struct {
 
 func (r *Customer) cql(keySpace string) *gocql.Session {
 	cassandraConfig := cassandra.Cassandra{
-		Host:        os.Getenv("CASSANDRA_HOST"),
+		Host:        os.Getenv("ELASSANDRA_HOST"),
 		Port:        os.Getenv("CASSANDRA_PORT"),
 		KeySpace:    keySpace,
 		Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
@@ -35,7 +35,7 @@ func (r *Customer) close() {
 
 func (r *Customer) MigrateKeySpace(keySpace string) error {
 	cassandraConfig := cassandra.Cassandra{
-		Host:        os.Getenv("CASSANDRA_HOST"),
+		Host:        os.Getenv("ELASSANDRA_HOST"),
 		Port:        os.Getenv("CASSANDRA_PORT"),
 		KeySpace:    keySpace,
 		Consistency: os.Getenv("CASSANDRA_CONSISTANCY_TRACKER"),
@@ -89,26 +89,24 @@ func (r *Customer) Migrate(keySpace string) error {
 	if err := r.MigrateKeySpace(keySpace); err != nil {
 		err = errors.NewAlreadyExists(err, "error.can-not-migrate-this-key-space")
 		r.log.Error(err)
+		return err
 	}
 
 	if err := r.MigrateMessage(keySpace); err != nil {
 		err = errors.NewAlreadyExists(err, "error.can-not-migrate-message")
 		r.log.Error(err)
-
 		return err
 	}
 
 	if err := r.MigrateMetaData(keySpace); err != nil {
 		err = errors.NewAlreadyExists(err, "error.can-not-migrate-meta-data")
 		r.log.Error(err)
-
 		return err
 	}
 
-	if err := r.MigrateKeySpace(keySpace); err != nil {
+	if err := r.MigrateRoom(keySpace); err != nil {
 		err = errors.NewAlreadyExists(err, "error.can-not-migrate-room")
 		r.log.Error(err)
-
 		return err
 	}
 

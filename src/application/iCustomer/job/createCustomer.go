@@ -26,7 +26,20 @@ func (j CreateCustomer) Init(b []byte) (error, job.Job) {
 }
 
 func (j CreateCustomer) Handler() error {
-	return j.service.Create(j.message.CustomerName)
+	j.log.TraceLn("get message create new customer " + j.message.CustomerName)
+	if err := j.service.Create(j.message.CustomerName); err != nil {
+		err := errors.NewNotSupported(err, "error.can-cot-migrate-customer-model")
+		j.log.Error(err)
+		return err
+	}
+
+	if err := j.service.SyncIndex(j.message.CustomerName); err != nil {
+		err := errors.NewNotSupported(err, "error.can-not-sync-customer-index")
+		j.log.Error(err)
+		return err
+	}
+
+	return nil
 }
 
 func (j CreateCustomer) Failed(err error) {
