@@ -229,8 +229,37 @@ services:
     container_name: 'hex-core'
     restart: unless-stopped
     ports:
-      - 8080:80
-      - 8081:81
+      - 1001:80
+      - 1002:81
+      - 1003:82
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - elassandra
+    volumes:
+      - ./docker/application/log:/var/log/hex
+    environment:
+      PKG: core
+      APP_ENV: ${APP_ENV}
+      MONGO_URL: ${MONGO_HOST}
+      REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
+      RABBIT_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/
+    networks:
+      - backend
+
+  iCustomer:
+    image: koushamad/hexagonal-icustomer:latest
+    build:
+      context: .
+      args:
+        PKG: iCustomer
+    container_name: 'hex-iCustomer'
+    restart: unless-stopped
+    ports:
+      - 1004:80
+      - 1005:81
+      - 1006:82
     depends_on:
       - redis
       - rabbitmq

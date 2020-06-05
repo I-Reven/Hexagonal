@@ -30,4 +30,4 @@ COPY .live.env ./
 
 CMD wait-for-it rabbitmq:5672 -- wait-for-it mongodb:27017 -- wait-for-it redis:6379 -- wait-for-it elassandra:9042 -- app/main install ; /app/main
 
-EXPOSE 80 81 82 83 84 85 86 87 88 89
+EXPOSE 80 81 82
