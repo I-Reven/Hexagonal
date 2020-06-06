@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS tracker.tracks (
+	id timeuuid PRIMARY KEY,
+	error text,
+	message text,
+	timestamp timestamp,
+	track_id uuid,
+	data set<text>,
+	debugs set<frozen<debug>>)
+	WITH ID = 9feb73b0-a758-11ea-b8d6-cf2bb105377c
+	AND bloom_filter_fp_chance = 0.01
+	AND dclocal_read_repair_chance = 0.1
+	AND crc_check_chance = 1.0
+	AND default_time_to_live = 0
+	AND gc_grace_seconds = 864000
+	AND min_index_interval = 128
+	AND max_index_interval = 2048
+	AND memtable_flush_period_in_ms = 0
+	AND read_repair_chance = 0.0
+	AND speculative_retry = '99PERCENTILE'
+	AND comment = ''
+	AND caching = { 'keys': 'ALL', 'rows_per_partition': 'NONE' }
+	AND compaction = { 'max_threshold': '32', 'min_threshold': '4', 'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+	AND compression = { 'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor' }
+	AND cdc = false
+	AND extensions = { 'elastic_admin/tracker': '3a290a05fa86747261636b6572fa8676657273696f6ec2847374617465436f70656e8773657474696e6773fa92696e6465782e6372656174696f6e5f646174654c3135393133383130343635313592696e6465782e70726f76696465645f6e616d6546747261636b657289696e6465782e7575696455654f63456b47787153716563463637326c352d34416794696e6465782e76657273696f6e2e637265617465644636303230333939fb876d617070696e6773f8fa85747261636b73fa8970726f70657274696573fa8364617461fa8374797065466b6579776f72648d63716c5f636f6c6c656374696f6e42736574fb85646562756773fa4c456e65737465644d427365748b63716c5f7564745f6e616d654464656275674afa82637075fa4c466b6579776f72644d4873696e676c65746f6efb4bfa4c466b6579776f72644d42736574fb856d656d6f7279fa4c466b6579776f72644d4873696e676c65746f6efb866d657373616765fa4c466b6579776f72644d4873696e676c65746f6efb8874696d657374616d70fa4c436c6f6e674d4873696e676c65746f6efbfbfb846572726f72fa4c466b6579776f72644d4873696e676c65746f6efb816964fa4c466b6579776f72644d4873696e676c65746f6e9063716c5f706172746974696f6e5f6b6579239463716c5f7072696d6172795f6b65795f6f72646572c0fb52fa4c466b6579776f72644d4873696e676c65746f6efb53fa4c43646174654d4873696e676c65746f6efb87747261636b5f6964fa4c466b6579776f72644d4873696e676c65746f6efbfbfbfbf986616c6961736573fafbfbfb' };
+CREATE CUSTOM INDEX elastic_tracks_idx ON tracker.tracks () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';

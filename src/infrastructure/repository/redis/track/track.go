@@ -26,7 +26,7 @@ var (
 
 type Track struct{}
 
-func (t Track) redis() *repository.Redis {
+func (r Track) redis() *repository.Redis {
 	once.Do(func() {
 		redis = repository.Redis{Client: redisV8.NewClient(config), Ctx: context.Background()}
 	})
@@ -34,16 +34,16 @@ func (t Track) redis() *repository.Redis {
 	return &redis
 }
 
-func (t Track) CreateTrack() (string, error) {
+func (r Track) CreateTrack() (string, error) {
 	track := entity.Track{}
 	track.SetId(gocql.TimeUUID())
 	id := track.GetId().String()
 	track.SetTrackId(track.GetId())
-	err := t.SaveTrack(id, &track)
+	err := r.SaveTrack(id, &track)
 	return id, err
 }
 
-func (t Track) SaveTrack(id string, track *entity.Track) error {
+func (r Track) SaveTrack(id string, track *entity.Track) error {
 	Track, err := json.Marshal(track)
 
 	if err != nil {
@@ -51,16 +51,16 @@ func (t Track) SaveTrack(id string, track *entity.Track) error {
 		return err
 	}
 
-	return t.redis().Set(id, Track, expiration)
+	return r.redis().Set(id, Track, expiration)
 }
 
-func (t Track) DeleteTrack(id string) error {
-	return t.redis().Del(id)
+func (r Track) DeleteTrack(id string) error {
+	return r.redis().Del(id)
 }
 
-func (t Track) GetTrack(id string) (entity.Track, error) {
+func (r Track) GetTrack(id string) (entity.Track, error) {
 	track := entity.Track{}
-	Track, err := t.redis().Get(id)
+	Track, err := r.redis().Get(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.redis-track-expired")
@@ -72,8 +72,8 @@ func (t Track) GetTrack(id string) (entity.Track, error) {
 	return track, err
 }
 
-func (t Track) AddMessage(id string, message string) error {
-	track, err := t.GetTrack(id)
+func (r Track) AddMessage(id string, message string) error {
+	track, err := r.GetTrack(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
@@ -82,11 +82,11 @@ func (t Track) AddMessage(id string, message string) error {
 
 	track.SetMessage(message)
 
-	return t.SaveTrack(id, &track)
+	return r.SaveTrack(id, &track)
 }
 
-func (t Track) AddError(id string, error error) error {
-	track, err := t.GetTrack(id)
+func (r Track) AddError(id string, error error) error {
+	track, err := r.GetTrack(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
@@ -95,11 +95,11 @@ func (t Track) AddError(id string, error error) error {
 
 	track.SetError(error.Error())
 
-	return t.SaveTrack(id, &track)
+	return r.SaveTrack(id, &track)
 }
 
-func (t Track) AddData(id string, data interface{}) error {
-	track, err := t.GetTrack(id)
+func (r Track) AddData(id string, data interface{}) error {
+	track, err := r.GetTrack(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
@@ -108,11 +108,11 @@ func (t Track) AddData(id string, data interface{}) error {
 
 	track.AddData(data)
 
-	return t.SaveTrack(id, &track)
+	return r.SaveTrack(id, &track)
 }
 
-func (t Track) AddDebug(id string, message string, data ...interface{}) error {
-	track, err := t.GetTrack(id)
+func (r Track) AddDebug(id string, message string, data ...interface{}) error {
+	track, err := r.GetTrack(id)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "error.redis-can-not-get-track")
@@ -121,5 +121,5 @@ func (t Track) AddDebug(id string, message string, data ...interface{}) error {
 
 	track.AddDebug(message, data...)
 
-	return t.SaveTrack(id, &track)
+	return r.SaveTrack(id, &track)
 }

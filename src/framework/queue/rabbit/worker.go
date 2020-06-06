@@ -51,8 +51,11 @@ func (w *Worker) catch(body []byte, job job.Job, tries int, err error) {
 	if err != nil {
 		if job.GetConfig().Tries > tries {
 			w.try(body, job, tries+1)
+
 		} else {
 			job.Failed(err)
 		}
+	} else {
+		job.Done()
 	}
 }

@@ -29,16 +29,8 @@ if [ $state == "live" ]; then
 fi
 
 if [ $state == "test" ]; then
-  echo Please select your deployment state? up, down
-  read state
-
-  if [ $state == "up" ]; then
-    docker-compose up -d mongodb elassandra redis rabbitmq core
-  fi
-
-  if [ $state == "down" ]; then
-    docker-compose down
-  fi
+  docker-compose down
+  docker-compose up -d mongodb elassandra redis rabbitmq core
 fi
 
 if [ $state == "local" ]; then

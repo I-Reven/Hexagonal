@@ -32,7 +32,7 @@ func (a SyncIndex) Send(keySpace string, table string) error {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	res, err := client.Do(req)
+	_, err = client.Do(req)
 
 	if err != nil {
 		err = errors.NewNotSupported(err, "errors.can-not-create-index")
@@ -40,6 +40,5 @@ func (a SyncIndex) Send(keySpace string, table string) error {
 		return err
 	}
 
-	fmt.Println(res)
 	return nil
 }

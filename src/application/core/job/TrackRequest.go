@@ -56,6 +56,8 @@ func (j TrackRequest) Handler() error {
 	return nil
 }
 
+func (j TrackRequest) Done() {}
+
 func (j TrackRequest) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-request-tracker-failed")
 	j.log.TraceLn(j)

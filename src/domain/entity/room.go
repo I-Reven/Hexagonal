@@ -76,5 +76,6 @@ func (e *Room) AddMetaData(metaData MetaData) *Room {
 func (e *Room) Make(roomId int64, userId int64) *Room {
 	e.SetRoomId(roomId)
 	e.AddUserId(userId)
+	e.SetStatus(1)
 	return e
 }

@@ -9,6 +9,7 @@ type (
 		Init([]byte) (error, Job)
 		Handler() error
 		Failed(error)
+		Done()
 		GetConfig() Config
 	}
 )

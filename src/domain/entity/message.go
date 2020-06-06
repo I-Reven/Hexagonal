@@ -6,18 +6,18 @@ import (
 )
 
 type Message struct {
-	Id        gocql.UUID `cql:"id" json:"id" faker:"-"`
-	UserId    int64      `cql:"userId" json:"user_id"`
-	Content   string     `cql:"content" json:"content" faker:"sentence"`
-	Kind      int32      `cql:"kind" json:"kind"`
-	Seen      []int64    `cql:"seen" json:"seen"`
-	Delivered []int64    `cql:"delivered" json:"delivered"`
-	Timestamp int64      `cql:"timestamp" json:"timestamp"`
+	Id        string  `cql:"id" json:"id" faker:"-"`
+	UserId    int64   `cql:"userId" json:"user_id"`
+	Content   string  `cql:"content" json:"content" faker:"sentence"`
+	Kind      int32   `cql:"kind" json:"kind"`
+	Seen      []int64 `cql:"seen" json:"seen"`
+	Delivered []int64 `cql:"delivered" json:"delivered"`
+	Timestamp int64   `cql:"timestamp" json:"timestamp"`
 }
 
-func (e *Message) GetId() gocql.UUID                       { return e.Id }
-func (e *Message) SetId(id gocql.UUID) *Message            { e.Id = id; return e }
-func (e *Message) MakeId() *Message                        { e.SetId(gocql.TimeUUID()); return e }
+func (e *Message) GetId() string                           { return e.Id }
+func (e *Message) SetId(id string) *Message                { e.Id = id; return e }
+func (e *Message) MakeId() *Message                        { e.SetId(gocql.TimeUUID().String()); return e }
 func (e *Message) GetUserId() int64                        { return e.UserId }
 func (e *Message) SetUserId(userId int64) *Message         { e.UserId = userId; return e }
 func (e *Message) GetContent() string                      { return e.Content }

@@ -35,6 +35,8 @@ func (j IAmAliveJob) Handler() error {
 	return iAmAlive.ConsumerTestSuccess()
 }
 
+func (j IAmAliveJob) Done() {}
+
 func (j IAmAliveJob) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
 

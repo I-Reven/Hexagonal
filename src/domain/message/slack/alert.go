@@ -1,6 +1,9 @@
 package slack
 
-import "github.com/ashwanthkumar/slack-go-webhook"
+import (
+	"github.com/ashwanthkumar/slack-go-webhook"
+	"os"
+)
 
 type Alert struct {
 	Title       string
@@ -23,5 +26,5 @@ func (m *Alert) GetPayload() Payload {
 }
 
 func (m *Alert) GetWebHook() string {
-	return "https://hooks.slack.com/services/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"
+	return os.Getenv("SLACK_LOG_WEB_HOOK")
 }

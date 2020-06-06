@@ -1,6 +1,7 @@
 package cassandra
 
 import (
+	"fmt"
 	"github.com/gocql/gocql"
 	"github.com/juju/errors"
 	"github.com/sirupsen/logrus"
@@ -58,9 +59,9 @@ func (c *Cassandra) MackKeySpace(keySpace string) error {
 		return err
 	}
 
-	debugQuery := `create keyspace ? with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};`
+	debugQuery := `CREATE keyspace IF NOT EXISTS %s WITH replication = {'class':'NetworkTopologyStrategy', 'DC1':'1'};`
 
-	return session.Query(debugQuery, keySpace).Exec()
+	return session.Query(fmt.Sprintf(debugQuery, keySpace)).Exec()
 }
 
 func (c *Cassandra) ClearSession(session *gocql.Session) {
