@@ -37,7 +37,7 @@ func (h Room) Create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
 
@@ -47,7 +47,7 @@ func (h Room) AddUser(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.addUserRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
@@ -57,7 +57,7 @@ func (h Room) AddUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
 
@@ -67,7 +67,7 @@ func (h Room) AddMessage(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.addMessageRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
@@ -77,7 +77,7 @@ func (h Room) AddMessage(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
 
@@ -87,7 +87,7 @@ func (h Room) SeenMessage(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.seenMessageRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
@@ -97,7 +97,7 @@ func (h Room) SeenMessage(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
 
@@ -107,7 +107,7 @@ func (h Room) DeliverMessage(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.deliverMessageRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
@@ -117,17 +117,17 @@ func (h Room) DeliverMessage(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
 
 func (h Room) AddMetaData(ctx *gin.Context) {
-	if err := ctx.ShouldBindJSON(&h.deliverMessageRequest); err != nil {
+	if err := ctx.ShouldBindJSON(&h.addMetaDataRequest); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.can-not-un-marshal-json"))
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.addMetaDataRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
@@ -137,6 +137,6 @@ func (h Room) AddMetaData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
 	return
 }
