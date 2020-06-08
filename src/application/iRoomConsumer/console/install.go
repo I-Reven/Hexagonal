@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/application/iRoom"
+	"github.com/I-Reven/Hexagonal/src/application/iRoomConsumer"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )

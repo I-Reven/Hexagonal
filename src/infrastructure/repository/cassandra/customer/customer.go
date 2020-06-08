@@ -71,9 +71,9 @@ func (r *Customer) MigrateMetaData(keySpace string) error {
 func (r *Customer) MigrateRoom(keySpace string) error {
 	roomQuery := `CREATE TABLE IF NOT EXISTS rooms (
   					id TIMEUUID,
-					room_id BIGINT,
+					roomId BIGINT,
   					status INT,
-  					userID SET<BIGINT>,
+  					usersId SET<BIGINT>,
 					messages SET<frozen <message>>,
 					metaData SET<frozen <metaData>>,
   					rating INT,

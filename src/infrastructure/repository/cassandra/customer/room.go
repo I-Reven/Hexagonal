@@ -79,7 +79,7 @@ func (r Room) GetById(keySpace string, id gocql.UUID) (*entity.Room, error) {
 	return nil, errors.NewNotFound(errors.New("error"), "error.room-not-found")
 }
 
-func (r Room) GetByRoomId(keySpace string, roomId uint64) (*entity.Room, error) {
+func (r Room) GetByRoomId(keySpace string, roomId int64) (*entity.Room, error) {
 	m := map[string]interface{}{}
 	query := ` SELECT * FROM rooms WHERE roomId = ? LIMIT 1 ALLOW FILTERING`
 	itr := r.cql(keySpace).Query(query, roomId).Iter()
@@ -104,10 +104,10 @@ func (r Room) Create(keySpace string, room *entity.Room) error {
 				id,
 				roomId,
 				status,
-				userId,
+				usersId,
 				messages,
 				metaData,
-				rating,
+				rating
 			) VALUES (?, ?, ?, ?, ?, ?, ?);`
 	err := r.cql(keySpace).Query(query,
 		room.GetId(),
@@ -152,6 +152,22 @@ func (r Room) AddMessage(keySpace string, id gocql.UUID, message entity.Message)
 func (r Room) RemoveMessage(keySpace string, id gocql.UUID, message entity.Message) error {
 	query := `UPDATE rooms SET messages - ? WHERE id = ?`
 	err := r.cql(keySpace).Query(query, []entity.Message{message}, id).Exec()
+	r.close()
+
+	return err
+}
+
+func (r Room) AddUser(keySpace string, id gocql.UUID, userId int64) error {
+	query := `UPDATE rooms SET usersId + ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []int64{userId}, id).Exec()
+	r.close()
+
+	return err
+}
+
+func (r Room) RemoveUser(keySpace string, id gocql.UUID, userId int64) error {
+	query := `UPDATE rooms SET usersId - ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []int64{userId}, id).Exec()
 	r.close()
 
 	return err

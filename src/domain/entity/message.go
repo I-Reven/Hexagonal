@@ -37,19 +37,13 @@ func (e *Message) AddDelivered(userId int64) *Message {
 }
 func (e *Message) Factory() error { return faker.FakeData(e) }
 
-func (e *Message) Create(content string, kind int32, userId int64) {
-	e.MakeId()
+func (e *Message) Make(messageId string, content string, kind int32, userId int64) *Message {
+	e.SetId(messageId)
 	e.SetContent(content)
 	e.SetKind(kind)
 	e.SetUserId(userId)
 	e.AddSeen(userId)
 	e.AddDelivered(userId)
-}
 
-func (e *Message) Make(content string, kind int32, userId int64) {
-	e.SetContent(content)
-	e.SetKind(kind)
-	e.SetUserId(userId)
-	e.AddSeen(userId)
-	e.AddDelivered(userId)
+	return e
 }

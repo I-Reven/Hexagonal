@@ -14,7 +14,7 @@ import (
 )
 
 type (
-	CreateCustomer struct {
+	CreateRoom struct {
 		tries      int
 		message    rabbit.CreateCustomer
 		log        logger.Log
@@ -24,11 +24,11 @@ type (
 	}
 )
 
-func (j CreateCustomer) Init(b []byte) (error, job.Job) {
+func (j CreateRoom) Init(b []byte) (error, job.Job) {
 	return json.Unmarshal(b, &j.message), j
 }
 
-func (j CreateCustomer) Handler() error {
+func (j CreateRoom) Handler() error {
 	err := j.service.Create(j.message.CustomerName)
 
 	if err != nil {
@@ -45,20 +45,20 @@ func (j CreateCustomer) Handler() error {
 	return err
 }
 
-func (j CreateCustomer) Done() {
+func (j CreateRoom) Done() {
 	j.slack.Send(&message.SuccessJob{
 		JobName: "CreateCustomer",
 		Message: "Create Customer " + j.message.CustomerName + " is Done",
 	})
 }
 
-func (j CreateCustomer) Failed(err error) {
+func (j CreateRoom) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
 	retryUrl, cancelUrl := j.getWebHooks()
 
 	j.slack.Send(&message.FailedJob{
-		JobName:   "CreateCustomer",
-		Message:   "Create Customer Job Failed For Customer: " + j.message.CustomerName,
+		JobName:   "CreateRoom",
+		Message:   "Create Room Job Failed",
 		RetryUrl:  retryUrl,
 		CancelUrl: cancelUrl,
 		Error:     err,
@@ -67,7 +67,7 @@ func (j CreateCustomer) Failed(err error) {
 	j.log.Warn(err)
 }
 
-func (j CreateCustomer) getWebHooks() (string, string) {
+func (j CreateRoom) getWebHooks() (string, string) {
 	retryUrl := ""
 	cancelUrl := ""
 	if data, er := json.Marshal(j.message); er == nil {
@@ -80,6 +80,6 @@ func (j CreateCustomer) getWebHooks() (string, string) {
 	return retryUrl, cancelUrl
 }
 
-func (j CreateCustomer) GetConfig() job.Config {
+func (j CreateRoom) GetConfig() job.Config {
 	return job.Config{Tries: 3}
 }

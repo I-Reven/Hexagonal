@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/application/iRoom/listener"
+	"github.com/I-Reven/Hexagonal/src/application/base/listener"
 	"github.com/spf13/cobra"
 )
 

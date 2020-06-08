@@ -13,6 +13,8 @@ if [ $state == "live" ]; then
     docker push koushamad/hexagonal-grafana:latest
 
     docker push koushamad/hexagonal-icustomer:latest
+    docker push koushamad/hexagonal-iroomconsumer:latest
+    docker push koushamad/hexagonal-iroomproducer:latest
 
     docker-compose config > docker-compose-deploy.yaml && kompose convert -f docker-compose-deploy.yaml --out ./k8s
     docker-compose down

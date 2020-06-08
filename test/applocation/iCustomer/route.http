@@ -1,5 +1,5 @@
 ### TRACK API
-POST http://localhost:80/v1/create-customer
+POST http://localhost:80/v1/customer/create
 Content-Type: application/json
 
 {

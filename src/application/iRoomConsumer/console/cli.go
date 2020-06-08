@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/application/iRoom"
+	"github.com/I-Reven/Hexagonal/src/application/iRoomConsumer"
 	"github.com/I-Reven/Hexagonal/src/framework/cli"
 	"github.com/I-Reven/Hexagonal/src/framework/logger"
 	_ "github.com/mattn/go-colorable"

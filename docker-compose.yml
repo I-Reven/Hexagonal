@@ -277,5 +277,61 @@ services:
     networks:
       - backend
 
+  iRoomConsumer:
+    image: koushamad/hexagonal-iroomconsumer:latest
+    build:
+      context: .
+      args:
+        PKG: iRoomConsumer
+    container_name: 'hex-iRoomConsumer'
+    restart: unless-stopped
+    ports:
+      - 1007:80
+      - 1008:81
+      - 1009:82
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - elassandra
+    volumes:
+      - ./docker/application/log:/var/log/hex
+    environment:
+      PKG: core
+      APP_ENV: ${APP_ENV}
+      MONGO_URL: ${MONGO_HOST}
+      REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
+      RABBIT_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/
+    networks:
+      - backend
+
+  iRoomProducer:
+    image: koushamad/hexagonal-iroomproducer:latest
+    build:
+      context: .
+      args:
+        PKG: iRoomProducer
+    container_name: 'hex-iRoomProducer'
+    restart: unless-stopped
+    ports:
+      - 1010:80
+      - 1011:81
+      - 1012:82
+    depends_on:
+      - redis
+      - rabbitmq
+      - mongodb
+      - elassandra
+    volumes:
+      - ./docker/application/log:/var/log/hex
+    environment:
+      PKG: core
+      APP_ENV: ${APP_ENV}
+      MONGO_URL: ${MONGO_HOST}
+      REDIS_URL: ${REDIS_HOST}:${REDIS_PORT}
+      RABBIT_URL: amqp://${RABBIT_USER}:${RABBIT_PASSWORD}@${RABBIT_HOST}:5672/
+    networks:
+      - backend
+
 networks:
   backend:

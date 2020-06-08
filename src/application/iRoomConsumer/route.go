@@ -14,7 +14,6 @@ func init() {
 func (h Http) Route() http.Handler {
 	_ = engine.Group("/v1")
 	{
-
 	}
 
 	return engine

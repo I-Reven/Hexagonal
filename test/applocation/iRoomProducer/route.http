@@ -1,0 +1,65 @@
+### CREATE ROOM API
+POST http://localhost:80/v1/room/create
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "user_id": 1
+}
+
+### ADD USER API
+PATCH http://localhost:80/v1/room/add-user
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "user_id": 1
+}
+
+### ADD MESSAGE API
+PATCH http://localhost:80/v1/room/add-message
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "user_id": 1,
+  "content": "test-content",
+  "kind": 1
+}
+
+### ADD META DATA API
+PATCH http://localhost:80/v1/room/add-meta-data
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "key": "key1",
+  "kind": 1,
+  "value": "value1"
+}
+
+### SEEN MESSAGE API
+PUT http://localhost:80/v1/room/seen-message
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "message_id": "message_id",
+  "user_id": 1
+}
+
+### DELIVER MESSAGE API
+PUT http://localhost:80/v1/room/deliver-message
+Content-Type: application/json
+
+{
+  "customer_name": "test1",
+  "room_id": 1,
+  "message_id": "message_id",
+  "user_id": 1
+}

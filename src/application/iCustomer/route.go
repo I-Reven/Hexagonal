@@ -19,13 +19,13 @@ func init() {
 func (h Http) Route() http.Handler {
 	webHook := engine.Group("/web-hook")
 	{
-		webHook.GET("/create-customer/:token", h.createCustomerWebHook.Approve)
-		webHook.GET("/create-customer-cancel/:token", h.createCustomerWebHook.Cancel)
+		webHook.GET("/customer/create/:token", h.createCustomerWebHook.Approve)
+		webHook.GET("/customer/create-cancel/:token", h.createCustomerWebHook.Cancel)
 	}
 
 	v1 := engine.Group("/v1")
 	{
-		v1.POST("/create-customer", h.createCustomer.Handler)
+		v1.POST("/customer/create", h.createCustomer.Handler)
 	}
 
 	return engine
