@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/I-Reven/Hexagonal/src/application/base/job"
+	"github.com/I-Reven/Hexagonal/src/application/iRoomProducer/job"
 	"github.com/spf13/cobra"
 )
 
