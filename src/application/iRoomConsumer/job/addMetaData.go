@@ -13,9 +13,9 @@ import (
 )
 
 type (
-	CreateRoom struct {
+	AddMetaData struct {
 		tries      int
-		message    rabbit.CreateRoom
+		message    rabbit.AddMetaData
 		log        logger.Log
 		slack      slack.Slack
 		service    service.RoomConsumer
@@ -23,28 +23,28 @@ type (
 	}
 )
 
-func (j CreateRoom) Init(b []byte) (error, job.Job) {
+func (j AddMetaData) Init(b []byte) (error, job.Job) {
 	return json.Unmarshal(b, &j.message), j
 }
 
-func (j CreateRoom) Handler() error {
-	return j.service.Create(j.message.CustomerName, j.message.RoomId, j.message.UserId)
+func (j AddMetaData) Handler() error {
+	return j.service.AddMetaData(j.message.CustomerName, j.message.RoomId, j.message.Key, j.message.Kind, j.message.Value)
 }
 
-func (j CreateRoom) Done() {}
+func (j AddMetaData) Done() {}
 
-func (j CreateRoom) Failed(err error) {
+func (j AddMetaData) Failed(err error) {
 	err = errors.NewNotSupported(err, "error.job-failed")
 
 	j.slack.Send(&message.FailedJob{
-		JobName: "CreateRoom",
-		Message: "Create Room Job Failed",
+		JobName: "AddMetaData",
+		Message: "Add Meta Data Job Failed",
 		Error:   err,
 	})
 
 	j.log.Warn(err)
 }
 
-func (j CreateRoom) GetConfig() job.Config {
+func (j AddMetaData) GetConfig() job.Config {
 	return job.Config{Tries: 3}
 }

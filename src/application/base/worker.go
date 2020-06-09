@@ -5,7 +5,7 @@ import (
 )
 
 type Worker struct {
-	Worker rabbit.Worker
+	worker rabbit.Worker
 }
 
 func (w Worker) Work() {}

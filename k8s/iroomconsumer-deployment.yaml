@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: core
-  name: core
+    io.kompose.service: iroomconsumer
+  name: iroomconsumer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: core
+      io.kompose.service: iroomconsumer
   strategy:
     type: Recreate
   template:
@@ -23,7 +23,7 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.network/backend: "true"
-        io.kompose.service: core
+        io.kompose.service: iroomconsumer
     spec:
       containers:
       - env:
@@ -37,9 +37,9 @@ spec:
           value: amqp://kousha:kousha@rabbitmq:5672/
         - name: REDIS_URL
           value: redis:6379
-        image: koushamad/hexagonal-core:latest
+        image: koushamad/hexagonal-iroomconsumer:latest
         imagePullPolicy: ""
-        name: hex-core
+        name: hex-iroomconsumer
         ports:
         - containerPort: 80
         - containerPort: 81
@@ -47,11 +47,11 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /var/log/hex
-          name: core-claim0
+          name: iroomconsumer-claim0
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: core-claim0
+      - name: iroomconsumer-claim0
         persistentVolumeClaim:
-          claimName: core-claim0
+          claimName: iroomconsumer-claim0
 status: {}

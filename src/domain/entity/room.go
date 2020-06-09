@@ -7,11 +7,11 @@ import (
 
 type Room struct {
 	Id       gocql.UUID `cql:"id" json:"id" faker:"-"`
-	RoomId   int64      `cql:"roomId" json:"room_id"`
+	RoomId   int64      `cql:"room_id" json:"room_id"`
 	Status   int32      `cql:"status" json:"status"`
-	UsersId  []int64    `cql:"userId" json:"users_id"`
+	UsersId  []int64    `cql:"users_id" json:"users_id"`
 	Messages []Message  `cql:"messages" json:"messages"`
-	MetaData []MetaData `cql:"metaData" json:"meta_data"`
+	MetaData []MetaData `cql:"meta_data" json:"meta_data"`
 	Rating   int32      `cql:"rating" json:"rating"`
 }
 
@@ -38,39 +38,43 @@ func (e *Room) AddMessage(message Message) *Room {
 }
 
 func (e *Room) AddUserId(userId int64) *Room {
-	var id int64
-	for _, id = range e.GetUsersId() {
-		if userId == id {
-			return nil
-		}
-	}
-
 	e.SetUsersId(append(e.GetUsersId(), userId))
 	return e
 }
 
 func (e *Room) AddMetaData(metaData MetaData) *Room {
-	var (
-		m     MetaData
-		md    []MetaData
-		exist = false
-	)
+	e.SetMetaData(append(e.GetMetaData(), metaData))
+	return e
+}
 
-	for _, m = range e.GetMetaData() {
-		if m.Key == metaData.Key {
-			md = append(md, metaData)
-			exist = true
-		} else {
-			md = append(md, m)
+func (e *Room) ExistUserId(userId int64) (int64, bool) {
+	for _, user := range e.GetUsersId() {
+		if userId == user {
+			return user, true
 		}
 	}
 
-	if !exist {
-		md = append(md, metaData)
+	return userId, false
+}
+
+func (e *Room) ExistMetaData(metaData MetaData) (MetaData, bool) {
+	for _, md := range e.GetMetaData() {
+		if md.Key == metaData.Key {
+			return md, true
+		}
 	}
 
-	e.SetMetaData(md)
-	return e
+	return metaData, false
+}
+
+func (e *Room) ExistMessage(message Message) (Message, bool) {
+	for _, msg := range e.GetMessages() {
+		if msg.Id == message.Id {
+			return msg, true
+		}
+	}
+
+	return message, false
 }
 
 func (e *Room) Make(roomId int64, userId int64) *Room {

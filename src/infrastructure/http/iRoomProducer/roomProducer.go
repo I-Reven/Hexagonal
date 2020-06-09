@@ -10,9 +10,10 @@ import (
 )
 
 type Room struct {
-	createRequest         request.CreateRoom
+	createRoomRequest     request.CreateRoom
 	addUserRequest        request.AddUser
 	addMessageRequest     request.AddMessage
+	addMessageResponse    response.AddMessage
 	seenMessageRequest    request.SeenMessage
 	deliverMessageRequest request.DeliverMessage
 	addMetaDataRequest    request.AddMetadata
@@ -22,17 +23,17 @@ type Room struct {
 }
 
 func (h Room) Create(ctx *gin.Context) {
-	if err := ctx.ShouldBindJSON(&h.createRequest); err != nil {
+	if err := ctx.ShouldBindJSON(&h.createRoomRequest); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.can-not-un-marshal-json"))
 		return
 	}
 
-	if err := h.createRequest.Validate(); err != nil {
+	if err := h.createRoomRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
 
-	if err := h.service.Create(h.createRequest.CustomerName, h.createRequest.RoomId, h.createRequest.UserId); err != nil {
+	if err := h.service.Create(h.createRoomRequest.CustomerName, h.createRoomRequest.RoomId, h.createRoomRequest.UserId); err != nil {
 		ctx.JSON(http.StatusInternalServerError, h.response.TryAgain(err, "message.can-not-produce-create-room-message"))
 		return
 	}
@@ -62,22 +63,27 @@ func (h Room) AddUser(ctx *gin.Context) {
 }
 
 func (h Room) AddMessage(ctx *gin.Context) {
-	if err := ctx.ShouldBindJSON(&h.addMessageRequest); err != nil {
+	var (
+		err       error
+		messageId string
+	)
+
+	if err = ctx.ShouldBindJSON(&h.addMessageRequest); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.can-not-un-marshal-json"))
 		return
 	}
 
-	if err := h.addMessageRequest.Validate(); err != nil {
+	if err = h.addMessageRequest.Validate(); err != nil {
 		ctx.JSON(http.StatusBadRequest, h.response.BadRequest(err, "message.invalid-json-data"))
 		return
 	}
 
-	if err := h.service.AddMessage(h.addMessageRequest.CustomerName, h.addMessageRequest.RoomId, h.addMessageRequest.UserId, h.addMessageRequest.Content, h.addMessageRequest.Kind); err != nil {
+	if messageId, err = h.service.AddMessage(h.addMessageRequest.CustomerName, h.addMessageRequest.RoomId, h.addMessageRequest.UserId, h.addMessageRequest.Content, h.addMessageRequest.Kind); err != nil {
 		ctx.JSON(http.StatusInternalServerError, h.response.TryAgain(err, "message.can-not-produce-add-message-message"))
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, h.response.Success("OK"))
+	ctx.JSON(http.StatusAccepted, h.response.Success(h.addMessageResponse.Make(messageId)))
 	return
 }
 

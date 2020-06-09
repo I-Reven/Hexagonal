@@ -6,20 +6,20 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: core
-  name: core
+    io.kompose.service: iroomproducer
+  name: iroomproducer
 spec:
   ports:
-  - name: "1001"
-    port: 1001
+  - name: "1010"
+    port: 1010
     targetPort: 80
-  - name: "1002"
-    port: 1002
+  - name: "1011"
+    port: 1011
     targetPort: 81
-  - name: "1003"
-    port: 1003
+  - name: "1012"
+    port: 1012
     targetPort: 82
   selector:
-    io.kompose.service: core
+    io.kompose.service: iroomproducer
 status:
   loadBalancer: {}

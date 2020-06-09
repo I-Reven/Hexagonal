@@ -48,6 +48,8 @@ spec:
           name: elassandra-claim0
         - mountPath: /opt/elassandra/data
           name: elassandra-claim1
+        - mountPath: /opt/elassandra/conf
+          name: elassandra-claim2
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
@@ -57,4 +59,7 @@ spec:
       - name: elassandra-claim1
         persistentVolumeClaim:
           claimName: elassandra-claim1
+      - name: elassandra-claim2
+        persistentVolumeClaim:
+          claimName: elassandra-claim2
 status: {}

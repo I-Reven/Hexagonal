@@ -3,11 +3,12 @@ package entity
 import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/gocql/gocql"
+	"time"
 )
 
 type Message struct {
 	Id        string  `cql:"id" json:"id" faker:"-"`
-	UserId    int64   `cql:"userId" json:"user_id"`
+	UserId    int64   `cql:"user_id" json:"user_id"`
 	Content   string  `cql:"content" json:"content" faker:"sentence"`
 	Kind      int32   `cql:"kind" json:"kind"`
 	Seen      []int64 `cql:"seen" json:"seen"`
@@ -44,6 +45,7 @@ func (e *Message) Make(messageId string, content string, kind int32, userId int6
 	e.SetUserId(userId)
 	e.AddSeen(userId)
 	e.AddDelivered(userId)
+	e.SetTimestamp(time.Now().UnixNano() / int64(time.Millisecond))
 
 	return e
 }

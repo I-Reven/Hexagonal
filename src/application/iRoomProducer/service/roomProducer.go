@@ -38,7 +38,7 @@ func (s RoomProducer) AddUser(customerName string, roomId int64, userId int64) e
 	return nil
 }
 
-func (s RoomProducer) AddMessage(customerName string, roomId int64, userId int64, content string, kind int32) error {
+func (s RoomProducer) AddMessage(customerName string, roomId int64, userId int64, content string, kind int32) (string, error) {
 	msg := message.AddMessage{
 		CustomerName: customerName,
 		RoomId:       roomId,
@@ -51,10 +51,10 @@ func (s RoomProducer) AddMessage(customerName string, roomId int64, userId int64
 	if err := s.produce.ProduceMessage(msg); err != nil {
 		err = errors.NewNotSupported(err, "error.can-not-produce-add-message-message")
 		s.log.Error(err)
-		return err
+		return s.message.GetId(), err
 	}
 
-	return nil
+	return s.message.GetId(), nil
 }
 
 func (s RoomProducer) SeenMessage(customerName string, roomId int64, messageId string, userId int64) error {

@@ -6,20 +6,20 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: core
-  name: core
+    io.kompose.service: icustomer
+  name: icustomer
 spec:
   ports:
-  - name: "1001"
-    port: 1001
+  - name: "1004"
+    port: 1004
     targetPort: 80
-  - name: "1002"
-    port: 1002
+  - name: "1005"
+    port: 1005
     targetPort: 81
-  - name: "1003"
-    port: 1003
+  - name: "1006"
+    port: 1006
     targetPort: 82
   selector:
-    io.kompose.service: core
+    io.kompose.service: icustomer
 status:
   loadBalancer: {}

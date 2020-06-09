@@ -8,6 +8,7 @@ import (
 	"github.com/juju/errors"
 	"github.com/mitchellh/mapstructure"
 	"os"
+	"time"
 )
 
 var (
@@ -15,10 +16,12 @@ var (
 		var messages []entity.Message
 		message := entity.Message{}
 
-		for _, d := range i.([]map[string]interface{}) {
-			err := mapstructure.Decode(d, &message)
-			if err == nil {
-				messages = append(messages, message)
+		if i != nil {
+			for _, d := range i.([]map[string]interface{}) {
+				err := mapstructure.Decode(d, &message)
+				if err == nil {
+					messages = append(messages, message)
+				}
 			}
 		}
 
@@ -28,14 +31,31 @@ var (
 		var metaData []entity.MetaData
 		metaInfo := entity.MetaData{}
 
-		for _, d := range i.([]map[string]interface{}) {
-			err := mapstructure.Decode(d, &metaInfo)
-			if err == nil {
-				metaData = append(metaData, metaInfo)
+		if i != nil {
+			for _, d := range i.([]map[string]interface{}) {
+				err := mapstructure.Decode(d, &metaInfo)
+				if err == nil {
+					metaData = append(metaData, metaInfo)
+				}
 			}
 		}
 
 		return metaData
+	}
+	toUsersId = func(i interface{}) []int64 {
+		var usersId []int64
+		var userId int64
+
+		if i != nil {
+			for _, d := range i.([]int64) {
+				err := mapstructure.Decode(d, &userId)
+				if err == nil {
+					usersId = append(usersId, userId)
+				}
+			}
+		}
+
+		return usersId
 	}
 )
 
@@ -67,11 +87,11 @@ func (r Room) GetById(keySpace string, id gocql.UUID) (*entity.Room, error) {
 	for itr.MapScan(m) {
 		room := &entity.Room{}
 		room.SetId(m["id"].(gocql.UUID))
-		room.SetRoomId(m["roomId"].(int64))
-		room.SetStatus(m["status"].(int32))
-		room.SetUsersId(m["usersId"].([]int64))
+		room.SetRoomId(m["room_id"].(int64))
+		room.SetStatus(int32(m["status"].(int)))
+		room.SetUsersId(toUsersId(m["users_id"]))
 		room.SetMessages(toMessages(m["messages"]))
-		room.SetMetaData(toMetaData(m["metaData"]))
+		room.SetMetaData(toMetaData(m["meta_data"]))
 
 		return room, nil
 	}
@@ -81,16 +101,16 @@ func (r Room) GetById(keySpace string, id gocql.UUID) (*entity.Room, error) {
 
 func (r Room) GetByRoomId(keySpace string, roomId int64) (*entity.Room, error) {
 	m := map[string]interface{}{}
-	query := ` SELECT * FROM rooms WHERE roomId = ? LIMIT 1 ALLOW FILTERING`
+	query := ` SELECT * FROM rooms WHERE room_id = ? LIMIT 1 ALLOW FILTERING`
 	itr := r.cql(keySpace).Query(query, roomId).Iter()
 	for itr.MapScan(m) {
 		room := &entity.Room{}
 		room.SetId(m["id"].(gocql.UUID))
-		room.SetRoomId(m["roomId"].(int64))
-		room.SetStatus(m["status"].(int32))
-		room.SetUsersId(m["usersId"].([]int64))
+		room.SetRoomId(m["room_id"].(int64))
+		room.SetStatus(int32(m["status"].(int)))
+		room.SetUsersId(toUsersId(m["users_id"]))
 		room.SetMessages(toMessages(m["messages"]))
-		room.SetMetaData(toMetaData(m["metaData"]))
+		room.SetMetaData(toMetaData(m["meta_data"]))
 
 		return room, nil
 	}
@@ -102,13 +122,14 @@ func (r Room) Create(keySpace string, room *entity.Room) error {
 	room.SetId(gocql.TimeUUID())
 	query := `INSERT INTO rooms (
 				id,
-				roomId,
+				room_id,
 				status,
-				usersId,
+				users_id,
 				messages,
-				metaData,
-				rating
-			) VALUES (?, ?, ?, ?, ?, ?, ?);`
+				meta_data,
+				rating,
+				timestamp
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
 	err := r.cql(keySpace).Query(query,
 		room.GetId(),
 		room.GetRoomId(),
@@ -117,6 +138,7 @@ func (r Room) Create(keySpace string, room *entity.Room) error {
 		room.GetMessages(),
 		room.GetMetaData(),
 		room.GetRating(),
+		time.Now(),
 	).Exec()
 	r.close()
 
@@ -124,16 +146,12 @@ func (r Room) Create(keySpace string, room *entity.Room) error {
 }
 
 func (r Room) Update(keySpace string, id gocql.UUID, room *entity.Room) error {
-	query := `UPRATE rooms  
-				SET roomId = ?, status = ?, userId = ?, messages = ?, metaData = ?, rating = ?
-				WHERE id = ?;`
+	query := `UPRATE rooms SET room_id = ?, status = ?, rating = ?, timestamp = ? WHERE id = ? ALLOW FILTERING;`
 	err := r.cql(keySpace).Query(query,
 		room.GetRoomId(),
 		room.GetStatus(),
-		room.GetUsersId(),
-		room.GetMessages(),
-		room.GetMetaData(),
 		room.GetRating(),
+		time.Now(),
 		id,
 	).Exec()
 	r.close()
@@ -142,49 +160,73 @@ func (r Room) Update(keySpace string, id gocql.UUID, room *entity.Room) error {
 }
 
 func (r Room) AddMessage(keySpace string, id gocql.UUID, message entity.Message) error {
-	query := `UPDATE rooms SET messages + ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []entity.Message{message}, id).Exec()
+	query := `UPDATE rooms SET messages = messages + ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []entity.Message{message}, time.Now(), id).Exec()
 	r.close()
 
 	return err
 }
 
 func (r Room) RemoveMessage(keySpace string, id gocql.UUID, message entity.Message) error {
-	query := `UPDATE rooms SET messages - ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []entity.Message{message}, id).Exec()
+	query := `UPDATE rooms SET messages = messages - ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []entity.Message{message}, time.Now(), id).Exec()
 	r.close()
 
 	return err
 }
 
+func (r Room) UpdateMessage(keySpace string, id gocql.UUID, messageOld entity.Message, messageNew entity.Message) error {
+	var err error
+
+	if err = r.RemoveMessage(keySpace, id, messageOld); err != nil {
+		err = r.AddMessage(keySpace, id, messageOld)
+	} else {
+		err = r.AddMessage(keySpace, id, messageNew)
+	}
+
+	return err
+}
+
 func (r Room) AddUser(keySpace string, id gocql.UUID, userId int64) error {
-	query := `UPDATE rooms SET usersId + ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []int64{userId}, id).Exec()
+	query := `UPDATE rooms SET users_id = users_id + ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []int64{userId}, time.Now(), id).Exec()
 	r.close()
 
 	return err
 }
 
 func (r Room) RemoveUser(keySpace string, id gocql.UUID, userId int64) error {
-	query := `UPDATE rooms SET usersId - ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []int64{userId}, id).Exec()
+	query := `UPDATE rooms SET users_id = users_id - ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []int64{userId}, time.Now(), id).Exec()
 	r.close()
 
 	return err
 }
 
 func (r Room) AddMetaData(keySpace string, id gocql.UUID, metaData entity.MetaData) error {
-	query := `UPDATE rooms SET metaData + ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []entity.MetaData{metaData}, id).Exec()
+	query := `UPDATE rooms SET meta_data = meta_data + ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []entity.MetaData{metaData}, time.Now(), id).Exec()
 	r.close()
 
 	return err
 }
 
 func (r Room) RemoveMetaData(keySpace string, id gocql.UUID, metaData entity.MetaData) error {
-	query := `UPDATE rooms SET metaData - ? WHERE id = ?`
-	err := r.cql(keySpace).Query(query, []entity.MetaData{metaData}, id).Exec()
+	query := `UPDATE rooms SET meta_data = meta_data - ?, timestamp = ? WHERE id = ?`
+	err := r.cql(keySpace).Query(query, []entity.MetaData{metaData}, time.Now(), id).Exec()
 	r.close()
+
+	return err
+}
+
+func (r Room) UpdateMetaData(keySpace string, id gocql.UUID, metaDataOld entity.MetaData, metaDataNew entity.MetaData) error {
+	err := r.RemoveMetaData(keySpace, id, metaDataOld)
+
+	if err != nil {
+		err = r.AddMetaData(keySpace, id, metaDataOld)
+	} else {
+		err = r.AddMetaData(keySpace, id, metaDataNew)
+	}
 
 	return err
 }

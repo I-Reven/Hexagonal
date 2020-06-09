@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "customer_name": "test1",
   "room_id": 1,
-  "user_id": 1
+  "user_id": 3
 }
 
 ### ADD USER API
@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "customer_name": "test1",
   "room_id": 1,
-  "user_id": 1
+  "user_id": 5
 }
 
 ### ADD MESSAGE API
@@ -49,8 +49,8 @@ Content-Type: application/json
 {
   "customer_name": "test1",
   "room_id": 1,
-  "message_id": "message_id",
-  "user_id": 1
+  "message_id": "b0c067b0-a9e5-11ea-b7db-985aebce38dc",
+  "user_id": 6
 }
 
 ### DELIVER MESSAGE API
@@ -60,6 +60,6 @@ Content-Type: application/json
 {
   "customer_name": "test1",
   "room_id": 1,
-  "message_id": "message_id",
-  "user_id": 1
+  "message_id": "08fd6386-a9e8-11ea-bb07-985aebce38dc",
+  "user_id": 7
 }
