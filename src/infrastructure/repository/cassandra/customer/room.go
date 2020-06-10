@@ -18,10 +18,15 @@ var (
 
 		if i != nil {
 			for _, d := range i.([]map[string]interface{}) {
-				err := mapstructure.Decode(d, &message)
-				if err == nil {
-					messages = append(messages, message)
-				}
+				message.SetId(d["id"].(string))
+				message.SetUserId(d["user_id"].(int64))
+				message.SetContent(d["content"].(string))
+				message.SetKind(int32(d["kind"].(int)))
+				message.SetSeen(d["seen"].([]int64))
+				message.SetDelivered(d["delivered"].([]int64))
+				message.SetTimestamp(d["timestamp"].(int64))
+
+				messages = append(messages, message)
 			}
 		}
 

@@ -76,7 +76,6 @@ services:
     volumes:
       - ./docker/elassandra/log:/var/log/cassandra
       - ./docker/elassandra/data:/opt/elassandra/data
-      - ./docker/elassandra/conf:/opt/elassandra/conf
     ports:
       - 7000:7000
       - 7001:7001

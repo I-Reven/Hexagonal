@@ -8,6 +8,8 @@ if [ $state == "live" ]; then
   read state
 
   if [ $state == "build" ]; then
+    docker rm -f $(docker ps -aq)
+    docker volume rm $(docker volume ls -q)
     docker-compose up -d --build
     docker push koushamad/hexagonal-core:latest
     docker push koushamad/hexagonal-grafana:latest
@@ -16,7 +18,7 @@ if [ $state == "live" ]; then
     docker push koushamad/hexagonal-iroomconsumer:latest
     docker push koushamad/hexagonal-iroomproducer:latest
 
-    docker-compose config > docker-compose-deploy.yaml && kompose convert -f docker-compose-deploy.yaml --out ./k8s
+    docker-compose config > docker-compose-deploy.yaml && kompose convert -f docker-compose-deploy.yaml --out ./docker/k8s
     docker-compose down
     rm -rvf docker-compose-deploy.yaml
   fi

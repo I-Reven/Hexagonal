@@ -64,16 +64,22 @@ func (s RoomConsumer) AddMessage(customer string, roomId int64, userId int64, me
 		return err
 	}
 
-	if messageOld, exist := room.ExistMessage(message); !exist {
-		if err = s.repository.AddMessage(customer, room.GetId(), message); err != nil {
+	if messageOld, exist := room.ExistMessage(message); exist {
+		if err = s.repository.UpdateMessage(customer, room.GetId(), messageOld, message); err != nil {
 			err = errors.NewNotSupported(err, "error.can-not-add-message-to-room")
 			s.log.Error(err)
 			return err
 		}
-	} else if err = s.repository.UpdateMessage(customer, room.GetId(), messageOld, message); err != nil {
+	} else if err = s.repository.AddMessage(customer, room.GetId(), message); err != nil {
 		err = errors.NewNotSupported(err, "error.can-not-add-message-to-room")
 		s.log.Error(err)
 		return err
+	}
+
+	if _, exist := room.ExistUserId(userId); !exist {
+		if err = s.AddUser(customer, roomId, userId); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -83,6 +89,7 @@ func (s RoomConsumer) SeenMessage(customer string, roomId int64, messageId strin
 	var (
 		err     error
 		message entity.Message
+		exist   bool
 	)
 
 	room := &entity.Room{}
@@ -92,8 +99,9 @@ func (s RoomConsumer) SeenMessage(customer string, roomId int64, messageId strin
 		return err
 	}
 
-	if messageOld, exist := room.ExistMessage(message); exist {
-		message = *messageOld.AddSeen(userId)
+	if message, exist = room.ExistMessage(message); exist {
+		messageOld := message
+		message.AddSeen(userId)
 
 		if err = s.repository.UpdateMessage(customer, room.GetId(), messageOld, message); err != nil {
 			err = errors.NewNotSupported(err, "error.can-not-update-message-seen")
@@ -101,7 +109,7 @@ func (s RoomConsumer) SeenMessage(customer string, roomId int64, messageId strin
 			return err
 		}
 
-		if _, exist := room.ExistUserId(userId); !exist {
+		if _, exist = room.ExistUserId(userId); !exist {
 			if err = s.AddUser(customer, roomId, userId); err != nil {
 				return err
 			}
@@ -111,12 +119,13 @@ func (s RoomConsumer) SeenMessage(customer string, roomId int64, messageId strin
 		err = errors.NewNotSupported(err, "error.can-not-found-message")
 	}
 
-	return nil
+	return err
 }
 
 func (s RoomConsumer) DeliverMessage(customer string, roomId int64, messageId string, userId int64) error {
 	var (
 		err     error
+		exist   bool
 		message entity.Message
 	)
 
@@ -127,8 +136,9 @@ func (s RoomConsumer) DeliverMessage(customer string, roomId int64, messageId st
 		return err
 	}
 
-	if messageOld, exist := room.ExistMessage(message); exist {
-		message = *messageOld.AddDelivered(userId)
+	if message, exist = room.ExistMessage(message); exist {
+		messageOld := message
+		message.AddDelivered(userId)
 
 		if err = s.repository.UpdateMessage(customer, room.GetId(), messageOld, message); err != nil {
 			err = errors.NewNotSupported(err, "error.can-not-update-message-deliver")
@@ -136,7 +146,7 @@ func (s RoomConsumer) DeliverMessage(customer string, roomId int64, messageId st
 			return err
 		}
 
-		if _, exist := room.ExistUserId(userId); !exist {
+		if _, exist = room.ExistUserId(userId); !exist {
 			if err = s.AddUser(customer, roomId, userId); err != nil {
 				return err
 			}
@@ -146,7 +156,7 @@ func (s RoomConsumer) DeliverMessage(customer string, roomId int64, messageId st
 		err = errors.NewNotSupported(err, "error.can-not-found-message")
 	}
 
-	return nil
+	return err
 }
 
 func (s RoomConsumer) AddMetaData(customer string, roomId int64, key string, kind int32, value string) error {
