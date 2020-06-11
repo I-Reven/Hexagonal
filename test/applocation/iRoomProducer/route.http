@@ -3,7 +3,7 @@ POST http://localhost:80/v1/room/create
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
   "user_id": 3
 }
@@ -13,7 +13,7 @@ PATCH http://localhost:80/v1/room/add-user
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
   "user_id": 5
 }
@@ -23,10 +23,10 @@ PATCH http://localhost:80/v1/room/add-message
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
-  "user_id": 1,
-  "content": "test-content",
+  "user_id": 2,
+  "content": "test-content-10",
   "kind": 1
 }
 
@@ -35,7 +35,7 @@ PATCH http://localhost:80/v1/room/add-meta-data
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
   "key": "key1",
   "kind": 1,
@@ -47,9 +47,9 @@ PUT http://localhost:80/v1/room/seen-message
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
-  "message_id": "b0c067b0-a9e5-11ea-b7db-985aebce38dc",
+  "message_id": "010ce2fa-abf5-11ea-8321-985aebce38dc",
   "user_id": 6
 }
 
@@ -58,8 +58,8 @@ PUT http://localhost:80/v1/room/deliver-message
 Content-Type: application/json
 
 {
-  "customer_name": "test1",
+  "customer_name": "kousha",
   "room_id": 1,
-  "message_id": "08fd6386-a9e8-11ea-bb07-985aebce38dc",
+  "message_id": "010ce2fa-abf5-11ea-8321-985aebce38dc",
   "user_id": 7
 }

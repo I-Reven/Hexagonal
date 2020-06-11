@@ -3,5 +3,5 @@ POST http://localhost:80/v1/customer/create
 Content-Type: application/json
 
 {
-  "customer_name": "test1"
+  "customer_name": "kousha"
 }

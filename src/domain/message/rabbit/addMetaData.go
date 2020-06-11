@@ -5,7 +5,7 @@ type (
 		CustomerName string `json:"customer_name"`
 		RoomId       int64  `json:"room_id"`
 		Key          string `json:"key"`
-		Kind         int32  `json:"kind"`
+		Kind         int64  `json:"kind"`
 		Value        string `json:"value"`
 	}
 )

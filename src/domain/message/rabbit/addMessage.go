@@ -7,7 +7,7 @@ type (
 		UserId       int64  `json:"user_id"`
 		MessageId    string `json:"message_id"`
 		Content      string `json:"content"`
-		Kind         int32  `json:"kind"`
+		Kind         int64  `json:"kind"`
 	}
 )
 

@@ -38,7 +38,7 @@ func (s RoomProducer) AddUser(customerName string, roomId int64, userId int64) e
 	return nil
 }
 
-func (s RoomProducer) AddMessage(customerName string, roomId int64, userId int64, content string, kind int32) (string, error) {
+func (s RoomProducer) AddMessage(customerName string, roomId int64, userId int64, content string, kind int64) (string, error) {
 	msg := message.AddMessage{
 		CustomerName: customerName,
 		RoomId:       roomId,
@@ -81,7 +81,7 @@ func (s RoomProducer) DeliverMessage(customerName string, roomId int64, messageI
 	return nil
 }
 
-func (s RoomProducer) AddMetaData(customerName string, roomId int64, key string, kind int32, value string) error {
+func (s RoomProducer) AddMetaData(customerName string, roomId int64, key string, kind int64, value string) error {
 	msg := message.AddMetaData{CustomerName: customerName, RoomId: roomId, Key: key, Kind: kind, Value: value}
 
 	if err := s.produce.ProduceMessage(msg); err != nil {

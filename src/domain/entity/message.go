@@ -10,7 +10,7 @@ type Message struct {
 	Id        string  `cql:"id" json:"id" faker:"-"`
 	UserId    int64   `cql:"user_id" json:"user_id"`
 	Content   string  `cql:"content" json:"content" faker:"sentence"`
-	Kind      int32   `cql:"kind" json:"kind"`
+	Kind      int64   `cql:"kind" json:"kind"`
 	Seen      []int64 `cql:"seen" json:"seen"`
 	Delivered []int64 `cql:"delivered" json:"delivered"`
 	Timestamp int64   `cql:"timestamp" json:"timestamp"`
@@ -23,8 +23,8 @@ func (e *Message) GetUserId() int64                        { return e.UserId }
 func (e *Message) SetUserId(userId int64) *Message         { e.UserId = userId; return e }
 func (e *Message) GetContent() string                      { return e.Content }
 func (e *Message) SetContent(content string) *Message      { e.Content = content; return e }
-func (e *Message) GetKind() int32                          { return e.Kind }
-func (e *Message) SetKind(kind int32) *Message             { e.Kind = kind; return e }
+func (e *Message) GetKind() int64                          { return e.Kind }
+func (e *Message) SetKind(kind int64) *Message             { e.Kind = kind; return e }
 func (e *Message) GetSeen() []int64                        { return e.Seen }
 func (e *Message) SetSeen(seen []int64) *Message           { e.Seen = seen; return e }
 func (e *Message) GetDelivered() []int64                   { return e.Delivered }
@@ -38,7 +38,7 @@ func (e *Message) AddDelivered(userId int64) *Message {
 }
 func (e *Message) Factory() error { return faker.FakeData(e) }
 
-func (e *Message) Make(messageId string, content string, kind int32, userId int64) *Message {
+func (e *Message) Make(messageId string, content string, kind int64, userId int64) *Message {
 	e.SetId(messageId)
 	e.SetContent(content)
 	e.SetKind(kind)

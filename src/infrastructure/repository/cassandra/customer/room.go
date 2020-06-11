@@ -21,7 +21,7 @@ var (
 				message.SetId(d["id"].(string))
 				message.SetUserId(d["user_id"].(int64))
 				message.SetContent(d["content"].(string))
-				message.SetKind(int32(d["kind"].(int)))
+				message.SetKind(d["kind"].(int64))
 				message.SetSeen(d["seen"].([]int64))
 				message.SetDelivered(d["delivered"].([]int64))
 				message.SetTimestamp(d["timestamp"].(int64))
@@ -93,7 +93,7 @@ func (r Room) GetById(keySpace string, id gocql.UUID) (*entity.Room, error) {
 		room := &entity.Room{}
 		room.SetId(m["id"].(gocql.UUID))
 		room.SetRoomId(m["room_id"].(int64))
-		room.SetStatus(int32(m["status"].(int)))
+		room.SetStatus(m["status"].(int64))
 		room.SetUsersId(toUsersId(m["users_id"]))
 		room.SetMessages(toMessages(m["messages"]))
 		room.SetMetaData(toMetaData(m["meta_data"]))
@@ -112,7 +112,7 @@ func (r Room) GetByRoomId(keySpace string, roomId int64) (*entity.Room, error) {
 		room := &entity.Room{}
 		room.SetId(m["id"].(gocql.UUID))
 		room.SetRoomId(m["room_id"].(int64))
-		room.SetStatus(int32(m["status"].(int)))
+		room.SetStatus(m["status"].(int64))
 		room.SetUsersId(toUsersId(m["users_id"]))
 		room.SetMessages(toMessages(m["messages"]))
 		room.SetMetaData(toMetaData(m["meta_data"]))

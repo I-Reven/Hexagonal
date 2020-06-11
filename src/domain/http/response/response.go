@@ -1,13 +1,13 @@
 package response
 
 type Response struct {
-	Code     int32       `json:"code"`
+	Code     int64       `json:"code"`
 	Messages []string    `json:"message"`
 	Error    string      `json:"error"`
 	Data     interface{} `json:"data"`
 }
 
-func (r Response) SetCote(code int32) Response           { r.Code = code; return r }
+func (r Response) SetCote(code int64) Response           { r.Code = code; return r }
 func (r Response) SetMessages(message []string) Response { r.Messages = message; return r }
 func (r Response) SetError(error string) Response        { r.Error = error; return r }
 func (r Response) SetData(data interface{}) Response     { r.Data = data; return r }
@@ -16,7 +16,7 @@ func (r Response) AddMessages(message string) Response {
 	return r
 }
 
-func (r Response) Make(code int32, messages []string, error string, data interface{}) Response {
+func (r Response) Make(code int64, messages []string, error string, data interface{}) Response {
 	return r.SetCote(code).SetMessages(messages).SetError(error).SetData(data)
 }
 

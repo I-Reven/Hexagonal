@@ -49,7 +49,7 @@ func (r *Customer) MigrateMessage(keySpace string) error {
 						id TEXT,
 						user_id BIGINT,
   						content TEXT,
-						kind INT,
+						kind BIGINT,
   						seen SET<BIGINT>,
 						delivered SET<BIGINT>,
 						timestamp BIGINT,
@@ -61,7 +61,7 @@ func (r *Customer) MigrateMessage(keySpace string) error {
 func (r *Customer) MigrateMetaData(keySpace string) error {
 	messageQuery := `CREATE TYPE IF NOT EXISTS metaData (
   						key TEXT,
-						kind INT,
+						kind BIGINT,
   						value TEXT,
 					);`
 
@@ -72,11 +72,11 @@ func (r *Customer) MigrateRoom(keySpace string) error {
 	roomQuery := `CREATE TABLE IF NOT EXISTS rooms (
   					id TIMEUUID,
 					room_id BIGINT,
-  					status INT,
+  					status BIGINT,
   					users_id SET<BIGINT>,
 					messages SET<frozen <message>>,
 					meta_data SET<frozen <metaData>>,
-  					rating INT,
+  					rating BIGINT,
   					timestamp TIMESTAMP,
   					PRIMARY KEY(id)
 				);`

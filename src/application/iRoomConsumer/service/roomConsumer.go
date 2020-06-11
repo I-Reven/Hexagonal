@@ -51,7 +51,7 @@ func (s RoomConsumer) AddUser(customer string, roomId int64, userId int64) error
 	return nil
 }
 
-func (s RoomConsumer) AddMessage(customer string, roomId int64, userId int64, messageId string, content string, kind int32) error {
+func (s RoomConsumer) AddMessage(customer string, roomId int64, userId int64, messageId string, content string, kind int64) error {
 	var (
 		err     error
 		message entity.Message
@@ -159,7 +159,7 @@ func (s RoomConsumer) DeliverMessage(customer string, roomId int64, messageId st
 	return err
 }
 
-func (s RoomConsumer) AddMetaData(customer string, roomId int64, key string, kind int32, value string) error {
+func (s RoomConsumer) AddMetaData(customer string, roomId int64, key string, kind int64, value string) error {
 	var (
 		err      error
 		metaData entity.MetaData
