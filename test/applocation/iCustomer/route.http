@@ -1,7 +1,7 @@
-### TRACK API
-POST http://localhost:80/v1/customer/create
+### Create Customer API
+POST http://localhost:1004/v1/customer/create
 Content-Type: application/json
 
 {
-  "customer_name": "kousha"
+  "customer_name": "kokokoko"
 }

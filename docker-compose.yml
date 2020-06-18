@@ -220,6 +220,18 @@ services:
     networks:
       - backend
 
+    git-server:
+      build:
+        context: ./docker/git
+        dockerfile: Dockerfile
+      image: koushamad/hexagonal-git-server:latest
+      container_name: hexagonal-git
+      working_dir: /application
+      volumes:
+        - .:/application
+      networks:
+        - backend
+
   core:
     image: koushamad/hexagonal-core:latest
     build:
