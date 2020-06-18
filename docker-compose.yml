@@ -26,36 +26,6 @@ services:
     networks:
       - backend
 
-  grafana:
-    image: koushamad/hexagonal-grafana:latest
-    build: ./docker/grafana
-    container_name: 'hex-grafana'
-    volumes:
-      - ./docker/grafana/data/grafana:/var/lib/grafana
-    ports:
-      - 3000:3000
-    links:
-      - redis
-      - rabbitmq
-      - mongodb
-      - influxdb
-      - elassandra
-    depends_on:
-      - redis
-      - rabbitmq
-      - mongodb
-      - influxdb
-      - elassandra
-    environment:
-      GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
-      GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
-      INFLUXDB_URI: ${INFLUXDB_URI}
-      INFLUXDB_DB: ${INFLUXDB_DB}
-      INFLUXDB_USER: ${INFLUXDB_USER}
-      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-    networks:
-      - backend
-
   mongodb:
     image: mongo:3.6.18
     container_name: 'hex-mongodb'
@@ -220,12 +190,45 @@ services:
     networks:
       - backend
 
+
+    grafana:
+      image: koushamad/hexagonal-grafana:latest
+      build:
+        context: ./docker/grafana
+        dockerfile: Dockerfile
+      container_name: 'hex-grafana'
+      volumes:
+        - ./docker/grafana/data/grafana:/var/lib/grafana
+      ports:
+        - 3000:3000
+      links:
+        - redis
+        - rabbitmq
+        - mongodb
+        - influxdb
+        - elassandra
+      depends_on:
+        - redis
+        - rabbitmq
+        - mongodb
+        - influxdb
+        - elassandra
+      environment:
+        GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED}
+        GF_AUTH_ANONYMOUS_ORG_ROLE: ${GF_AUTH_ANONYMOUS_ORG_ROLE}
+        INFLUXDB_URI: ${INFLUXDB_URI}
+        INFLUXDB_DB: ${INFLUXDB_DB}
+        INFLUXDB_USER: ${INFLUXDB_USER}
+        INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      networks:
+        - backend
+
     git-server:
       build:
         context: ./docker/git
         dockerfile: Dockerfile
-      image: koushamad/hexagonal-git-server:latest
-      container_name: hexagonal-git
+      image: koushamad/hexagonal-git:latest
+      container_name: 'hexagonal-git'
       working_dir: /application
       volumes:
         - .:/application

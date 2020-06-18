@@ -11,9 +11,11 @@ if [ $state == "live" ]; then
     docker rm -f $(docker ps -aq)
     docker volume rm $(docker volume ls -q)
     docker-compose up -d --build
-    docker push koushamad/hexagonal-core:latest
+
+    docker push koushamad/hexagonal-git:latest
     docker push koushamad/hexagonal-grafana:latest
 
+    docker push koushamad/hexagonal-core:latest
     docker push koushamad/hexagonal-icustomer:latest
     docker push koushamad/hexagonal-iroomconsumer:latest
     docker push koushamad/hexagonal-iroomproducer:latest
