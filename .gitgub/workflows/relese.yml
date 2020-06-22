@@ -1,0 +1,35 @@
+name: RELESE
+
+on:
+  push:
+    branches:
+      - IRaven/Master
+      - IRaven/Develop
+  pull_request:
+    branches:
+      - IRaven/Master
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Build the docker-compose stack
+        run: docker-compose --log-level INFO up -d --build
+      - name: Push hexagonal-git
+        run: docker push koushamad/hexagonal-git:latest
+      - name: Push hexagonal-grafana
+        run: docker push koushamad/hexagonal-grafana:latest
+      - name: Push hexagonal-core
+        run: docker push koushamad/hexagonal-core:latest
+      - name: Push hexagonal-icustomer
+        run: docker push koushamad/hexagonal-icustomer:latest
+      - name: Push hexagonal-iroomconsumer
+        run: docker push koushamad/hexagonal-iroomconsumer:latest
+      - name: Push hexagonal-iroomproducer
+        run: docker push koushamad/hexagonal-iroomproducer:latest
